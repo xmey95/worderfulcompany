@@ -13,6 +13,7 @@
 
 > ID
 > CAPACITA'
+> NOME
 > 
 
 ## API
@@ -21,6 +22,6 @@
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTEzNTcwNzgyNywtMTYyOTg1MDU2Nyw4MD
-Y4NTMxNzRdfQ==
+eyJoaXN0b3J5IjpbLTEwNjkwODU0MzQsMTEzNTcwNzgyNywtMT
+YyOTg1MDU2Nyw4MDY4NTMxNzRdfQ==
 -->
