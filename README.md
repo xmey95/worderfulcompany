@@ -35,7 +35,7 @@
 > ID UTENTE*
 > ID AULA*
 
-#### 
+#### Sondaggio
 
 ## API
     /users
@@ -43,7 +43,7 @@
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTg2NjU4NDc2Nyw5NjIzOTE4NDMsMTM3Mz
-I4NzcyOSwxMTM1NzA3ODI3LC0xNjI5ODUwNTY3LDgwNjg1MzE3
-NF19
+eyJoaXN0b3J5IjpbLTU4MzA2MjIwOCwtODY2NTg0NzY3LDk2Mj
+M5MTg0MywxMzczMjg3NzI5LDExMzU3MDc4MjcsLTE2Mjk4NTA1
+NjcsODA2ODUzMTc0XX0=
 -->
