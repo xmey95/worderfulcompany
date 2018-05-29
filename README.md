@@ -9,6 +9,8 @@
 > EMAIL
 > PASSWORD
 
+### Aule
+
 #### Aula
 
 > ID
@@ -34,6 +36,8 @@
 > DATA/ORA FINE
 > ID UTENTE*
 > ID AULA*
+
+### Sondaggi
 
 #### Sondaggio
 
@@ -63,14 +67,18 @@
 > RISPOSTA
 > ID UTENTE
 
+### Assenze
+
+#### 
+
 ## API
     /users
 
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzMjg1MzAyNDcsNjcwMTQxOTUzLC05OT
-U4Mjg1NTcsLTU4MzA2MjIwOCwtODY2NTg0NzY3LDk2MjM5MTg0
-MywxMzczMjg3NzI5LDExMzU3MDc4MjcsLTE2Mjk4NTA1NjcsOD
-A2ODUzMTc0XX0=
+eyJoaXN0b3J5IjpbMTgyMDkzMzIyMCwtMTMyODUzMDI0Nyw2Nz
+AxNDE5NTMsLTk5NTgyODU1NywtNTgzMDYyMjA4LC04NjY1ODQ3
+NjcsOTYyMzkxODQzLDEzNzMyODc3MjksMTEzNTcwNzgyNywtMT
+YyOTg1MDU2Nyw4MDY4NTMxNzRdfQ==
 -->
