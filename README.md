@@ -11,8 +11,9 @@
 
 #### Aula
 
-> Blockquote
-> Capacità
+> ID
+> CAPACITA'
+> 
 
 ## API
     /users
@@ -20,6 +21,6 @@
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExNjA4MDU1NzksLTE2Mjk4NTA1NjcsOD
-A2ODUzMTc0XX0=
+eyJoaXN0b3J5IjpbMTEzNTcwNzgyNywtMTYyOTg1MDU2Nyw4MD
+Y4NTMxNzRdfQ==
 -->
