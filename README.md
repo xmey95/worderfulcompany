@@ -18,7 +18,11 @@
 
 #### Accessori aula
 
-#### Associazione aula/
+> ID
+> NOME
+
+#### Associazione aula/accessori
+
 
 ## API
     /users
@@ -26,6 +30,6 @@
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTM3MzI4NzcyOSwxMTM1NzA3ODI3LC0xNj
-I5ODUwNTY3LDgwNjg1MzE3NF19
+eyJoaXN0b3J5IjpbOTYyMzkxODQzLDEzNzMyODc3MjksMTEzNT
+cwNzgyNywtMTYyOTg1MDU2Nyw4MDY4NTMxNzRdfQ==
 -->
