@@ -23,6 +23,13 @@
 
 #### Associazione aula/accessori
 
+> ID AULA
+> ID ACCESSORIO
+> QUANTITA'
+
+#### Prenotazione aula
+
+
 
 ## API
     /users
@@ -30,6 +37,7 @@
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTYyMzkxODQzLDEzNzMyODc3MjksMTEzNT
-cwNzgyNywtMTYyOTg1MDU2Nyw4MDY4NTMxNzRdfQ==
+eyJoaXN0b3J5IjpbLTExMDIzNzUyODQsOTYyMzkxODQzLDEzNz
+MyODc3MjksMTEzNTcwNzgyNywtMTYyOTg1MDU2Nyw4MDY4NTMx
+NzRdfQ==
 -->
