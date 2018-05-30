@@ -1,7 +1,6 @@
 # WonderfulCompany
 
 ## Table of Contents
-=================
 
   * [Database](#Database)
   * [Screenshot](#screenshot)
@@ -10,7 +9,7 @@
         * [OR using Vundle:](#or-using-vundle)
   * [License](#license)
 
-## Database
+### Database
 
 <img src="doc/er.jpg"/>
 
@@ -20,10 +19,10 @@
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjQ3MDAyMTM0LDE4OTcyNDA4MzEsLTE0Mj
-c1NzgzODgsNzY2NzUwNzUxLDE2MjU5MTM4NzQsMTA5MTcxNDg0
-NCwxMTUxOTEwMDQ1LC0yNDg0NjgyMTMsMjcwNjI2NjY4LC0xMz
-I4NTMwMjQ3LDY3MDE0MTk1MywtOTk1ODI4NTU3LC01ODMwNjIy
-MDgsLTg2NjU4NDc2Nyw5NjIzOTE4NDMsMTM3MzI4NzcyOSwxMT
-M1NzA3ODI3LC0xNjI5ODUwNTY3LDgwNjg1MzE3NF19
+eyJoaXN0b3J5IjpbLTEzNDk3ODQ4MzQsMTg5NzI0MDgzMSwtMT
+QyNzU3ODM4OCw3NjY3NTA3NTEsMTYyNTkxMzg3NCwxMDkxNzE0
+ODQ0LDExNTE5MTAwNDUsLTI0ODQ2ODIxMywyNzA2MjY2NjgsLT
+EzMjg1MzAyNDcsNjcwMTQxOTUzLC05OTU4Mjg1NTcsLTU4MzA2
+MjIwOCwtODY2NTg0NzY3LDk2MjM5MTg0MywxMzczMjg3NzI5LD
+ExMzU3MDc4MjcsLTE2Mjk4NTA1NjcsODA2ODUzMTc0XX0=
 -->
