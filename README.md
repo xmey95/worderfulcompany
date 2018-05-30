@@ -7,7 +7,7 @@
   * [Installation](#installation)
         * [OR using Pathogen:](#or-using-pathogen)
         * [OR using Vundle:](#or-using-vundle)
-  * [License](#license)
+  * [API](## API)
 
 ### Database
 
@@ -19,10 +19,10 @@
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTkxOTYyMzE1MiwxODk3MjQwODMxLC0xND
-I3NTc4Mzg4LDc2Njc1MDc1MSwxNjI1OTEzODc0LDEwOTE3MTQ4
-NDQsMTE1MTkxMDA0NSwtMjQ4NDY4MjEzLDI3MDYyNjY2OCwtMT
-MyODUzMDI0Nyw2NzAxNDE5NTMsLTk5NTgyODU1NywtNTgzMDYy
-MjA4LC04NjY1ODQ3NjcsOTYyMzkxODQzLDEzNzMyODc3MjksMT
-EzNTcwNzgyNywtMTYyOTg1MDU2Nyw4MDY4NTMxNzRdfQ==
+eyJoaXN0b3J5IjpbNDk0MTg1MzcxLDE4OTcyNDA4MzEsLTE0Mj
+c1NzgzODgsNzY2NzUwNzUxLDE2MjU5MTM4NzQsMTA5MTcxNDg0
+NCwxMTUxOTEwMDQ1LC0yNDg0NjgyMTMsMjcwNjI2NjY4LC0xMz
+I4NTMwMjQ3LDY3MDE0MTk1MywtOTk1ODI4NTU3LC01ODMwNjIy
+MDgsLTg2NjU4NDc2Nyw5NjIzOTE4NDMsMTM3MzI4NzcyOSwxMT
+M1NzA3ODI3LC0xNjI5ODUwNTY3LDgwNjg1MzE3NF19
 -->
