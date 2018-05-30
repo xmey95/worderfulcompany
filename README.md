@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-  * [Database](### Database)
+  * [Database](#Database)
   * [Screenshot](#screenshot)
   * [Installation](#installation)
         * [OR using Pathogen:](#or-using-pathogen)
@@ -19,7 +19,7 @@
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDk0MTg1MzcxLDE4OTcyNDA4MzEsLTE0Mj
+eyJoaXN0b3J5IjpbMTc3NzE0OTUzLDE4OTcyNDA4MzEsLTE0Mj
 c1NzgzODgsNzY2NzUwNzUxLDE2MjU5MTM4NzQsMTA5MTcxNDg0
 NCwxMTUxOTEwMDQ1LC0yNDg0NjgyMTMsMjcwNjI2NjY4LC0xMz
 I4NTMwMjQ3LDY3MDE0MTk1MywtOTk1ODI4NTU3LC01ODMwNjIy
