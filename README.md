@@ -1,5 +1,15 @@
 # WonderfulCompany
 
+Table of Contents
+=================
+
+  * [Dockerfile.vim](#dockerfilevim)
+  * [Screenshot](#screenshot)
+  * [Installation](#installation)
+        * [OR using Pathogen:](#or-using-pathogen)
+        * [OR using Vundle:](#or-using-vundle)
+  * [License](#license)
+
 ## Database
 
 <img src="doc/er.jpg"/>
@@ -10,10 +20,10 @@
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0Mjc1NzgzODgsNzY2NzUwNzUxLDE2Mj
-U5MTM4NzQsMTA5MTcxNDg0NCwxMTUxOTEwMDQ1LC0yNDg0Njgy
-MTMsMjcwNjI2NjY4LC0xMzI4NTMwMjQ3LDY3MDE0MTk1MywtOT
-k1ODI4NTU3LC01ODMwNjIyMDgsLTg2NjU4NDc2Nyw5NjIzOTE4
-NDMsMTM3MzI4NzcyOSwxMTM1NzA3ODI3LC0xNjI5ODUwNTY3LD
-gwNjg1MzE3NF19
+eyJoaXN0b3J5IjpbLTU2MTAzMTU5OCwtMTQyNzU3ODM4OCw3Nj
+Y3NTA3NTEsMTYyNTkxMzg3NCwxMDkxNzE0ODQ0LDExNTE5MTAw
+NDUsLTI0ODQ2ODIxMywyNzA2MjY2NjgsLTEzMjg1MzAyNDcsNj
+cwMTQxOTUzLC05OTU4Mjg1NTcsLTU4MzA2MjIwOCwtODY2NTg0
+NzY3LDk2MjM5MTg0MywxMzczMjg3NzI5LDExMzU3MDc4MjcsLT
+E2Mjk4NTA1NjcsODA2ODUzMTc0XX0=
 -->
