@@ -3,10 +3,6 @@
 ## Table of Contents
 
   * [Database](#database)
-  * [Screenshot](#screenshot)
-  * [Installation](#installation)
-        * [OR using Pathogen:](#or-using-pathogen)
-        * [OR using Vundle:](#or-using-vundle)
   * [API](#api)
 
 ### Database
@@ -19,11 +15,11 @@
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjAwNjA0NDYwLC0xMzQ5MzUxNTcyLDE4OT
-cyNDA4MzEsLTE0Mjc1NzgzODgsNzY2NzUwNzUxLDE2MjU5MTM4
-NzQsMTA5MTcxNDg0NCwxMTUxOTEwMDQ1LC0yNDg0NjgyMTMsMj
-cwNjI2NjY4LC0xMzI4NTMwMjQ3LDY3MDE0MTk1MywtOTk1ODI4
-NTU3LC01ODMwNjIyMDgsLTg2NjU4NDc2Nyw5NjIzOTE4NDMsMT
-M3MzI4NzcyOSwxMTM1NzA3ODI3LC0xNjI5ODUwNTY3LDgwNjg1
-MzE3NF19
+eyJoaXN0b3J5IjpbLTE2OTk4MzIxNjAsLTEzNDkzNTE1NzIsMT
+g5NzI0MDgzMSwtMTQyNzU3ODM4OCw3NjY3NTA3NTEsMTYyNTkx
+Mzg3NCwxMDkxNzE0ODQ0LDExNTE5MTAwNDUsLTI0ODQ2ODIxMy
+wyNzA2MjY2NjgsLTEzMjg1MzAyNDcsNjcwMTQxOTUzLC05OTU4
+Mjg1NTcsLTU4MzA2MjIwOCwtODY2NTg0NzY3LDk2MjM5MTg0My
+wxMzczMjg3NzI5LDExMzU3MDc4MjcsLTE2Mjk4NTA1NjcsODA2
+ODUzMTc0XX0=
 -->
