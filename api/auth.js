@@ -16,7 +16,7 @@ var pool  = mysql.createPool({
 
 var passport_jwt_options = {};
 passport_jwt_options.secretOrKey = config.secret;
-passport_jwt_options.jwtFromRequest = ExtractJwt.fromHeader();
+passport_jwt_options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 // example Auth Header: "Authorization: JWT <token>"
 passport_jwt_options.ignoreExpiration = false;
 //passport_jwt_options.passReqToCallback = true;
