@@ -35,7 +35,7 @@ passport.use(new BasicStrategy(
           connection.release();
 
           if (err) return callback(err);
-          if (!results) return callback(null, false);
+          if (!results[0]) return callback(null, false);
 
           // check the password
           if(results[0].password === password){

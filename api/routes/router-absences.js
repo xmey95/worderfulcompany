@@ -12,6 +12,22 @@ var pool  = mysql.createPool({
   database : config.dbname
 });
 
+/**
+ * @api {get} / Section Welcome response
+ * @apiName Section Welcome response
+ * @apiGroup Absences
+ *
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       message: 'Benvenuto alle API della Web App "WonderfulCompany"(sezione assenze), effettua una richiesta valida :)'
+ *     }
+ *
+ *
+ *
+ */
+
 router.get('/', function(req, res){
     res.json({
         message: 'Benvenuto alle API della Web App "WonderfulCompany"(sezione assenze), effettua una richiesta valida :)'

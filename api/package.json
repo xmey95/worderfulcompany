@@ -19,5 +19,14 @@
     "passport-http": "^0.3.0",
     "passport-jwt": "^4.0.0",
     "path": "^0.12.7"
+  },
+  "apidoc": {
+    "title": "WonderfulCompany-API",
+    "url" : "https://github.com/xmey95/worderfulcompany",
+    "sampleUrl" : "https://github.com/xmey95/worderfulcompany",
+    "description": "",
+    "order": [
+                "General"
+              ]
   }
 }
