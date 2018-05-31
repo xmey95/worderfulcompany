@@ -5,12 +5,13 @@ var morgan = require('morgan');
 var session = require('express-session');
 var passport = require('passport');
 
-//Include routes for every part of the project
+//Include routes for every part of the project(divided by subsections)
 var router_absences = require('./routes/router-absences.js');
 var router_surveys = require('./routes/router-surveys.js');
 var router_rooms = require('./routes/router-rooms.js');
 var router = require('./routes/router.js');
 var config = require('./config.js');
+var setup_db = require('./setup_db.js').setupDB;
 
 var SECRET = config.secret;
 
@@ -30,7 +31,6 @@ app.use(session({
 ));
 
 // use morgan to log requests to the console
-// when in production, redirect the log to the log server
 app.use(morgan('dev'));
 
 // use passport for authentication
@@ -46,12 +46,15 @@ app.use(function(req, res, next) {
   res.header('Access-Control-Max-Age', '1728000');
   next();
 });
+
 // router in separate file
-// tell the server to answer to addresses starting with /api/v1 with the router definitions (see ./router.js)
+// tell the server to answer to addresses starting with /api/ with the router definitions
 app.use('/api/surveys', router_surveys);
 app.use('/api/absences', router_absences);
 app.use('/api/rooms', router_rooms);
 app.use('/api/', router);
+
+if(process.argv[2] == "--setup") setup_db()
 
 app.listen(port);
 console.log('Express server active on port ' + port);
