@@ -203,6 +203,50 @@ router.route('/authenticate').get(auth.isAuthenticatedBasic, function(req,res) {
 *      }
 */
 
+/**
+* @api                {get} /users                                              Get Users
+* @apiName            Get Users
+* @apiDescription     Get the list of users.
+* @apiError           (Error 500) InternalServerError                           Query failed.
+* @apiError           (Error 404) NotFoundError                                 Resource not found.
+* @apiErrorExample    {json} Error-Response:
+*     HTTP/1.1 500 Internal Server Error
+*     {
+*         success : false,
+*         error : "INTERNAL_SERVER_ERROR"
+*      }
+* @apiErrorExample    {json} Error-Response:
+*     HTTP/1.1 404 Not Found Error
+*     {
+*         success : false,
+*         error : "USERS_NOT_FOUND"
+*      }
+* @apiSampleRequest   /users
+* @apiGroup           General
+* @apiPermission      none
+* @apiSuccess         {Boolean} success                                         True if the query is succesfully.
+* @apiSuccess         {String} error                                            String containing the error, it's null if success is true.
+* @apiSuccess         {String} users                                            String containing list of users.
+* @apiSuccessExample  {json} Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*       "success": true,
+*       "error": null,
+*       "users": [
+*                  {
+*                   "name":"xmey952",
+*                   "surname":"xmey952",
+*                   "email":"xmey952@ciao.it"
+*                  },
+*                  {
+*                   "name":"xmey95",
+*                   "surname":"xmey95",
+*                   "email":"xmey95@ciao.it"
+*                  }
+*                 ]
+*      }
+*/
+
 //register a new user(POST)
 router.route('/users').post(function(req, res) {
     pool.getConnection(function(err, connection) {
@@ -213,9 +257,80 @@ router.route('/users').post(function(req, res) {
         connection.release();
 
         if (err) return res.status(500).send(JSON.stringify({success:false, error:err}))
-        else res.status(200).send(JSON.stringify({success:true, error:null}));
+        else res.status(201).send(JSON.stringify({success:true, error:null}));
       });
     });
+}).get(function(req, res){
+  pool.getConnection(function(err, connection) {
+    // Use the connection
+    connection.query('SELECT * FROM ??', ['users'], function (err, results, fields) {
+      // And done with the connection.
+      connection.release();
+
+      if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+      if (!results) return res.status(404).send(JSON.stringify({success:false, error:"USERS_NOT_FOUND"}));
+
+      var users = [];
+      for(var i = 0; i < results.length; i++){
+        users.push(make_user_safe(results[i]));
+      }
+      return res.status(200).send(JSON.stringify({success:true, error:null, users: users}));
+    });
+  });
+});
+
+/**
+* @api                {get} /users/:user                                        Get User
+* @apiName            Get User
+* @apiDescription     Get User info by ID.
+* @apiError           (Error 500) InternalServerError                           Query failed.
+* @apiError           (Error 404) NotFoundError                                 Resource not found.
+* @apiErrorExample    {json} Error-Response:
+*     HTTP/1.1 500 Internal Server Error
+*     {
+*         success : false,
+*         error : "INTERNAL_SERVER_ERROR"
+*      }
+* @apiErrorExample    {json} Error-Response:
+*     HTTP/1.1 404 Not Found Error
+*     {
+*         success : false,
+*         error : "USER_NOT_FOUND"
+*      }
+* @apiSampleRequest   /user/1
+* @apiGroup           General
+* @apiPermission      none
+* @apiSuccess         {Boolean} success                                         True if the query is succesfully.
+* @apiSuccess         {String} error                                            String containing the error, it's null if success is true.
+* @apiSuccess         {String} user                                             String containing user object.
+* @apiSuccessExample  {json} Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*       "success": true,
+*       "error": null,
+*       "user":
+*                  {
+*                   "name":"xmey952",
+*                   "surname":"xmey952",
+*                   "email":"xmey952@ciao.it"
+*                  },
+*      }
+*/
+
+//Get a user(GET)
+router.route('/users/:user').get(function(req, res) {
+  pool.getConnection(function(err, connection) {
+    // Use the connection
+    connection.query('SELECT * FROM ?? WHERE id = ?', ['users', req.params.user], function (err, results, fields) {
+      // And done with the connection.
+      connection.release();
+
+      if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
+      if (!results[0]) return res.status(404).send(JSON.stringify({success:false, error:"USER_NOT_FOUND"}));
+
+      return res.status(200).send(JSON.stringify({success:true, error:null, user: make_user_safe(results[0])}));
+    });
+  });
 });
 
 module.exports = router;
