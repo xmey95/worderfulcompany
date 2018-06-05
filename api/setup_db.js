@@ -2,13 +2,22 @@ var mysql = require('mysql');
 var config = require('./config.js');
 
 var setup_db = () => {
-  var pool  = mysql.createPool({
-    host     : config.dbhost,
-    user     : config.dbuser,
-    password : config.dbsecret,
-    database : config.dbname
-  });
-
+    if(process.argv[3] == "--mac"){
+        var pool  = mysql.createPool({
+          host     : config.dbhost,
+          user     : config.dbuser,
+          port     : config.port,
+          password : 'root',
+          database : config.dbname
+        });
+    }else{
+        var pool  = mysql.createPool({
+          host     : config.dbhost,
+          user     : config.dbuser,
+          password : config.dbsecret,
+          database : config.dbname
+    });
+}
 console.log("Starting DB Setup...")
 
 var users = 'CREATE TABLE if not exists users (id integer primary key AUTO_INCREMENT, password text not null, name text not null, surname text not null, email text not null, superuser boolean not null default false)'

@@ -54,13 +54,22 @@ const API_SUCCESS_MSG = {success: true, error: null};
 const API_FAILURE_MSG = {success: false, error: null};
 
 //MySQL Connection
-var pool  = mysql.createPool({
-  host     : config.dbhost,
-  user     : config.dbuser,
-  password : config.dbsecret,
-  database : config.dbname
-});
-
+if(process.argv[3] == "--mac"){
+  var pool  = mysql.createPool({
+    host     : config.dbhost,
+    user     : config.dbuser,
+    port     : config.port,
+    password : 'root',
+    database : config.dbname
+  });
+}else{
+  var pool  = mysql.createPool({
+    host     : config.dbhost,
+    user     : config.dbuser,
+    password : config.dbsecret,
+    database : config.dbname
+  });
+}
 //show user information hiding password
 function make_user_safe(user) {
   return {

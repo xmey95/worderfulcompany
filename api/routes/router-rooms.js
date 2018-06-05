@@ -6,12 +6,22 @@ var mysql = require('mysql');
 var router = express.Router(); // new instance of express router
 
 //MySQL Connection
-var pool  = mysql.createPool({
-  host     : config.dbhost,
-  user     : config.dbuser,
-  password : config.dbsecret,
-  database : config.dbname
-});
+if(process.argv[3] == "--mac"){
+    var pool  = mysql.createPool({
+      host     : config.dbhost,
+      user     : config.dbuser,
+      port     : config.port,
+      password : 'root',
+      database : config.dbname
+    });
+}else{
+    var pool  = mysql.createPool({
+      host     : config.dbhost,
+      user     : config.dbuser,
+      password : config.dbsecret,
+      database : config.dbname
+    });
+}
 
 /**
  * @api {get} / Section Welcome response
