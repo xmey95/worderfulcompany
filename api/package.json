@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "crypto": "^1.0.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.2.1",
@@ -22,11 +23,11 @@
   },
   "apidoc": {
     "title": "WonderfulCompany-API",
-    "url" : "https://github.com/xmey95/worderfulcompany",
-    "sampleUrl" : "https://github.com/xmey95/worderfulcompany",
+    "url": "https://github.com/xmey95/worderfulcompany",
+    "sampleUrl": "https://github.com/xmey95/worderfulcompany",
     "description": "",
     "order": [
-                "General"
-              ]
+      "General"
+    ]
   }
 }
