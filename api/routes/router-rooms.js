@@ -50,11 +50,13 @@ router.route('/rooms').post(auth.isAuthenticated, function(req, res){
 });
 
 //Get, modify or delete a room or get all rooms(only superuser)
-router.route('/rooms/:room').get(auth.isAuthenticated, function(req, res){
-
-}).put(auth.isAuthenticated, function(req, res){
+router.route('/rooms/:room').put(auth.isAuthenticated, function(req, res){
 
 }).delete(auth.isAuthenticated, function(req, res){
+
+});
+
+router.route('/rooms/:room/:version').get(auth.isAuthenticated, function(req, res){
 
 });
 
@@ -64,14 +66,15 @@ router.route('/findrooms').post(auth.isAuthenticated, function(req, res){
 });
 
 //find bookings of requesting user
-router.route('/bookings').get(auth.isAuthenticated, function(req, res){
+router.route('/bookings/:version').get(auth.isAuthenticated, function(req, res){
 
 });
 
 //find bookings for the specified room and submit a list of interval to booking
-router.route('/bookings/:room').get(auth.isAuthenticated, function(req, res){
+router.route('/bookings/:room/:version').get(auth.isAuthenticated, function(req, res){
 
-}).post(auth.isAuthenticated, function(req, res){
+});
+router.route('/bookings/:room').post(auth.isAuthenticated, function(req, res){
 
 });
 

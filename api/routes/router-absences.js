@@ -43,4 +43,46 @@ router.get('/', function(req, res){
     });
 });
 
+//get all requests of requesting user
+router.route('/requests').post(auth.isAuthenticated, function(req, res){
+
+});
+
+//version for previouse request
+router.route('/requests/:version').get(auth.isAuthenticated, function(req, res){
+
+});
+
+//approves a request(just for requests of employees of requesting user)
+router.route('/requests/approve/:request').put(auth.isAuthenticated, function(req, res){
+
+});
+
+//modify(delete) a request (only for the creator of the request)
+router.route('/requests/:request').put(auth.isAuthenticated, function(req, res){
+
+}).delete(auth.isAuthenticated, function(req, res){
+
+});
+
+//get info of the specified request
+router.route('/requests/:request/:version').get(auth.isAuthenticated, function(req, res){
+
+});
+
+//get requesting user's employees information
+router.route('/employees/:version').get(auth.isAuthenticated, function(req, res){
+
+});
+
+//get all request made by requesting user's employees
+router.route('/employees/requests/:version').get(auth.isAuthenticated, function(req, res){
+
+});
+
+//get info of the specified user's requests
+router.route('/employees/requests/:employee/:version').get(auth.isAuthenticated, function(req, res){
+
+});
+
 module.exports = router;

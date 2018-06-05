@@ -44,4 +44,56 @@ router.get('/', function(req, res){
     });
 });
 
+//Create an empty survey
+router.route('/surveys').post(auth.isAuthenticated, function(req, res){
+
+});
+
+router.route('/surveys/:version').get(auth.isAuthenticated, function(req, res){
+
+});
+
+//Add or delete a step in specified survey or view specified survey
+router.route('/surveys/:survey').post(auth.isAuthenticated, function(req, res){
+
+}).delete(auth.isAuthenticated, function(req, res){
+
+});
+
+router.route('/surveys/:survey/:version').get(auth.isAuthenticated, function(req, res){
+
+});
+
+//Modify, get or delete question
+router.route('/questions/:survey/:question').put(auth.isAuthenticated, function(req, res){
+
+}).delete(auth.isAuthenticated, function(req, res){
+
+});
+
+router.route('/questions/:survey/:question/:version').get(auth.isAuthenticated, function(req, res){
+
+})
+
+//Submit a question
+router.route('/answers/:survey/:question').post(auth.isAuthenticated, function(req, res){
+
+});
+
+//Modify, get or delete specific answer
+router.route('/answers/:survey/:question/:answer').put(auth.isAuthenticated, function(req, res){
+
+}).delete(auth.isAuthenticated, function(req, res){
+
+});
+
+router.route('/answers/:survey/:question/:answer/:version').get(auth.isAuthenticated, function(req, res){
+
+})
+
+//Get of details
+router.route('/surveysdetails/:survey/:version').get(auth.isAuthenticated, function(req, res){
+
+});
+
 module.exports = router;
