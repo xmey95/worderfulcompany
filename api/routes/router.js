@@ -342,4 +342,15 @@ router.route('/users/:user').get(function(req, res) {
   });
 });
 
+//Set the manager for specified survey
+router.route('/users/set_survey_manager/:user/:survey').post(auth.isAuthenticated, function(req, res) {
+
+});
+
+
+//set the boss for specified employee
+router.route('/users/set_boss/:user/:boss').post(auth.isAuthenticated, function(req, res) {
+
+});
+
 module.exports = router;
