@@ -38,7 +38,7 @@ var condition = 'CREATE TABLE if not exists conditions (id integer primary key A
 
 var supervision = 'CREATE TABLE if not exists supervisions (id_user integer not null, id_boss integer not null, foreign key(id_user) references users(id), foreign key(id_boss) references users(id))'
 
-var accessoryroom = 'CREATE TABLE if not exists accessoriesrooms (id_room integer not null, id_accessory integer not null, quantity integer not null, foreign key(id_room) references rooms(id), foreign key(id_accessory) references accessories(id))'
+var accessoryroom = 'CREATE TABLE if not exists accessoriesrooms (id_room integer not null, id_accessory integer not null, quantity integer not null, foreign key(id_room) references rooms(id) ON DELETE CASCADE, foreign key(id_accessory) references accessories(id))'
 
 var booking = 'CREATE TABLE if not exists bookings (id integer primary key AUTO_INCREMENT, start_date date, end_date date, id_room integer not null, id_user integer not null, foreign key(id_room) references rooms(id), foreign key(id_user) references users(id))'
 
