@@ -30,7 +30,7 @@ var accessory = 'CREATE TABLE if not exists accessories (id integer primary key 
 
 var survey = 'CREATE TABLE if not exists surveys (id integer primary key AUTO_INCREMENT, name text not null, id_user integer not null, foreign key(id_user) references users(id))'
 
-var question = 'CREATE TABLE if not exists questions (id integer primary key AUTO_INCREMENT, question text not null, answer text not null, type text not null, step integer not null, condition_answer boolean not null)'
+var question = 'CREATE TABLE if not exists questions (id integer primary key AUTO_INCREMENT, question text not null, answer text, type text not null, step integer not null, condition_answer boolean not null, id_survey integer not null, foreign key(id_survey) references surveys(id))'
 
 var answer = 'CREATE TABLE if not exists answers (id_question integer not null, id_user integer not null, answer text not null, foreign key(id_user) references users(id), foreign key(id_question) references questions(id))'
 
