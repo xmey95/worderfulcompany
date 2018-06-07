@@ -125,16 +125,21 @@ router.route('/rooms/:room').put(auth.isAuthenticated, function(req, res){
 }).delete(auth.isAuthenticated, function(req, res){
     
     pool.getConnection(function(err, connection) {
-        connection.query('DELETE FROM ?? WHERE id = ?', ['rooms', req.params.room], function (err, results, fields) {
-        // And done with the connection.
-        connection.release();
-  
-        if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
-        res.status(201).send(JSON.stringify({success:true, error:null}));
+        connection.query('SELECT * FROM ?? WHERE id = ?', ['rooms', req.params.room], function (err, results, fields) {
+    
+            if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+            if (results.length==0) return res.status(404).send(JSON.stringify({success:false, error:"ROOM_NOT_FOUND"}));
+
+            connection.query('DELETE FROM ?? WHERE id = ?', ['rooms', req.params.room], function (err, results, fields) {
+            // And done with the connection.
+            connection.release();
+        
+            if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
+            res.status(201).send(JSON.stringify({success:true, error:null}));
+            });
+            
         });
-
     });
-
 });
 
 router.route('/rooms/:room/:version').get(auth.isAuthenticated, function(req, res){
