@@ -349,7 +349,17 @@ router.route('/users/set_survey_manager/:user/:survey').post(auth.isAuthenticate
 
 
 //set the boss for specified employee
-router.route('/users/set_boss/:user/:boss').post(auth.isAuthenticated, function(req, res) {
+router.route('/users/set_boss/').post(auth.isAuthenticated, function(req, res) {
+if(req.user.superuser !=1) return res.status(401).send(JSON.stringify({success:false, error:"UNAUTHORIZED"}));
+
+pool.getConnection(function(err, connection) {
+    var post  = {id_user: req.body.user, id_boss: req.body.boss};
+    connection.query('INSERT INTO ?? SET ?', ['supervisions', post], function (err, results, fields) {
+        connection.release();
+        if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
+        res.status(201).send(JSON.stringify({success:true, error:null}));
+    });
+  });
 
 });
 
