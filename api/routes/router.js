@@ -387,4 +387,17 @@ pool.getConnection(function(err, connection) {
 
 });
 
+//get the id of a user from his email address
+router.route('/users/get_id_by_mail/').post(auth.isAuthenticated, function(req, res) {
+pool.getConnection(function(err, connection) {
+    connection.query('SELECT ?? FROM ?? WHERE ?? = ?', ['id', 'users', 'email', req.body.email], function (err, results, fields) {
+        connection.release();
+        if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
+        if (!results || results.length==0) return res.status(404).send(JSON.stringify({success:false, error:"USER_NOT_FOUND"}));
+        res.status(201).send(JSON.stringify({success:true, error:null, user: results[0].id}));
+    });
+  });
+
+});
+
 module.exports = router;
