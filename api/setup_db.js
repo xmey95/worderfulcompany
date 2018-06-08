@@ -22,7 +22,7 @@ console.log("Starting DB Setup...")
 
 var users = 'CREATE TABLE if not exists users (id integer primary key AUTO_INCREMENT, password text not null, name text not null, surname text not null, email text not null, superuser boolean not null default false)'
 
-var absence = 'CREATE TABLE if not exists absences (id integer primary key AUTO_INCREMENT, id_user integer not null, state integer not null, reason text not null, justified boolean, start_date date, end_date date, foreign key(id_user) references users(id))'
+var absence = 'CREATE TABLE if not exists absences (id integer primary key AUTO_INCREMENT, id_user integer not null, state integer not null, reason text not null, justification_file text, start_date date, end_date date, foreign key(id_user) references users(id))'
 
 var room = 'CREATE TABLE if not exists rooms (id integer primary key AUTO_INCREMENT, name text not null, floor text not null, capacity text not null)'
 
