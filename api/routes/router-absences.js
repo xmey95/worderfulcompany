@@ -56,7 +56,41 @@ router.get('/', function(req, res){
 });
 
 
-//create a new request for an absence
+/**
+ * @api {post} /requests                                                         My Requests
+ * @apiName My Requests
+ * @apiDescription                                                              Submit a new absence request
+ * @apiError           (Error 500) InternalServerError                          Submission failed.
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *         success : false,
+ *         error : "INTERNAL_SERVER_ERROR"
+ *      }
+ * @apiGroup Absences
+ * @apiParam           {String} reason                                          Reason of the absence
+ * @apiParam           {Date} start_date                                        Initial date of the absence
+ * @apiParam           {Date} end_date                                          Final date of the absence (included)
+ * @apiParamExample    {json} Request-Example:
+ *     {
+ *         "reason": "Malattia",
+ *         "stard_date": "2018-08-08",
+ *         "end_date": "2018-08-09"
+ *     }
+ * @apiHeader {String} Authorization                                            Authentication Token
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "bearer <token>"
+ *     }
+ * @apiSuccess {Boolean} success                                                True if query is succcessfully
+ * @apiSuccess {String} error                                                   String containing the error, it's null if success is true.
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "error": null
+ *     }
+ */
 router.route('/requests').post(auth.isAuthenticated, function(req, res){
   pool.getConnection(function(err, connection) {
       var post  = {state : 0, reason: req.body.reason, start_date:req.body.start_date, end_date: req.body.end_date, id_user: req.user.id};
@@ -68,6 +102,45 @@ router.route('/requests').post(auth.isAuthenticated, function(req, res){
     });
 
 });
+
+
+/**
+ * @api {get} /requests/:version                                                My Requests
+ * @apiName My Requests
+ * @apiDescription Get the list of the absence requests made by the requesting user
+ * @apiError           (Error 500) InternalServerError                          Query failed.
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *         success : false,
+ *         error : "INTERNAL_SERVER_ERROR"
+ *      }
+ * @apiGroup Absences
+ * @apiParam {String} version                                                   If "true" the request returns a version code of the value
+ * @apiHeader {String} Authorization                                            Authentication Token
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "bearer <token>"
+ *     }
+ * @apiSuccess {Boolean} success                                                True if query is succcessfully
+ * @apiSuccess {String} error                                                   String containing the error, it's null if success is true.
+ * @apiSuccess {String} requests                                                String containing the stringified list of requests
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "error": null
+ *       "requests": [
+ *                {  "id":4,
+ *                   "id_user":1,
+ *                   "state":0,
+ *                   "reason":"febbre",
+ *                   "justification_file":"absences/requests/get_justification/4.png",
+ *                   "start_date":"2018-09-06T22:00:00.000Z",
+ *                   "end_date":"2018-09-08T22:00:00.000Z"
+ *                  }]
+ *     }
+ */
 
 //get all absence (approved and not approved) of the requesting user
 router.route('/requests/:version').get(auth.isAuthenticated, function(req, res){
@@ -88,7 +161,41 @@ router.route('/requests/:version').get(auth.isAuthenticated, function(req, res){
     });
 });
 
-//upload justification file for a request
+
+/**
+* @api                {put} /requests/:request/upload_justification             Upload Justification
+* @apiName            Upload Justification
+* @apiDescription     Upload Justification file for specified request
+* @apiError           (Error 500) InternalServerError                           Query failed.
+* @apiError           (Error 404) NotFoundError                                 Resource not found.
+* @apiErrorExample    {json} Error-Response:
+*     HTTP/1.1 500 Internal Server Error
+*     {
+*         success : false,
+*         error : "INTERNAL_SERVER_ERROR"
+*      }
+* @apiErrorExample    {json} Error-Response:
+*     HTTP/1.1 404 Not Found Error
+*     {
+*         success : false,
+*         error : "REQUESTS_NOT_FOUND"
+*      }
+* @apiParam {Number} request                                                    The id of the request
+* @apiHeader {String} Authorization                                             Authentication Token
+* @apiHeaderExample {json} Header-Example:
+*     {
+*       "Authorization": "bearer <token>"
+*     }
+* @apiGroup           Absences
+* @apiSuccess         {Boolean} success                                         True if the query is succesfully.
+* @apiSuccess         {String} error                                            String containing the error, it's null if success is true.
+* @apiSuccessExample  {json} Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*       "success": true,
+*       "error": null
+*      }
+*/
 router.route('/requests/:request/upload_justification').put(auth.isAuthenticated, function(req, res){
   var form = new formidable.IncomingForm();
   form.parse(req, function (err, fields, files) {
@@ -107,37 +214,81 @@ router.route('/requests/:request/upload_justification').put(auth.isAuthenticated
                 connection.release();
                 return res.status(500).send(JSON.stringify({success:false, error:err}));
               }
-              if (!results || results.length == 0) {
+              console.log(JSON.stringify(results));
+              if (!results || results.affectedRows == 0) {
                 connection.release();
                 return res.status(404).send(JSON.stringify({success:false, error:"REQUEST_NOT_FOUND"}));
               }
-
-              if(req.user.id != results[0].id_user){ //if user is not the owner of the request the changes in the request are discarded
-                connection.query('UPDATE ?? SET ?? = NULL WHERE ?? = ?', ['absences', 'justification_file', 'id', req.params.request], function (err, results, fields) {
-                    connection.release();
-                    if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
-                    return res.status(401).send(JSON.stringify({success:false, error:"UNAUTHORIZED"}));
-                });
-              }
-
-              else{
                 connection.release();
                 return res.status(201).send(JSON.stringify({success:true, error:null}));
-              }
           });
         });
     });
   });
 });
 
-//Get a justification file from the storage
+
+/**
+* @api                {get} /requests/get_justification/:file                   Get a justification file from the storage
+* @apiName            Get Justification
+* @apiDescription     Get Justification file identified by filename
+* @apiError           (Error 404) NotFoundError                                 Resource not found
+* @apiGroup           Absences
+* @apiHeader {String} Authorization                                             Authentication Token
+* @apiHeaderExample {json} Header-Example:
+*     {
+*       "Authorization": "bearer <token>"
+*     }
+*
+* @apiParam {String} file                                                       Filename of the JUstification file, it's like <id_absence>.<extension>
+* @apiSuccess         {File} file                                               Requested file
+*/
 router.route('/requests/get_justification/:file').get(auth.isAuthenticated, function(req,res){
     var path = config.media_path + '/justification_files/' + req.params.file;
     res.sendFile(path);
 });
 
-
-//approves a request(just for requests of employees of requesting user)
+/**
+ * @api                {put} /requests/approve/:request                         Approve Request
+ * @apiName            Approve Request
+ * @apiDescription     Approve an absence request made by an Employee of the requesting user
+ * @apiGroup           Absences
+ * @apiError           (Error 500) InternalServerError                          Operation failed.
+ * @apiError           (Error 404) NotFoundError                                Request not found.
+ * @apiError           (Error 401) Unauthorized                                 The user is not the boss of the request's owner
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *         success : false,
+ *         error : "INTERNAL_SERVER_ERROR"
+ *      }
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 401 Unauthorized
+ *     {
+ *         success : false,
+ *         error : "UNAUTHORIZED"
+ *      }
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 404 Not Found Error
+ *     {
+ *         success : false,
+ *         error : "REQUEST_NOT_FOUND"
+ *      }
+ * @apiHeader {String} Authorization                                            Authentication Token
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "bearer <token>"
+ *     }
+ * @apiParam {Number} request                                                   The id of the request.
+ * @apiSuccess         {Boolean} success                                         True if the query is succesfully.
+ * @apiSuccess         {String} error                                            String containing the error, it's null if success is true.
+ * @apiSuccessExample  {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "error": null
+ *      }
+ */
 router.route('/requests/approve/:request').put(auth.isAuthenticated, function(req, res){
   pool.getConnection(function(err, connection) {
     connection.query('SELECT ?? FROM ??, ?? WHERE ?? = ??', ['supervisions.id_boss', 'absences', 'supervisions', 'absences.id_user', 'supervisions.id_user'], function (err, results, fields) {
@@ -185,7 +336,54 @@ router.route('/requests/approve/:request').put(auth.isAuthenticated, function(re
     });
 });
 
-//refuse a request(just for requests of employees of requesting user)
+/**
+ * @api                {put} /requests/refuse/:request                          Refuse Request
+ * @apiName            Refuse Request
+ * @apiDescription     Refuse an absence request made by an Employee of the requesting user
+ * @apiGroup           Absences
+ * @apiError           (Error 500) InternalServerError                          Operation failed.
+ * @apiError           (Error 404) NotFoundError                                Request not found.
+ * @apiError           (Error 401) Unauthorized                                 The user is not the boss of the request's owner
+ * @apiError           (Error 400) BadRequest                                   The request's state is not pending
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *         success : false,
+ *         error : "INTERNAL_SERVER_ERROR"
+ *      }
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *         success : false,
+ *         error : "REQUEST_NOT_PENDING"
+ *      }
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 401 Unauthorized
+ *     {
+ *         success : false,
+ *         error : "UNAUTHORIZED"
+ *      }
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 404 Not Found Error
+ *     {
+ *         success : false,
+ *         error : "REQUEST_NOT_FOUND"
+ *      }
+ * @apiHeader {String} Authorization                                            Authentication Token
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "bearer <token>"
+ *     }
+ * @apiParam {Number} request                                                   The id of the request.
+ * @apiSuccess         {Boolean} success                                         True if the query is succesfully.
+ * @apiSuccess         {String} error                                            String containing the error, it's null if success is true.
+ * @apiSuccessExample  {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "error": null
+ *      }
+ */
 router.route('/requests/refuse/:request').put(auth.isAuthenticated, function(req, res){
   pool.getConnection(function(err, connection) {
     connection.query('SELECT ?? FROM ??, ?? WHERE ?? = ??', ['supervisions.id_boss', 'absences', 'supervisions', 'absences.id_user', 'supervisions.id_user'], function (err, results, fields) {
@@ -233,7 +431,119 @@ router.route('/requests/refuse/:request').put(auth.isAuthenticated, function(req
     });
 });
 
-//modify(delete) a request (only for the creator of the request)
+
+
+/**
+ * @api                {put} /requests/:request                                 Modify Request
+ * @apiName            Modify Request
+ * @apiDescription     Modify an absence request made by the requesting user
+ * @apiGroup           Absences
+ * @apiError           (Error 500) InternalServerError                          Operation failed.
+ * @apiError           (Error 404) NotFoundError                                Request not found.
+ * @apiError           (Error 401) Unauthorized                                 The user is not the request's owner
+ * @apiError           (Error 400) BadRequest                                   The request's state is not pending
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *         success : false,
+ *         error : "INTERNAL_SERVER_ERROR"
+ *      }
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *         success : false,
+ *         error : "REQUEST_NOT_PENDING"
+ *      }
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 401 Unauthorized
+ *     {
+ *         success : false,
+ *         error : "UNAUTHORIZED"
+ *      }
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 404 Not Found Error
+ *     {
+ *         success : false,
+ *         error : "REQUEST_NOT_FOUND"
+ *      }
+ * @apiHeader {String} Authorization                                            Authentication Token
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "bearer <token>"
+ *     }
+ * @apiParam           {String} reason                                          Optional Reason of the absence
+ * @apiParam           {Date} start_date                                        Optional Initial date of the absence
+ * @apiParam           {Date} end_date                                          Optional Final date of the absence (included)
+ * @apiParamExample    {json} Request-Example:
+ *     {
+ *       "reason": "Malattia",
+ *       "end_date": "2018-08-09"
+ *     }
+ *
+ *
+ *
+ * @apiParam {Number} request                                                   The id of the request.
+ * @apiSuccess         {Boolean} success                                         True if the query is succesfully.
+ * @apiSuccess         {String} error                                            String containing the error, it's null if success is true.
+ * @apiSuccessExample  {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "error": null
+ *      }
+ */
+
+ /**
+  * @api                {delete} /requests/:request                             Delete Request
+  * @apiName            Delete Request
+  * @apiDescription     Delete an absence request made by the requesting user
+  * @apiGroup           Absences
+  * @apiError           (Error 500) InternalServerError                         Operation failed.
+  * @apiError           (Error 404) NotFoundError                               Request not found.
+  * @apiError           (Error 401) Unauthorized                                The user is not the request's owner
+  * @apiError           (Error 400) BadRequest                                  The request's state is not pending
+  * @apiErrorExample    {json} Error-Response:
+  *     HTTP/1.1 500 Internal Server Error
+  *     {
+  *         success : false,
+  *         error : "INTERNAL_SERVER_ERROR"
+  *      }
+  * @apiErrorExample    {json} Error-Response:
+  *     HTTP/1.1 400 Bad Request
+  *     {
+  *         success : false,
+  *         error : "REQUEST_NOT_PENDING"
+  *      }
+  * @apiErrorExample    {json} Error-Response:
+  *     HTTP/1.1 401 Unauthorized
+  *     {
+  *         success : false,
+  *         error : "UNAUTHORIZED"
+  *      }
+  * @apiErrorExample    {json} Error-Response:
+  *     HTTP/1.1 404 Not Found Error
+  *     {
+  *         success : false,
+  *         error : "REQUEST_NOT_FOUND"
+  *      }
+  * @apiHeader {String} Authorization                                           Authentication Token
+  * @apiHeaderExample {json} Header-Example:
+  *     {
+  *       "Authorization": "bearer <token>"
+  *     }
+  *
+  *
+  * @apiParam {Number} request                                                  The id of the request to delete
+  * @apiSuccess         {Boolean} success                                       True if the deletion is succesfully.
+  * @apiSuccess         {String} error                                          String containing the error, it's null if success is true.
+  * @apiSuccessExample  {json} Success-Response:
+  *     HTTP/1.1 200 OK
+  *     {
+  *       "success": true,
+  *       "error": null
+  *      }
+  */
+
 router.route('/requests/:request').put(auth.isAuthenticated, function(req, res){
   pool.getConnection(function(err, connection) {
     connection.query('SELECT * FROM ?? WHERE ?? = ?', ['absences', 'id', req.params.request], function (err, results, fields) {
@@ -306,7 +616,52 @@ router.route('/requests/:request').put(auth.isAuthenticated, function(req, res){
   });
 });
 
-//get info of the specified request
+
+/**
+ * @api {get} /requests/:request/:version                                       Get Request
+ * @apiName   Get Requests
+ * @apiDescription Get info of the specified absence request
+ * @apiError           (Error 500) InternalServerError                          Query failed.
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *         success : false,
+ *         error : "INTERNAL_SERVER_ERROR"
+ *      }
+ * @apiError           (Error 404) NotFoundError                                Request not found.
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 404 Not Found Error
+ *     {
+ *         success : false,
+ *         error : "REQUEST_NOT_FOUND"
+ *      }
+ * @apiGroup Absences
+ * @apiParam {String} version                                                   If "true" the request returns a version code of the value
+ * @apiParam {Number} request                                                   Id of the request to get
+ * @apiHeader {String} Authorization                                            Authentication Token
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "bearer <token>"
+ *     }
+ * @apiSuccess {Boolean} success                                                True if query is succcessfully
+ * @apiSuccess {String} error                                                   String containing the error, it's null if success is true.
+ * @apiSuccess {String} request                                                 String containing the stringified request object
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "error": null
+ *       "request":
+ *                {  "id":4,
+ *                   "id_user":1,
+ *                   "state":0,
+ *                   "reason":"Malattia",
+ *                   "justification_file":"absences/requests/get_justification/4.png",
+ *                   "start_date":"2018-09-06T22:00:00.000Z",
+ *                   "end_date":"2018-09-08T22:00:00.000Z"
+ *                  }
+ *     }
+ */
 router.route('/requests/:request/:version').get(auth.isAuthenticated, function(req, res){
   pool.getConnection(function(err, connection) {
     connection.query('SELECT * FROM ?? WHERE ?? = ?', ['absences', 'id', req.params.request], function (err, results, fields) {
@@ -324,7 +679,48 @@ router.route('/requests/:request/:version').get(auth.isAuthenticated, function(r
   });
 });
 
-//get requesting user's employees information
+
+
+/**
+ * @api {get} /employees/:version                                               Get My Employees
+ * @apiName   Get My Employees
+ * @apiDescription Get a list of all Employees of requesting user
+ * @apiError           (Error 500) InternalServerError                          Query failed.
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *         success : false,
+ *         error : "INTERNAL_SERVER_ERROR"
+ *      }
+ * @apiGroup Absences
+ * @apiParam {String} version                                                   If "true" the request returns a version code of the value
+ * @apiHeader {String} Authorization                                            Authentication Token
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "bearer <token>"
+ *     }
+ * @apiSuccess {Boolean} success                                                True if query is succcessfully
+ * @apiSuccess {String} error                                                   String containing the error, it's null if success is true.
+ * @apiSuccess {String} users                                                   String containing the stringified list of users
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "error": null
+ *       "users": [
+ *                  {
+ *                   "name":"Pippo",
+ *                   "surname":"Pluto",
+ *                   "email":"pippo@pluto.it"
+ *                  },
+ *                  {
+ *                   "name":"Paolino",
+ *                   "surname":"Paperino",
+ *                   "email":"paolino@paperino.it"
+ *                  }
+ *                 ]
+ *     }
+ */
 router.route('/employees/:version').get(auth.isAuthenticated, function(req, res){
   pool.getConnection(function(err, connection) {
     connection.query('SELECT * FROM ??,?? WHERE ?? = ?? AND ??=?', ['users', 'supervisions', 'supervisions.id_user', 'users.id', 'supervisions.id_boss', req.user.id], function (err, results, fields) {
@@ -347,8 +743,46 @@ router.route('/employees/:version').get(auth.isAuthenticated, function(req, res)
 });
 
 
-//get info of the specified user's requests (if requesting user is his boss)
-router.route('/employees/requests/:employee/:version').get(auth.isAuthenticated, function(req, res){
+/**
+ * @api {get} /employees/requests/:employee/:version                            Get Employee Requests
+ * @apiName   Get Employee Requests
+ * @apiDescription Get a list of all Requests made by specified requesting user's Employee
+ * @apiError           (Error 500) InternalServerError                          Query failed.
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *         success : false,
+ *         error : "INTERNAL_SERVER_ERROR"
+ *      }
+ * @apiGroup Absences
+ * @apiParam {String} version                                                   If "true" the request returns a version code of the value
+ * @apiParam {Number} employee                                                  Id of the employee
+ * @apiHeader {String} Authorization                                            Authentication Token
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "bearer <token>"
+ *     }
+ * @apiSuccess {Boolean} success                                                True if query is succcessfully
+ * @apiSuccess {String} error                                                   String containing the error, it's null if success is true.
+ * @apiSuccess {String} requests                                                String containing the stringified list of requests
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "error": null
+ *       "requests": [
+ *                  {  "id":4,
+ *                   "id_user":1,
+ *                   "state":0,
+ *                   "reason":"Malattia",
+ *                   "justification_file":"absences/requests/get_justification/4.png",
+ *                   "start_date":"2018-09-06T22:00:00.000Z",
+ *                   "end_date":"2018-09-08T22:00:00.000Z"
+ *                  }
+ *                 ]
+ *     }
+ */
+ router.route('/employees/requests/:employee/:version').get(auth.isAuthenticated, function(req, res){
   pool.getConnection(function(err, connection) {
       connection.query('SELECT * FROM ??,?? WHERE ?? = ?? AND ??=? AND ??=?', ['absences','supervisions', 'supervisions.id_user', 'absences.id_user', 'supervisions.id_boss', req.user.id, 'absences.id_user', req.params.employee], function (err, results, fields) {
           connection.release();
@@ -365,7 +799,53 @@ router.route('/employees/requests/:employee/:version').get(auth.isAuthenticated,
     });
 });
 
-//get all request made by requesting user's employees
+
+/**
+ * @api {get} /employees/requests/:version                                      Get Employees Requests
+ * @apiName   Get Employees Requests
+ * @apiDescription Get a list of all Requests made by anyone of the requesting user's Employee
+ * @apiError           (Error 500) InternalServerError                          Query failed.
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *         success : false,
+ *         error : "INTERNAL_SERVER_ERROR"
+ *      }
+ * @apiGroup Absences
+ * @apiParam {String} version                                                   If "true" the request returns a version code of the value
+ * @apiHeader {String} Authorization                                            Authentication Token
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "bearer <token>"
+ *     }
+ * @apiSuccess {Boolean} success                                                True if query is succcessfully
+ * @apiSuccess {String} error                                                   String containing the error, it's null if success is true.
+ * @apiSuccess {String} requests                                                String containing the stringified list of requests
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "error": null
+ *       "requests": [
+ *                  {  "id":4,
+ *                   "id_user":1,
+ *                   "state":0,
+ *                   "reason":"Malattia",
+ *                   "justification_file":"absences/requests/get_justification/4.png",
+ *                   "start_date":"2018-09-06T22:00:00.000Z",
+ *                   "end_date":"2018-09-08T22:00:00.000Z"
+ *                  },
+ *                 {  "id":50,
+ *                   "id_user":13,
+ *                   "state":1,
+ *                   "reason":"Ferie",
+ *                   "justification_file":"absences/requests/get_justification/50.pdf",
+ *                   "start_date":"2018-10-06T22:00:00.000Z",
+ *                   "end_date":"2018-10-15T22:00:00.000Z"
+ *                  }
+ *                 ]
+ *     }
+ */
 router.route('/employees/requests/:version').get(auth.isAuthenticated, function(req, res){
   pool.getConnection(function(err, connection) {
       connection.query('SELECT * FROM ??,?? WHERE ?? = ?? AND ??=?', ['absences','supervisions', 'supervisions.id_user', 'absences.id_user', 'supervisions.id_boss', req.user.id], function (err, results, fields) {

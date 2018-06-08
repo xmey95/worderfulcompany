@@ -347,14 +347,45 @@ router.route('/users/set_survey_manager/:user/:survey').post(auth.isAuthenticate
 
 });
 
-
-//set/update the boss for specified employee
+/**
+ * @api {post} /users/set_boss/                                                 Set/Update boss
+ * @apiName Set/Update boss
+ * @apiDescription                                                              Set (or update if exists) the boss for specified user
+ * @apiError           (Error 500) InternalServerError                          Submission failed.
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *         success : false,
+ *         error : "INTERNAL_SERVER_ERROR"
+ *      }
+ * @apiGroup                                                                    General
+ * @apiParam           {Number} user                                            Id of the Employee
+ * @apiParam           {Number} boss                                            Id of the Boss
+ * @apiParamExample    {json} Request-Example:
+ *     {
+ *         "user": 23,
+ *         "boss": 6
+ *     }
+ * @apiHeader {String} Authorization                                            Authentication Token
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "bearer <token>"
+ *     }
+ * @apiSuccess {Boolean} success                                                True if query is succcessfully
+ * @apiSuccess {String} error                                                   String containing the error, it's null if success is true.
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "error": null
+ *     }
+ */
 router.route('/users/set_boss/').post(auth.isAuthenticated, function(req, res) {
   if(req.user.superuser !=1) return res.status(401).send(JSON.stringify({success:false, error:"UNAUTHORIZED"}));
   pool.getConnection(function(err, connection) {
       connection.query('SELECT * FROM ?? WHERE ?? = ?', ['supervisions', 'id_user', req.body.user], function (err, results, fields) {
           if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
-          if (!results) return res.status(404).send(JSON.stringify({success:false, error:"BOSS_NOT_FOUND"}));
+          if (!results) return res.status(404).send(JSON.stringify({success:false, error:"USER_NOT_FOUND"}));
           if(results.length == 0){//l'utente non aveva un boss, inserimento nuova entry nella tabella supervisions
             var post  = {id_user: req.body.user, id_boss: req.body.boss};
             connection.query('INSERT INTO ?? SET ?', ['supervisions', post], function (err, results, fields) {
@@ -374,8 +405,37 @@ router.route('/users/set_boss/').post(auth.isAuthenticated, function(req, res) {
 
 });
 
-//get the boss for specified employee
-router.route('/users/:user/get_boss/').get(auth.isAuthenticated, function(req, res) {
+
+/**
+ * @api {get} /users/:user/get_boss/                                            Get Boss
+ * @apiName                                                                     Get Boss
+ * @apiDescription                                                              Get the id of specified user's Boss
+ * @apiError           (Error 500) InternalServerError                          Query failed.
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *         success : false,
+ *         error : "INTERNAL_SERVER_ERROR"
+ *      }
+ * @apiGroup General
+ * @apiParam {String} user                                                      Id of the Employee
+ * @apiHeader {String} Authorization                                            Authentication Token
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "bearer <token>"
+ *     }
+ * @apiSuccess {Boolean} success                                                True if query is succcessfully
+ * @apiSuccess {String} error                                                   String containing the error, it's null if success is true.
+ * @apiSuccess {Number} boss                                                    Id of the specified user's boss
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "error": null
+ *       "boss": 5
+ *     }
+ */
+router.route('/users/:user/get_boss/').get(function(req, res) {
 pool.getConnection(function(err, connection) {
     connection.query('SELECT ?? FROM ?? WHERE ?? = ?', ['id_boss', 'supervisions', 'id_user', req.params.user], function (err, results, fields) {
         connection.release();
@@ -387,7 +447,44 @@ pool.getConnection(function(err, connection) {
 
 });
 
-//get the id of a user from his email address
+
+
+/**
+ * @api {get} /users/get_id_by_mail/                                            Get Id by Email
+ * @apiName                                                                     Get Id by Email
+ * @apiDescription                                                              Get the id the user who owns the specified email address
+ * @apiError           (Error 500) InternalServerError                          Query failed.
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *         success : false,
+ *         error : "INTERNAL_SERVER_ERROR"
+ *      }
+ * @apiError           (Error 404) NotFoundError                                Request not found.
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 404 Not Found Error
+ *     {
+ *         success : false,
+ *         error : "USER_NOT_FOUND"
+ *      }
+ * @apiGroup General
+ * @apiParam {String} email                                                     Email of the user to find
+ * @apiHeader {String} Authorization                                            Authentication Token
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "bearer <token>"
+ *     }
+ * @apiSuccess {Boolean} success                                                True if query is succcessfully
+ * @apiSuccess {String} error                                                   String containing the error, it's null if success is true.
+ * @apiSuccess {Number} user                                                    Id of the user
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "error": null
+ *       "user": 14
+ *     }
+ */
 router.route('/users/get_id_by_mail/').post(auth.isAuthenticated, function(req, res) {
 pool.getConnection(function(err, connection) {
     connection.query('SELECT ?? FROM ?? WHERE ?? = ?', ['id', 'users', 'email', req.body.email], function (err, results, fields) {
