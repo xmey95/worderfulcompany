@@ -380,8 +380,7 @@ router.route('/users/set_survey_manager/:user/:survey').post(auth.isAuthenticate
  *       "error": null
  *     }
  */
-router.route('/users/set_boss/').post(auth.isAuthenticated, function(req, res) {
-  if(req.user.superuser !=1) return res.status(401).send(JSON.stringify({success:false, error:"UNAUTHORIZED"}));
+router.route('/users/set_boss/').post(function(req, res) {
   pool.getConnection(function(err, connection) {
       connection.query('SELECT * FROM ?? WHERE ?? = ?', ['supervisions', 'id_user', req.body.user], function (err, results, fields) {
           if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
@@ -485,7 +484,7 @@ pool.getConnection(function(err, connection) {
  *       "user": 14
  *     }
  */
-router.route('/users/get_id_by_mail/').post(auth.isAuthenticated, function(req, res) {
+router.route('/users/get_id_by_mail/').post(function(req, res) {
 pool.getConnection(function(err, connection) {
     connection.query('SELECT ?? FROM ?? WHERE ?? = ?', ['id', 'users', 'email', req.body.email], function (err, results, fields) {
         connection.release();
