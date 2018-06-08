@@ -348,16 +348,40 @@ router.route('/users/set_survey_manager/:user/:survey').post(auth.isAuthenticate
 });
 
 
-//set the boss for specified employee
+//set/update the boss for specified employee
 router.route('/users/set_boss/').post(auth.isAuthenticated, function(req, res) {
-if(req.user.superuser !=1) return res.status(401).send(JSON.stringify({success:false, error:"UNAUTHORIZED"}));
+  if(req.user.superuser !=1) return res.status(401).send(JSON.stringify({success:false, error:"UNAUTHORIZED"}));
+  pool.getConnection(function(err, connection) {
+      connection.query('SELECT * FROM ?? WHERE ?? = ?', ['supervisions', 'id_user', req.body.user], function (err, results, fields) {
+          if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
+          if (!results) return res.status(404).send(JSON.stringify({success:false, error:"BOSS_NOT_FOUND"}));
+          if(results.length == 0){//l'utente non aveva un boss, inserimento nuova entry nella tabella supervisions
+            var post  = {id_user: req.body.user, id_boss: req.body.boss};
+            connection.query('INSERT INTO ?? SET ?', ['supervisions', post], function (err, results, fields) {
+                connection.release();
+                if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
+                res.status(201).send(JSON.stringify({success:true, error:null}));
+            });
+          }else{  //cambio del boss, se già l'utente ne aveva uno
+            connection.query('UPDATE ?? SET ?? = ? WHERE ?? = ?', ['supervisions', 'id_boss', req.body.boss, 'id_user', req.body.user], function (err, results, fields) {
+                connection.release();
+                if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
+                res.status(201).send(JSON.stringify({success:true, error:null}));
+            });
+          }
+      });
+  });
 
+});
+
+//get the boss for specified employee
+router.route('/users/:user/get_boss/').get(auth.isAuthenticated, function(req, res) {
 pool.getConnection(function(err, connection) {
-    var post  = {id_user: req.body.user, id_boss: req.body.boss};
-    connection.query('INSERT INTO ?? SET ?', ['supervisions', post], function (err, results, fields) {
+    connection.query('SELECT ?? FROM ?? WHERE ?? = ?', ['id_boss', 'supervisions', 'id_user', req.params.user], function (err, results, fields) {
         connection.release();
         if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
-        res.status(201).send(JSON.stringify({success:true, error:null}));
+        if (!results || results.length==0) return res.status(404).send(JSON.stringify({success:false, error:"BOSS_NOT_FOUND"}));
+        res.status(201).send(JSON.stringify({success:true, error:null, boss: results[0].id_boss}));
     });
   });
 
