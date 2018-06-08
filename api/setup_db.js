@@ -30,11 +30,11 @@ var accessory = 'CREATE TABLE if not exists accessories (id integer primary key 
 
 var survey = 'CREATE TABLE if not exists surveys (id integer primary key AUTO_INCREMENT, name text not null, id_user integer not null, foreign key(id_user) references users(id))'
 
-var question = 'CREATE TABLE if not exists questions (id integer primary key AUTO_INCREMENT, question text not null, answer text, type text not null, step integer not null, condition_answer boolean not null, id_survey integer not null, foreign key(id_survey) references surveys(id))'
+var question = 'CREATE TABLE if not exists questions (id integer primary key AUTO_INCREMENT, question text not null, answer text, type text not null, step integer not null, condition_answer boolean not null, id_survey integer not null, foreign key(id_survey) references surveys(id) ON DELETE CASCADE)'
 
-var answer = 'CREATE TABLE if not exists answers (id_question integer not null, id_user integer not null, answer text not null, foreign key(id_user) references users(id), foreign key(id_question) references questions(id))'
+var answer = 'CREATE TABLE if not exists answers (id integer primary key AUTO_INCREMENT, id_question integer not null, id_user integer not null, answer text not null, foreign key(id_user) references users(id) ON DELETE CASCADE, foreign key(id_question) references questions(id) ON DELETE CASCADE)'
 
-var condition = 'CREATE TABLE if not exists conditions (id integer primary key AUTO_INCREMENT, answer text not null, id_p_question integer not null, id_question integer not null, foreign key(id_p_question) references questions(id), foreign key(id_question) references questions(id))'
+var condition = 'CREATE TABLE if not exists conditions (id integer primary key AUTO_INCREMENT, answer text not null, id_p_question integer not null, id_question integer not null, foreign key(id_p_question) references questions(id) ON DELETE CASCADE, foreign key(id_question) references questions(id) ON DELETE CASCADE)'
 
 var supervision = 'CREATE TABLE if not exists supervisions (id_user integer not null, id_boss integer not null, foreign key(id_user) references users(id), foreign key(id_boss) references users(id))'
 

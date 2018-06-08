@@ -166,34 +166,176 @@ router.route('/surveys/:survey').post(auth.isAuthenticated, function(req, res){
 });
 
 router.route('/surveys/:survey/:version').get(auth.isAuthenticated, function(req, res){
+  var questions = []
+  pool.getConnection(function(err, connection) {
+      // Use the connection
+      connection.query('SELECT * FROM ?? WHERE ?? = ?', ['surveys', 'id', req.params.survey], function (err, results, fields) {
 
+        if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+        if (!results) return res.status(404).send(JSON.stringify({success:false, error:"SURVEYS_NOT_FOUND"}));
+
+        connection.query('SELECT * FROM ?? WHERE ?? = ?', ['questions', 'id_survey', req.params.survey], function (err, results, fields) {
+          if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+          if (!results) return res.status(404).send(JSON.stringify({success:false, error:"QUESTIONS_NOT_FOUND"}));
+
+          questions = results;
+          connection.release();
+          if(req.params.version=='false'){
+            return res.status(200).send(JSON.stringify({success:true, error:null, survey: results, questions: questions}));
+          }else{
+            var string = JSON.stringify(results) + JSON.stringify(questions);
+            string = crypto.createHash('sha1').update(string).digest('hex');
+            return res.status(200).send(JSON.stringify({success:true, error:null, version: string}));
+          }
+        });
+
+      });
+    });
 });
 
 //Modify, get or delete question
-router.route('/questions/:survey/:question').put(auth.isAuthenticated, function(req, res){
+router.route('/questions/:question').put(auth.isAuthenticated, function(req, res){
+  pool.getConnection(function(err, connection) {
+      if(req.body.condition_change == "true"){
+        connection.query('SELECT ?? FROM ?? WHERE ?? = ?', ['condition_answer', 'questions', 'id', req.params.question], function (err, results, fields) {
 
+          if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+          if (!results) return res.status(404).send(JSON.stringify({success:false, error:"QUESTION_NOT_FOUND"}));
+
+          connection.query('DELETE FROM ?? WHERE ?? = ?', ['conditions', 'id', results[0].condition_answer], function (err, results, fields) {
+
+            if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+            if (!results) return res.status(404).send(JSON.stringify({success:false, error:"CONDITION_NOT_FOUND"}));
+            if(req.body.condition == "true"){
+              var post  = {answer: req.body.previous_answer, id_p_question: req.body.previous_question, id_question: req.params.question};
+              connection.query('INSERT INTO ?? SET ?', ['conditions', post], function (err, results, fields) {
+
+                if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+                if (!results) return res.status(404).send(JSON.stringify({success:false, error:"CONDITION_NOT_FOUND"}));
+
+                var post  = {answer: req.body.answer, question: req.body.question, type: req.body.type, condition_answer: results.insertId};
+                connection.query('UPDATE ?? SET ? WHERE ?? = ?', ['questions', post, 'id', req.params.question], function (err, results, fields) {
+
+                  if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+                  if (!results) return res.status(404).send(JSON.stringify({success:false, error:"QUESTION_NOT_FOUND"}));
+
+                });
+            });
+          }
+          else{
+            var post  = {answer: req.body.answer, question: req.body.question, type: req.body.type };
+            connection.query('UPDATE ?? SET ? WHERE ?? = ?', ['questions', post, 'id', req.params.question], function (err, results, fields) {
+
+              if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+              if (!results) return res.status(404).send(JSON.stringify({success:false, error:"QUESTION_NOT_FOUND"}));
+
+            });
+          }
+          });
+        });
+      }
+      else{
+        var update  = {answer: req.body.answer, question: req.body.question, type: req.body.type };
+        connection.query('UPDATE ?? SET ? WHERE ?? = ?', ['questions', update, 'id', req.params.question], function (err, results, fields) {
+
+          if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+          if (!results) return res.status(404).send(JSON.stringify({success:false, error:"QUESTION_NOT_FOUND"}));
+
+        });
+      }
+      connection.release();
+      return res.status(200).send(JSON.stringify({success:true, error:null}));
+      });
 }).delete(auth.isAuthenticated, function(req, res){
-
+  pool.getConnection(function(err, connection) {
+    connection.query('DELETE FROM ?? WHERE ?? = ?', ['questions', 'id', req.params.question], function (err, results, fields) {
+      if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+      if (!results) return res.status(404).send(JSON.stringify({success:false, error:"QUESTION_NOT_FOUND"}));
+      connection.release();
+      return res.status(200).send(JSON.stringify({success:true, error:null}));
+    });
+  });
 });
 
-router.route('/questions/:survey/:question/:version').get(auth.isAuthenticated, function(req, res){
+router.route('/questions/:question/:version').get(auth.isAuthenticated, function(req, res){
+  pool.getConnection(function(err, connection) {
+      // Use the connection
+      connection.query('SELECT * FROM ?? WHERE ?? = ?', ['questions', 'id', req.params.question], function (err, results, fields) {
 
+        if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+        if (!results) return res.status(404).send(JSON.stringify({success:false, error:"QUESTIONS_NOT_FOUND"}));
+        connection.release();
+        if(req.params.version=='false'){
+          return res.status(200).send(JSON.stringify({success:true, error:null, survey: results, question: results}));
+        }else{
+          var string = JSON.stringify(results);
+          string = crypto.createHash('sha1').update(string).digest('hex');
+          return res.status(200).send(JSON.stringify({success:true, error:null, version: string}));
+        }
+      });
+    });
 })
 
 //Submit a question
-router.route('/answers/:survey/:question').post(auth.isAuthenticated, function(req, res){
+router.route('/answers/:question').post(auth.isAuthenticated, function(req, res){
+  pool.getConnection(function(err, connection) {
+      // Use the connection
+      var post  = {answer: req.body.answer, id_question: req.params.question, id_user: req.user.id};
+      connection.query('INSERT INTO ?? SET ?', ['answers', post], function (err, results, fields) {
 
+        if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+        if (!results) return res.status(404).send(JSON.stringify({success:false, error:"SURVEY_NOT_FOUND"}));
+        connection.release();
+        return res.status(201).send(JSON.stringify({success:true, error:null}));
+
+      });
+    });
 });
 
 //Modify, get or delete specific answer
-router.route('/answers/:survey/:question/:answer').put(auth.isAuthenticated, function(req, res){
+router.route('/answers/:answer').put(auth.isAuthenticated, function(req, res){
+  pool.getConnection(function(err, connection) {
+      // Use the connection
+      connection.query('UPDATE ?? SET ?? = ? WHERE ?? = ?', ['answers', 'answer', req.body.answer, 'id', req.params.answer], function (err, results, fields) {
 
+        if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+        if (!results) return res.status(404).send(JSON.stringify({success:false, error:"ANSWER_NOT_FOUND"}));
+        connection.release();
+        return res.status(200).send(JSON.stringify({success:true, error:null, answer: results}));
+
+      });
+    });
 }).delete(auth.isAuthenticated, function(req, res){
+  pool.getConnection(function(err, connection) {
+      // Use the connection
+      connection.query('DELETE FROM ?? WHERE ?? = ?', ['answers', 'id', req.params.answer], function (err, results, fields) {
 
+        if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+        if (!results) return res.status(404).send(JSON.stringify({success:false, error:"ANSWER_NOT_FOUND"}));
+        connection.release();
+        return res.status(200).send(JSON.stringify({success:true, error:null, answer: results}));
+
+      });
+    });
 });
 
-router.route('/answers/:survey/:question/:answer/:version').get(auth.isAuthenticated, function(req, res){
+router.route('/answers/:question/:version').get(auth.isAuthenticated, function(req, res){
+  pool.getConnection(function(err, connection) {
+      // Use the connection
+      connection.query('SELECT * FROM ?? WHERE ?? = ? AND ?? = ?', ['answers', 'id_question', req.params.question, 'id_user', req.user.id], function (err, results, fields) {
 
+        if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+        if (!results) return res.status(404).send(JSON.stringify({success:false, error:"QUESTIONS_NOT_FOUND"}));
+        connection.release();
+        if(req.params.version=='false'){
+          return res.status(200).send(JSON.stringify({success:true, error:null, answer: results}));
+        }else{
+          var string = JSON.stringify(results);
+          string = crypto.createHash('sha1').update(string).digest('hex');
+          return res.status(200).send(JSON.stringify({success:true, error:null, version: string}));
+        }
+      });
+    });
 })
 
 //Get of details
