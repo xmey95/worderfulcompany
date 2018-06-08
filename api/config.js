@@ -4,7 +4,8 @@ var config = {
     dbuser: 'root',
     port:   '8889',
     dbsecret: '',
-    dbname: 'prova'
+    dbname: 'prova',
+    media_path: __dirname +'/storage/',
 };
 
 module.exports = config;

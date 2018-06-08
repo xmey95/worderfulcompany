@@ -4,6 +4,9 @@ var mysql = require('mysql');
 var auth = require('../auth.js');
 var config = require('../config.js');
 var router = express.Router(); // new instance of express router
+var crypto = require('crypto');
+var formidable = require('formidable');  //module to save uploaded file (justifications)
+var fs = require('fs');
 
 //MySQL Connection
 if(process.argv[3] == "--mac"){
@@ -44,13 +47,64 @@ router.get('/', function(req, res){
     });
 });
 
-//get all requests of requesting user
+
+//create a new request for an absence
 router.route('/requests').post(auth.isAuthenticated, function(req, res){
+  pool.getConnection(function(err, connection) {
+      var post  = {state : 0, reason: req.body.reason, start_date:req.body.start_date, end_date: req.body.end_date, id_user: req.user.id};
+      connection.query('INSERT INTO ?? SET ?', ['absences', post], function (err, results, fields) {
+          connection.release();
+          if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
+          res.status(201).send(JSON.stringify({success:true, error:null}));
+      });
+    });
 
 });
 
-//version for previouse request
+//get all absence (approved and not approved) of the requesting user
 router.route('/requests/:version').get(auth.isAuthenticated, function(req, res){
+  pool.getConnection(function(err, connection) {
+      // Use the connection to select requests from database
+      connection.query('SELECT * FROM ?? WHERE ?? = ?', ['absences', 'id_user', req.user.id], function (err, results, fields) {
+          if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+          if (!results) return res.status(404).send(JSON.stringify({success:false, error:"REQUESTS_NOT_FOUND"}));
+          connection.release();
+          if(req.params.version=='false'){
+                  return res.status(201).send(JSON.stringify({success:true, error:null, requests: results}));
+          }else{
+                  var string = JSON.stringify(results);
+                  string = crypto.createHash('sha1').update(string).digest('hex');
+                  return res.status(201).send(JSON.stringify({success:true, error:null, version: string}));
+          }
+      });
+    });
+});
+
+//upload justification file for a request (only for the creator of the request)
+router.route('/requests/:request/upload_justification').put(auth.isAuthenticated, function(req, res){
+  var form = new formidable.IncomingForm();
+form.parse(req, function (err, fields, files) {
+  var oldpath = files.filetoupload.path;
+  var parts = files.filetoupload.name.split('.');
+  var filext = '.' + parts[parts.length-1];
+  var newname = req.params.request + filext;
+  var newpath =  config.media_path +'justification_files/' + newname;
+  console.log(newpath);
+  fs.rename(oldpath, newpath, function (err) {
+    if (err) throw err;
+    pool.getConnection(function(err, connection) {
+        // Use the connection
+        var post  = {name: req.body.name, id_user: req.user.id};
+        connection.query('UPDATE ?? SET ?? = ? WHERE ?? = ?', ['absences', 'justification_file', newpath, 'id', req.params.request], function (err, results, fields) {
+            connection.release();
+            if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
+            if (!results) return res.status(404).send(JSON.stringify({success:false, error:"REQUEST_NOT_FOUND"}));
+            res.status(201).send(JSON.stringify({success:true, error:null}));
+
+        });
+      });
+  });
+});
 
 });
 
