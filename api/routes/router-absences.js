@@ -105,9 +105,9 @@ router.route('/requests').post(auth.isAuthenticated, function(req, res){
 
 
 /**
- * @api {get} /requests/:version                                                My Requests
- * @apiName My Requests
- * @apiDescription Get the list of the absence requests made by the requesting user
+ * @api {get} /requests/:version                                                Absence Requests
+ * @apiName Absence Requests
+ * @apiDescription Get the list of all the absence in company
  * @apiError           (Error 500) InternalServerError                          Query failed.
  * @apiErrorExample    {json} Error-Response:
  *     HTTP/1.1 500 Internal Server Error
@@ -144,6 +144,62 @@ router.route('/requests').post(auth.isAuthenticated, function(req, res){
 
 //get all absence (approved and not approved) of the requesting user
 router.route('/requests/:version').get(auth.isAuthenticated, function(req, res){
+  pool.getConnection(function(err, connection) {
+      // Use the connection to select requests from database
+      connection.query('SELECT * FROM ??', ['absences'], function (err, results, fields) {
+          connection.release();
+          if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+          if (!results) return res.status(404).send(JSON.stringify({success:false, error:"REQUESTS_NOT_FOUND"}));
+          if(req.params.version=='false'){
+                  return res.status(201).send(JSON.stringify({success:true, error:null, requests: results}));
+          }else{
+                  var string = JSON.stringify(results);
+                  string = crypto.createHash('sha1').update(string).digest('hex');
+                  return res.status(201).send(JSON.stringify({success:true, error:null, version: string}));
+          }
+      });
+    });
+});
+
+
+/**
+ * @api {get} /myrequests/:version                                                My Requests
+ * @apiName My Requests
+ * @apiDescription Get the list of the absence requests made by the requesting user
+ * @apiError           (Error 500) InternalServerError                          Query failed.
+ * @apiErrorExample    {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *         success : false,
+ *         error : "INTERNAL_SERVER_ERROR"
+ *      }
+ * @apiGroup Absences
+ * @apiParam {String} version                                                   If "true" the request returns a version code of the value
+ * @apiHeader {String} Authorization                                            Authentication Token
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "bearer <token>"
+ *     }
+ * @apiSuccess {Boolean} success                                                True if query is succcessfully
+ * @apiSuccess {String} error                                                   String containing the error, it's null if success is true.
+ * @apiSuccess {String} requests                                                String containing the stringified list of requests
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "success": true,
+ *       "error": null
+ *       "requests": [
+ *                {  "id":4,
+ *                   "id_user":1,
+ *                   "state":0,
+ *                   "reason":"febbre",
+ *                   "justification_file":"absences/requests/get_justification/4.png",
+ *                   "start_date":"2018-09-06T22:00:00.000Z",
+ *                   "end_date":"2018-09-08T22:00:00.000Z"
+ *                  }]
+ *     }
+ */
+router.route('/myrequests/:version').get(auth.isAuthenticated, function(req, res){
   pool.getConnection(function(err, connection) {
       // Use the connection to select requests from database
       connection.query('SELECT * FROM ?? WHERE ?? = ?', ['absences', 'id_user', req.user.id], function (err, results, fields) {
