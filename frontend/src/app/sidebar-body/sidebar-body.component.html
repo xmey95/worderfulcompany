@@ -1,0 +1,20 @@
+<!--
+Base Component Code got from Angular Material
+-->
+<div class="sidebar-title-box text-center">
+  <h2>Benvenuto, Orazio Scavo</h2>
+</div>
+<div class="sidebar-divider">
+  <mat-divider></mat-divider>
+</div>
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+
+  <mat-tree-node class="child-node" *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
+    {{node.filename}}
+  </mat-tree-node>
+
+  <mat-tree-node class="parent-node" *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodeToggle>
+      <i class="fa side-list-icon" [ngClass]="{'fa-angle-right' : !treeControl.isExpanded(node), 'fa-angle-down': treeControl.isExpanded(node)}" mat-icon-button></i>
+    {{node.filename}}
+  </mat-tree-node>
+</mat-tree>

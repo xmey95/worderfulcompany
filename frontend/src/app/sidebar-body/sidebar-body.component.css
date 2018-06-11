@@ -1,0 +1,43 @@
+.child-node{
+  background:  #172d44;
+  min-height:48px;
+  transition: min-height 2s;
+}
+
+.parent-node{
+  cursor:pointer;
+}
+
+.child-node:hover, .parent-node:hover{
+  background: rgba(255,255,255,0.2);
+}
+
+.side-list-icon{
+  color:white;
+  font-size:1.5em;
+  margin-left:15px;
+  margin-right: 15px;
+}
+
+.sidebar-divider{
+  width:80%;
+  margin:auto;
+}
+
+.sidebar-divider mat-divider{
+  border-top-color: rgba(255,255,255,0.5);
+}
+
+.sidebar-title-box{
+  width:100%;
+  padding:20px;
+  color:rgb(255,255,255);
+}
+
+mat-tree{
+  background: #2a3f54;
+}
+
+mat-tree-node{
+  color:white;
+}

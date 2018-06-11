@@ -1,0 +1,67 @@
+<div class="veil visible-xs visible-sm" (click)="toggle_sidebar()" *ngIf="side_expanded==true"></div>
+
+
+<div class="col-md-3 sidebar sidebar-body" [ngClass]="{'sidebar-collapsed': side_expanded==false,'sidebar-expanded': side_expanded==true}">
+  <div class="sidebar-body">
+    <div class="sidebar-top" [ngClass]="{'sidebar-collapsed': side_expanded==false,'sidebar-expanded': side_expanded==true}">
+      <a class="sidebar-expand text-center" *ngIf="side_expanded==false">
+        <i (click)="toggle_sidebar()" class="fas fa-bars side-top-icon"></i>
+      </a>
+      <img class="sidebar-top-logo pull-left" src="assets/images/LogoWhite.png" *ngIf="side_expanded==true"/>
+      <span class="collapse-icon-box" (click)="toggle_sidebar()"[ngClass]="{'visible' : side_expanded==true, 'erased': side_expanded==false}">
+        <i class="fas fa-arrow-left fa-2x collapse-icon pull-right"></i>
+      </span>
+
+    </div>
+    <div class="clearfix"></div>
+    <div *ngIf="side_expanded==true" class="sidebar-menu-expanded">
+      <sidebar-body></sidebar-body>
+    </div>
+  </div>
+</div>
+
+<div class="smooth-transition" [ngClass]="{'top-nav' : side_expanded==false, 'top-nav-expanded': side_expanded==true}">
+  <div class="nav-menu">
+    <nav>
+      <img class="header-logo pull-left"  [ngClass]="{'visible' : side_expanded==false, 'erased header-logo-hidden': side_expanded==true}" src="assets/images/Logo.png"/>
+      <ul class="nav-list" [ngClass]="{'nav-list-side-expanded' : side_expanded==true}">
+        <li class="pull-right">
+          <a class="user-top dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-user user-icon"></i> <span class="hidden-xs hidden-sm">Orazio Scavo</span>
+            <span class="fas fa-angle-down profile-arrow"></span>
+          </a>
+          <ul class="dropdown-menu dropdown-usermenu pull-right">
+            <li>
+              <a class="user-menu-item">
+                <i class="fa fa-user-plus pull-right"></i>Inserimento Utente
+              </a>
+            </li>
+            <li>
+              <a class="user-menu-item">
+                <i class="fas fa-user-tie pull-right"></i>Responsabili assenze
+              </a>
+            </li>
+            <li>
+              <a class="user-menu-item">
+                <i class="fa fa-question pull-right"></i>Gestori Sondaggi
+              </a>
+            </li>
+            <li>
+              <a class="user-menu-item">
+                <i class="fa fa-users pull-right"></i>Lista Utenti
+              </a>
+            </li>
+            <li>
+              <a class="user-menu-item">
+                <i class="fa fa-sign-out pull-right"></i>Log Out
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<div class="outlet smooth-transition" [ngClass]="{'outlet-side-expanded' : side_expanded==true}">
+  <router-outlet></router-outlet>
+</div>
