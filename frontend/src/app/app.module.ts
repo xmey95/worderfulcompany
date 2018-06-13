@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HomeComponent } from './home/home.component';
 import { NgModule } from '@angular/core';
 import { MiniSidebarItem, SidebarBodyComponent, SidebarMenuItem } from './sidebar-body/sidebar-body.component';
-import { MatCardModule, MatDividerModule, MatIconModule, MatTreeModule } from '@angular/material'
+import { MatButtonModule, MatCardModule, MatDividerModule } from '@angular/material'
 @NgModule({
   declarations: [
     AppComponent,
@@ -15,7 +15,7 @@ import { MatCardModule, MatDividerModule, MatIconModule, MatTreeModule } from '@
     SidebarMenuItem
   ],
   imports: [
-    BrowserModule, BrowserAnimationsModule, AppRoutingModule,MatCardModule, MatIconModule, MatDividerModule, MatTreeModule
+    BrowserModule, BrowserAnimationsModule, AppRoutingModule, MatButtonModule, MatCardModule, MatDividerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -8,18 +8,18 @@ Base Component Code got from Angular Material
   <mat-divider></mat-divider>
 </div>
 <ul class="sidebar-menu" *ngIf="side_extended == true">
-  <sidebar-menu-item class="visible-xs visible-sm" [item]="items[3]"></sidebar-menu-item>
+  <sidebar-menu-item class="visible-xs" [item]="items[3]"></sidebar-menu-item>
   <sidebar-menu-item [item]="items[0]"></sidebar-menu-item>
   <sidebar-menu-item [item]="items[1]"></sidebar-menu-item>
   <sidebar-menu-item [item]="items[2]"></sidebar-menu-item>
-  <li class="visible-xs visible-sm logout-entry">
+  <li class="visible-xs logout-entry">
     <a>
       <i class="fas fa-sign-out-alt logout-icon"></i> Logout
     </a>
   </li>
 </ul>
 
-<ul class="sidebar-menu hidden-sm hidden-xs" *ngIf="side_extended==false">
+<ul class="sidebar-menu hidden-xs" *ngIf="side_extended==false">
   <mini-sidebar-item [item]="items[0]"></mini-sidebar-item>
   <mini-sidebar-item [item]="items[1]"></mini-sidebar-item>
   <mini-sidebar-item [item]="items[2]"></mini-sidebar-item>

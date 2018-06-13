@@ -61,6 +61,7 @@ export class SidebarBodyComponent {
       "short_name": "Aule",
       "sub_menu": [
         ["Aule (amministratore)", ""],
+        ["Le tue prenotazioni", ""],
         ["Prenota Aula", ""],
         ["Tutte le Aule", ""]
       ]

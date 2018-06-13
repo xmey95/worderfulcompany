@@ -1,10 +1,10 @@
-<div class="veil visible-xs visible-sm" (click)="toggle_sidebar()" *ngIf="side_expanded==true"></div>
+<div class="veil visible-xs" (click)="toggle_sidebar()" *ngIf="side_expanded==true"></div>
 
 
 <div class="col-md-3 sidebar" [ngClass]="{'sidebar-collapsed': side_expanded==false,'sidebar-expanded': side_expanded==true}">
   <div class="sidebar-body">
     <div class="sidebar-top" [ngClass]="{'sidebar-collapsed': side_expanded==false,'sidebar-expanded': side_expanded==true}">
-      <a class="sidebar-expand text-center hidden-sm hidden-xs" *ngIf="side_expanded==false">
+      <a class="sidebar-expand text-center hidden-xs" *ngIf="side_expanded==false">
         <i (click)="toggle_sidebar()" class="fas fa-bars side-top-icon"></i>
       </a>
       <div class="sidebar-top-logo pull-left" >
@@ -25,14 +25,14 @@
 <div class="smooth-transition" [ngClass]="{'top-nav' : side_expanded==false, 'top-nav-expanded': side_expanded==true}">
   <div class="nav-menu">
     <nav>
-      <span class="visible-sm visible-xs pull-left" *ngIf="side_expanded==false">
+      <span class="visible-xs pull-left" *ngIf="side_expanded==false">
         <i (click)="toggle_sidebar()" class="fas fa-bars fa-2x  bars-icon-box-mobile"></i>
       </span>
       <img class="header-logo"  [ngClass]="{'visible' : side_expanded==false, 'erased header-logo-hidden': side_expanded==true}" src="assets/images/Logo.png"/>
-      <ul class="nav-list hidden-xs hidden-sm">
+      <ul class="nav-list hidden-xs">
         <li class="pull-right">
           <a class="user-top dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            <i class="fa fa-user user-icon"></i> <span class="hidden-xs hidden-sm">Orazio Scavo</span>
+            <i class="fa fa-user user-icon"></i> <span class="hidden-xs">Orazio Scavo</span>
             <span class="fas fa-angle-down profile-arrow"></span>
           </a>
           <ul class="dropdown-menu dropdown-usermenu pull-right">
