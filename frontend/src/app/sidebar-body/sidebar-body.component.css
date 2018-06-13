@@ -1,23 +1,19 @@
-.child-node{
-  background:  #172d44;
+.logout-entry{
   min-height:48px;
-  transition: min-height 2s;
+  font-size:20px;
+  padding-top:10px;
+  padding-left:20px;
 }
 
-.parent-node{
-  cursor:pointer;
-}
-
-.child-node:hover, .parent-node:hover{
-  background: rgba(255,255,255,0.2);
-}
-
-.side-list-icon{
+.logout-entry a{
+  text-decoration: none;
   color:white;
-  font-size:1.5em;
-  margin-left:15px;
-  margin-right: 15px;
 }
+
+.logout-icon{
+  color:rgb(255,0,0,0.6);
+}
+
 
 .sidebar-divider{
   width:80%;
@@ -28,16 +24,15 @@
   border-top-color: rgba(255,255,255,0.5);
 }
 
+.sidebar-menu{
+  margin:0px;
+  margin-top:30px;
+  padding:0px;
+  list-style: none;
+}
+
 .sidebar-title-box{
   width:100%;
   padding:20px;
   color:rgb(255,255,255);
-}
-
-mat-tree{
-  background: #2a3f54;
-}
-
-mat-tree-node{
-  color:white;
 }

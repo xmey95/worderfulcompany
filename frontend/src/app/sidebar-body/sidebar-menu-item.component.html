@@ -1,0 +1,13 @@
+<li class="top-item" [ngClass]="{'active' : active==true}" (click)="active=!active">
+  <a>
+    <i class="fa fa-angle-right" [ngClass]="{'fa-angle-down' : active==true }"></i>
+    {{item.name}}
+  </a>
+</li>
+<ul class="inner-list" [ngClass]="{'inner-active' : active==true}">
+  <li class="inner-item" *ngFor="let item of item.sub_menu">
+    <a [routerLink]="[item[1]]">
+      {{item[0]}}
+    </a>
+  </li>
+</ul>

@@ -1,0 +1,41 @@
+.active{
+  border-right: 5px solid #1ABB9C;
+  text-shadow: rgba(0,0,0,.25) 0 -1px 0;
+  background: linear-gradient(#334556,#2C4257),#2A3F54;
+  box-shadow: rgba(0,0,0,.25) 0 1px 0,inset rgba(255,255,255,.16) 0 1px 0;
+}
+
+.inner-active li{
+  height:48px;
+  padding-top:15px;
+}
+
+.inner-item{
+  height:0px;
+  overflow:hidden;
+  transition: height 1s, padding-top 1s;
+  list-style: none;
+  padding-left: 30px;
+}
+
+.inner-list{
+  background: #172d44;
+  padding-left:0px;
+}
+
+.top-item{
+  min-height:48px;
+  transition:font-size 1s;
+  padding-top:10px;
+  padding-left:20px;
+  font-size:20px;
+}
+
+a{
+  text-decoration: none;
+  color:white;
+}
+
+li:hover{
+  background:rgba(255,255,255,0.2);
+}

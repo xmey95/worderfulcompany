@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
-  side_expanded: boolean = true;
+  side_expanded: boolean = false;
 
   constructor(){
 

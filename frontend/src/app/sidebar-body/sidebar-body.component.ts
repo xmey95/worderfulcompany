@@ -1,142 +1,94 @@
-/*
-Base Component Code got from Angular Material
-*/
-import {FlatTreeControl} from '@angular/cdk/tree';
-import {Component, Injectable} from '@angular/core';
-import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
-import {BehaviorSubject, Observable, of as observableOf} from 'rxjs';
+import {Component, Input} from '@angular/core';
 
-/**
- * File node data with nested structure.
- * Each node has a filename, and a type or a list of children.
- */
-export class FileNode {
-  children: FileNode[];
-  filename: string;
-  type: any;
+interface menuItem{
+  name: string;
+  short_name:string;
+  sub_menu: string[][];
 }
 
-/** Flat node with expandable and level information */
-export class FileFlatNode {
-  filename: string;
-  type: any;
-  level: number;
-  expandable: boolean;
-}
-
-/**
- * The file structure tree data in string. The data could be parsed into a Json object
- */
-const TREE_DATA = `
-  {
-    "Sezione Assenze": {
-      "I miei permessi": "ts",
-      "Richieste dei Sottoposti": "ts"
-    },
-    "Sezione Aule": {
-      "Prenota Aula": "ts"
-    },
-    "Sezione Sondaggi": {
-        "Crea Sondaggio": "newsurvey"
-    }
-}`;
-
-/**
- * File database, it can build a tree structured Json object from string.
- * Each node in Json object represents a file or a directory. For a file, it has filename and type.
- * For a directory, it has filename and children (a list of files or directories).
- * The input will be a json object string, and the output is a list of `FileNode` with nested
- * structure.
- */
-@Injectable()
-export class FileDatabase {
-  dataChange: BehaviorSubject<FileNode[]> = new BehaviorSubject<FileNode[]>([]);
-
-  get data(): FileNode[] { return this.dataChange.value; }
-
+@Component({
+  selector: 'sidebar-menu-item',
+  templateUrl: 'sidebar-menu-item.component.html',
+  styleUrls: ['./sidebar-menu-item.component.css']
+})
+export class SidebarMenuItem {
+  @Input() item: menuItem;
+  active: boolean = false;
   constructor() {
-    this.initialize();
-  }
-
-  initialize() {
-    // Parse the string to json object.
-    const dataObject = JSON.parse(TREE_DATA);
-
-    // Build the tree nodes from Json object. The result is a list of `FileNode` with nested
-    //     file node as children.
-    const data = this.buildFileTree(dataObject, 0);
-
-    // Notify the change.
-    this.dataChange.next(data);
-  }
-
-  /**
-   * Build the file structure tree. The `value` is the Json object, or a sub-tree of a Json object.
-   * The return value is the list of `FileNode`.
-   */
-  buildFileTree(value: any, level: number): FileNode[] {
-    let data: any[] = [];
-    for (let k in value) {
-      let v = value[k];
-      let node = new FileNode();
-      node.filename = `${k}`;
-      if (v === null || v === undefined) {
-        // no action
-      } else if (typeof v === 'object') {
-        node.children = this.buildFileTree(v, level + 1);
-      } else {
-        node.type = v;
-      }
-      data.push(node);
-    }
-    return data;
   }
 }
 
-/**
- * @title Tree with flat nodes
- */
+@Component({
+  selector: 'mini-sidebar-item',
+  templateUrl: 'mini-sidebar-item.component.html',
+  styleUrls: ['./mini-sidebar-item.component.css']
+})
+export class MiniSidebarItem {
+  @Input() item: menuItem;
+  active: boolean = false;
+  constructor() {
+  }
+
+  get_icon(){
+    if(this.item.name == "Sezione Assenze") return "fas fa-calendar-times";
+    if(this.item.name == "Sezione Aule") return "fas fa-chalkboard-teacher";
+    return "fas fa-question";
+  }
+}
+
 @Component({
   selector: 'sidebar-body',
   templateUrl: 'sidebar-body.component.html',
-  providers: [FileDatabase],
   styleUrls: ['./sidebar-body.component.css']
 })
 export class SidebarBodyComponent {
+  @Input() side_extended: boolean;
+  items: menuItem[] = [];
 
-  treeControl: FlatTreeControl<FileFlatNode>;
+  constructor() {
+    var obj = {
+      "name": "Sezione Assenze",
+      "short_name": "Assenze",
+      "sub_menu": [
+        ["Calendario", ""],
+        ["Le tue Richieste", ""],
+        ["Richieste (amministratore)", ""]
+      ]
+    }
+    this.items.push(obj);
+    obj = {
+      "name": "Sezione Aule",
+      "short_name": "Aule",
+      "sub_menu": [
+        ["Aule (amministratore)", ""],
+        ["Prenota Aula", ""],
+        ["Tutte le Aule", ""]
+      ]
+    }
+    this.items.push(obj);
+    obj = {
+      "name": "Sezione Sondaggi",
+      "short_name": "Sondaggi",
+      "sub_menu": [
+        ["Crea Sondaggio", ""],
+        ["Sondaggi (amministratore)", ""],
+        ["Tutti i Sondaggi", ""]
+      ]
+    }
+    this.items.push(obj);
 
-  treeFlattener: MatTreeFlattener<FileNode, FileFlatNode>;
+    obj = {
+      "name": "Gestione Utenti",
+      "short_name": "Utenti",
+      "sub_menu": [
+        ["Inserimento Utente", ""],
+        ["Lista Utenti", ""],
+        ["Gestori Sondaggi", ""],
+        ["Responsabili Assenze", ""]
+      ]
+    }
+    this.items.push(obj);
 
-  dataSource: MatTreeFlatDataSource<FileNode, FileFlatNode>;
-
-  constructor(database: FileDatabase) {
-    this.treeFlattener = new MatTreeFlattener(this.transformer, this._getLevel,
-      this._isExpandable, this._getChildren);
-    this.treeControl = new FlatTreeControl<FileFlatNode>(this._getLevel, this._isExpandable);
-    this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
-    database.dataChange.subscribe(data => {
-      this.dataSource.data = data;
-    });
   }
 
-  transformer = (node: FileNode, level: number) => {
-    let flatNode = new FileFlatNode();
-    flatNode.filename = node.filename;
-    flatNode.type = node.type;
-    flatNode.level = level;
-    flatNode.expandable = !!node.children;
-    return flatNode;
-  }
-
-  private _getLevel = (node: FileFlatNode) => { return node.level; };
-
-  private _isExpandable = (node: FileFlatNode) => { return node.expandable; };
-
-  private _getChildren = (node: FileNode): Observable<FileNode[]> => {
-    return observableOf(node.children);
-  }
-
-  hasChild = (_: number, _nodeData: FileFlatNode) => { return _nodeData.expandable; };
 }
