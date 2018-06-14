@@ -10,6 +10,7 @@ export class UserListComponent {
   constructor() {
   }
 
+  //handler for inner component (user-table) emission: [0]=> show loader; [1]=>show table, [2] => no user found, show message
   set_ready(val){
     this.ready=val;
   }
