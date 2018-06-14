@@ -1,0 +1,24 @@
+.mat-form-field {
+  font-size: 14px;
+  width: 20%;
+  left:40%;
+}
+
+table {
+  margin:auto;
+  left:0;
+  right:0;
+  width: 60%;
+}
+
+
+@media (max-width: 766px){
+  .mat-form-field {
+    width: 80%;
+    left:10%;
+  }
+  table {
+    width: 100%;
+    left:0%;
+  }
+}

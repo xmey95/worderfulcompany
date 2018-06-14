@@ -50,4 +50,7 @@ mat-card>:first-child {
   button{
     background:#aaaaaa;
   }
+  .page{
+    padding:5px;
+  }
 }

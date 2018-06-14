@@ -1,0 +1,45 @@
+<div class="smooth-transition" [ngClass]="{'top-nav' : side_expanded==false, 'top-nav-expanded': side_expanded==true}">
+  <div class="nav-menu">
+    <nav>
+      <span class="visible-xs pull-left" *ngIf="side_expanded==false">
+        <i (click)="toggle_sidebar()" class="fas fa-bars fa-2x  bars-icon-box-mobile"></i>
+      </span>
+      <img class="header-logo"  [ngClass]="{'visible' : side_expanded==false, 'erased header-logo-hidden': side_expanded==true}" src="assets/images/Logo.png"/>
+      <ul class="nav-list hidden-xs">
+        <li class="pull-right">
+          <a class="user-top dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-user user-icon"></i> <span class="hidden-xs">Orazio Scavo</span>
+            <span class="fas fa-angle-down profile-arrow"></span>
+          </a>
+          <ul class="dropdown-menu dropdown-usermenu pull-right">
+            <li>
+              <a class="user-menu-item">
+                <i class="fa fa-user-plus pull-right"></i>Inserimento Utente
+              </a>
+            </li>
+            <li>
+              <a class="user-menu-item">
+                <i class="fas fa-user-tie pull-right"></i>Responsabili assenze
+              </a>
+            </li>
+            <li>
+              <a class="user-menu-item">
+                <i class="fa fa-question pull-right"></i>Gestori Sondaggi
+              </a>
+            </li>
+            <li>
+              <a class="user-menu-item">
+                <i class="fa fa-users pull-right"></i>Lista Utenti
+              </a>
+            </li>
+            <li>
+              <a class="user-menu-item">
+                <i class="fa fa-sign-out pull-right"></i>Log Out
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

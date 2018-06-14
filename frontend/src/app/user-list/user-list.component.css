@@ -1,0 +1,47 @@
+.page{
+  padding:60px;
+}
+
+.center-div
+{
+  margin: auto;
+  margin-top:50px;
+  right: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+}
+
+.hidden{
+  display:none;
+}
+
+.no-user{
+  margin-top:60px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 20px;
+  padding:30px;
+}
+
+.title{
+  width:100%;
+}
+
+.user-table-box{
+  padding:20px;
+  max-width: 100%;
+  overflow:hidden;
+}
+
+button{
+  margin-top:30px;
+}
+
+@media (max-width: 766px){
+  .page{
+    padding:0px;
+  }
+  .user-table-box{
+    padding:0px;
+  }
+}

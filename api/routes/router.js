@@ -49,6 +49,7 @@ var path = require('path');
 var router = express.Router(); // new instance of express router
 var auth = require('../auth.js');
 var jwt = require('jsonwebtoken');
+var crypto = require('crypto');
 
 const API_SUCCESS_MSG = {success: true, error: null};
 const API_FAILURE_MSG = {success: false, error: null};
@@ -233,6 +234,7 @@ router.route('/authenticate').get(auth.isAuthenticatedBasic, function(req,res) {
 * @apiSampleRequest   /users
 * @apiGroup           General
 * @apiPermission      none
+* @apiParam {String} version                                                   If "true" the request returns a version code of the value
 * @apiSuccess         {Boolean} success                                         True if the query is succesfully.
 * @apiSuccess         {String} error                                            String containing the error, it's null if success is true.
 * @apiSuccess         {String} users                                            String containing list of users.
@@ -269,7 +271,9 @@ router.route('/users').post(function(req, res) {
         else res.status(201).send(JSON.stringify({success:true, error:null}));
       });
     });
-}).get(function(req, res){
+});
+
+router.route('/users/:version').get(function(req, res){
   pool.getConnection(function(err, connection) {
     // Use the connection
     connection.query('SELECT * FROM ??', ['users'], function (err, results, fields) {
@@ -283,7 +287,13 @@ router.route('/users').post(function(req, res) {
       for(var i = 0; i < results.length; i++){
         users.push(make_user_safe(results[i]));
       }
-      return res.status(200).send(JSON.stringify({success:true, error:null, users: users}));
+      if(req.params.version=='false'){
+              return res.status(201).send(JSON.stringify({success:true, error:null, users: users}));
+      }else{
+              var string = JSON.stringify(users);
+              string = crypto.createHash('sha1').update(string).digest('hex');
+              return res.status(201).send(JSON.stringify({success:true, error:null, version: string}));
+      }
     });
   });
 });

@@ -1,0 +1,20 @@
+<div class="col-md-3 sidebar" [ngClass]="{'sidebar-collapsed': side_expanded==false,'sidebar-expanded': side_expanded==true}">
+  <div class="sidebar-body">
+    <div class="sidebar-top" [ngClass]="{'sidebar-collapsed': side_expanded==false,'sidebar-expanded': side_expanded==true}">
+      <a class="sidebar-expand text-center hidden-xs" *ngIf="side_expanded==false">
+        <i (click)="toggle_sidebar()" class="fas fa-bars side-top-icon"></i>
+      </a>
+      <div class="sidebar-top-logo pull-left" >
+        <img width="100%" src="assets/images/LogoWhite.png"/>
+      </div>
+      <div class="collapse-icon-box pull-right" (click)="toggle_sidebar()">
+        <i class="fas fa-arrow-left collapse-icon pull-right"></i>
+      </div>
+
+    </div>
+    <div class="clearfix"></div>
+    <div class="sidebar-menu-expanded">
+      <sidebar-body [side_extended]="side_expanded"></sidebar-body>
+    </div>
+  </div>
+</div>
