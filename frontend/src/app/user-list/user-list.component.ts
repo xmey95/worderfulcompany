@@ -6,12 +6,21 @@ import { Component } from '@angular/core';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent {
-  public ready: number = 0;
+  public number: number;
   constructor() {
   }
 
-  set_ready(val){
-    this.ready=val;
+  //handler for inner component (user-table) emission: it contains the number of users
+  set_number(val){
+    this.number=val;
   }
+
+  get_number(){
+    if(this.number){
+      return '(' + this.number + ')';
+    }
+    else return "";
+  }
+
 
 }

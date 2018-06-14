@@ -24,6 +24,7 @@ import { UserListComponent } from './user-list/user-list.component';
 import { UserTableComponent } from './user-table/user-table.component';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
+import { AddUserComponent } from './add-user/add-user.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
     SidebarComponent,
     UserListComponent,
     UserTableComponent,
-    LoginDialogComponent
+    LoginDialogComponent,
+    AddUserComponent
   ],
   imports: [
     BrowserModule,

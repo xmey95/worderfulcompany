@@ -5,7 +5,7 @@
   <mat-divider></mat-divider>
 </div>
 <ul class="sidebar-menu" *ngIf="side_extended == true">
-  <li [routerLink]="['/home']" class="basic-entry">
+  <li [routerLink]="['/home']" class="basic-entry" (click)="emit_toggle_if_mobile()">
     <a>
       <i class="fas fa-home"></i> Home
     </a>

@@ -1,15 +1,15 @@
 <div class="page">
     <div class="title text-center">
-        <h1>Lista Impiegati</h1>
+        <h1>Lista Impiegati {{get_number()}}</h1>
     </div>
-    <div *ngIf="ready==0" class="center-div">
+    <div *ngIf="!number" class="center-div">
         <mat-spinner></mat-spinner>
     </div>
-    <div *ngIf="ready == 2" class="no-user text-center">
+    <div *ngIf="number == 0" class="no-user text-center">
         <h1 >Nessun Utente da mostrare...</h1>
         <button mat-raised-button color="primary">Inserimento Utenti</button>
     </div>
-    <div class="user-table-box" [ngClass]="{'hidden' : ready!=1}">
-        <user-table (ready)="set_ready($event)"></user-table>
+    <div class="user-table-box" [ngClass]="{'hidden' : (!number || number<1)}">
+        <user-table (ready)="set_number($event)"></user-table>
     </div>
 </div>

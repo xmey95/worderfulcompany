@@ -8,6 +8,10 @@ import { CookieService } from 'ngx-cookie-service';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { BlockScrollService } from './block-scroll.service';
 
+/*
+This service can be used for the user-ralted funtionality like login, logout, token and user info management.
+*/
+
 @Injectable()
 export class UserService {
     private logged_in: boolean = false;
@@ -33,16 +37,18 @@ export class UserService {
                     return true;
                 }),
                 switchMap(() => this.httpClient.get<UsersResponseType>(this.api + 'users/false')),
-                map((data)=>{ return data.users }),
+                map((data)=>{ return data.users }), //save new value (get just users field from response)
                 share()
             );
     }
 
     get_login_status(){
+        //user and token must be set
         if(this.user && this.token && this.logged_in == true) return true;
         return false;
     }
 
+    //get complete name (name + surname) of the user
     get_name(){
       if(this.get_login_status() == true){
         return this.user.name + " " + this.user.surname
@@ -52,7 +58,9 @@ export class UserService {
     }
 
     load_cookies(){
+        //check if cookies are set
         if(this.cookieService.check('user') && this.cookieService.check('token') && this.cookieService.check('logged_in') && this.cookieService.get('logged_in') == "true"){
+            //load saved values from cookies
             this.user = JSON.parse(this.cookieService.get('user'));
             this.token = this.cookieService.get('token');
             this.logged_in = true;
@@ -63,7 +71,7 @@ export class UserService {
         this.token = null;
         this.user = null;
         this.logged_in = false;
-        this.cookieService.deleteAll();
+        this.cookieService.deleteAll(); //clear cookies
     }
 
     save_cookies(){
@@ -72,28 +80,29 @@ export class UserService {
         this.cookieService.set( 'user', JSON.stringify(this.user) );
     }
 
+    //send authentication request to backend, providing credentials got through the login form
     try_login(email, password){
       this.httpClient.get<LogResponseType>(this.api + 'authenticate', {
-      headers: new HttpHeaders().set('Authorization', "Basic " + btoa(email + ':' + password)),
+      headers: new HttpHeaders().set('Authorization', "Basic " + btoa(email + ':' + password)), //basic authentication, base-64 encoded string <email>:<password>
     }).subscribe(data=> {
-        if(data.success){
+        if(data.success){ //login succesfully
           this.token = data.token;
           this.user = data.user;
           this.logged_in = true;
           this.save_cookies();
-          this.BlockScrollService.enable();
+          this.BlockScrollService.enable(); //scroll is disabled while login modal is shown, after login we can enable it
         }
-        else{
+        else{ //login failed
             let config = new MatSnackBarConfig();
             config.duration = 2000;
             this.snackBar.open("Login non riuscito! Credenziali non valide...", "OK", config);
         }
       },
-      err =>{
+      err =>{ //login failed
           let config = new MatSnackBarConfig();
           config.duration = 2000;
           this.snackBar.open("Login non riuscito! Credenziali non valide...", "OK", config);
-        console.log(JSON.stringify(err))
+          console.log(JSON.stringify(err));
       });
     }
 }
