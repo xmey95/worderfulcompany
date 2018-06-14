@@ -8,7 +8,7 @@
       <ul class="nav-list hidden-xs">
         <li class="pull-right">
           <a class="user-top dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            <i class="fa fa-user user-icon"></i> <span class="hidden-xs">Orazio Scavo</span>
+            <i class="fa fa-user user-icon"></i> <span class="hidden-xs">{{UserService.get_name()}}</span>
             <span class="fas fa-angle-down profile-arrow"></span>
           </a>
           <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -27,12 +27,12 @@
                 <i class="fa fa-question pull-right"></i>Gestori Sondaggi
               </a>
             </li>
-            <li>
+            <li [routerLink]="['/userlist']">
               <a class="user-menu-item">
                 <i class="fa fa-users pull-right"></i>Lista Utenti
               </a>
             </li>
-            <li>
+            <li (click)="logout()">
               <a class="user-menu-item">
                 <i class="fa fa-sign-out pull-right"></i>Log Out
               </a>

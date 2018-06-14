@@ -171,10 +171,11 @@ router.get('/', function(req, res){
 //Authenticate an user who send valid log in credentials
 router.route('/authenticate').get(auth.isAuthenticatedBasic, function(req,res) {
     var token = auth.generate_jwt_token(req.user.email);
-    res.json({
+    res.status(201).send({
         success: true,
         user: make_user_safe(req.user),
-        token: token,
+        user: make_user_safe(req.user),
+        token: token
     });
 });
 

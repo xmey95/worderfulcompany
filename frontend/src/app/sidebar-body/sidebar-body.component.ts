@@ -1,5 +1,5 @@
-import {Component, Input, ElementRef, HostListener} from '@angular/core';
-
+import {Component, Input, ElementRef, EventEmitter, HostListener, Output} from '@angular/core';
+import { UserService } from '../user.service';
 //Structure of an Element of Sidebar Menu
 interface menuItem{
   name: string;
@@ -16,7 +16,14 @@ interface menuItem{
 export class SidebarMenuItem {
   @Input() item: menuItem; //the menu entry to be shown
   active: boolean = false; //if true the submenu is shown
+  @Output() toggle = new EventEmitter();
   constructor() {
+  }
+
+  collapse_if_mobile(){
+    if(window.screen.width <= 766){
+      this.toggle.emit();
+    }
   }
 }
 
@@ -58,8 +65,8 @@ export class MiniSidebarItem {
 export class SidebarBodyComponent {
   @Input() side_extended: boolean;
   items: menuItem[] = [];
-
-  constructor() {
+  @Output() toggle = new EventEmitter();
+  constructor(private UserService: UserService) {
     var obj = {
       "name": "Sezione Assenze",
       "short_name": "Assenze",
@@ -97,13 +104,16 @@ export class SidebarBodyComponent {
       "short_name": "Utenti",
       "sub_menu": [
         ["Inserimento Utente", ""],
-        ["Lista Utenti", ""],
+        ["Lista Utenti", "/userlist"],
         ["Gestori Sondaggi", ""],
         ["Responsabili Assenze", ""]
       ]
     }
     this.items.push(obj);
+  }
 
+  emit_toggle(){
+    this.toggle.emit();
   }
 
 }

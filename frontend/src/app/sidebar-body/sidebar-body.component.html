@@ -1,18 +1,20 @@
-<!--
-Base Component Code got from Angular Material
--->
 <div class="sidebar-title-box text-center"  *ngIf="side_extended == true">
-  <h2>Benvenuto, Orazio Scavo</h2>
+  <h2>Benvenuto, {{UserService.get_name()}}</h2>
 </div>
 <div class="sidebar-divider" *ngIf="side_extended == true">
   <mat-divider></mat-divider>
 </div>
 <ul class="sidebar-menu" *ngIf="side_extended == true">
-  <sidebar-menu-item class="visible-xs" [item]="items[3]"></sidebar-menu-item>
-  <sidebar-menu-item [item]="items[0]"></sidebar-menu-item>
-  <sidebar-menu-item [item]="items[1]"></sidebar-menu-item>
-  <sidebar-menu-item [item]="items[2]"></sidebar-menu-item>
-  <li class="visible-xs logout-entry">
+  <li [routerLink]="['/home']" class="basic-entry">
+    <a>
+      <i class="fas fa-home"></i> Home
+    </a>
+  </li>
+  <sidebar-menu-item (toggle)="emit_toggle($event)" class="visible-xs" [item]="items[3]"></sidebar-menu-item>
+  <sidebar-menu-item (toggle)="emit_toggle($event)" [item]="items[0]"></sidebar-menu-item>
+  <sidebar-menu-item (toggle)="emit_toggle($event)" [item]="items[1]"></sidebar-menu-item>
+  <sidebar-menu-item (toggle)="emit_toggle($event)" [item]="items[2]"></sidebar-menu-item>
+  <li (click)="UserService.logout()" class="visible-xs basic-entry">
     <a>
       <i class="fas fa-sign-out-alt logout-icon"></i> Logout
     </a>
@@ -20,6 +22,13 @@ Base Component Code got from Angular Material
 </ul>
 
 <ul class="sidebar-menu hidden-xs" *ngIf="side_extended==false">
+  <li class="home-mini" [routerLink]="['/home']">
+    <a title="Home">
+      <i class="fa fa-home"></i>
+    </a>
+    <br />
+    <small>Home</small>
+  </li>
   <mini-sidebar-item [item]="items[0]"></mini-sidebar-item>
   <mini-sidebar-item [item]="items[1]"></mini-sidebar-item>
   <mini-sidebar-item [item]="items[2]"></mini-sidebar-item>

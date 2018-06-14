@@ -13,13 +13,17 @@ import { MatButtonModule,
          MatFormFieldModule,
          MatInputModule,
          MatProgressSpinnerModule,
+         MatSnackBarModule,
          MatTableModule
        } from '@angular/material';
 import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component'
 import { UserService } from './user.service';
+import { BlockScrollService } from './block-scroll.service';
 import { UserListComponent } from './user-list/user-list.component';
-import { UserTableComponent } from './user-table/user-table.component'
+import { UserTableComponent } from './user-table/user-table.component';
+import { CookieService } from 'ngx-cookie-service';
+import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +35,8 @@ import { UserTableComponent } from './user-table/user-table.component'
     HeaderComponent,
     SidebarComponent,
     UserListComponent,
-    UserTableComponent
+    UserTableComponent,
+    LoginDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -46,9 +51,10 @@ import { UserTableComponent } from './user-table/user-table.component'
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
     MatTableModule
   ],
-  providers: [UserService],
+  providers: [BlockScrollService, CookieService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

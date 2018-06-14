@@ -1,3 +1,10 @@
+export interface LogResponseType{
+  success: boolean,
+  error: string,
+  user: UserType,
+  token: string
+}
+
 export interface UsersResponseType{
     success:boolean,
     error: string,

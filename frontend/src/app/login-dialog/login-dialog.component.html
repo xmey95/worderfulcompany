@@ -1,0 +1,26 @@
+<div class="dialog-veil"></div>
+
+<div class="login-box text-center">
+  <h1>LOGIN</h1>
+  <h4>All'interno di questa applicazione non è prevista la navigazione anonima. <br />
+    Inserisci le tue credenziali per accedere
+  </h4>
+  <form class="login-form">
+    <mat-form-field>
+      <input name="email" [(ngModel)]="email" type="text" matInput placeholder="Email">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input name="password" [(ngModel)]="password" [type]="showPassword==true ? 'text' : 'password'" matInput placeholder="Password">
+    </mat-form-field>
+    <span title="Mostra Password" class="far fa-eye"  [ngClass]="{'fa-eye-slash' : showPassword==true}" (click)="toggle_show_password()"></span>
+    <div>
+      <button [disabled]="validate() == false"  mat-button (click)="try_login()">INVIA</button>
+    </div>
+  </form>
+  <small class="admin-credentials">
+    <i class="fa fa-info"></i>
+     Accedi come mministratore per aggiungere nuovi utenti.<br />
+    CREDENZIALI DA AMMINISTRATORE: [email] - [password]
+  </small>
+</div>

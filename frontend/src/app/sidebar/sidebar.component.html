@@ -14,7 +14,7 @@
     </div>
     <div class="clearfix"></div>
     <div class="sidebar-menu-expanded">
-      <sidebar-body [side_extended]="side_expanded"></sidebar-body>
+      <sidebar-body (toggle)="toggle_sidebar()" [side_extended]="side_expanded"></sidebar-body>
     </div>
   </div>
 </div>

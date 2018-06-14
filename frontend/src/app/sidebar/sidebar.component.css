@@ -17,19 +17,17 @@ padding: 5px 6px;
 }
 
 .sidebar{
-  height:110%;
-  min-height:100vh;
+  position:fixed;
+  height:100vh;
   padding: 0;
-  z-index: 9999;
-  position: absolute;
+  z-index: 1000;
   float:left;
   -webkit-transition: width 1s; /* For Safari 3.1 to 6.0 */
   transition: width 1s;
 }
 
 .sidebar-body{
-  height:110%;
-  min-height:100vh;
+  height:100%;
   overflow-y:auto;
   overflow-x:hidden;
   background: #2a3f54;
@@ -98,9 +96,6 @@ padding: 5px 6px;
 }
 
 @media (max-width: 766px){
-  .sidebar{
-    position:fixed;
-  }
   .sidebar-collapsed{
     width:0px;
   }

@@ -1,17 +1,41 @@
-.logout-entry{
+.basic-entry{
   min-height:48px;
   font-size:20px;
   padding-top:10px;
   padding-left:20px;
+  cursor:pointer;
 }
 
-.logout-entry a{
+.basic-entry:hover{
+  background:rgba(255,255,255,0.2);
+}
+
+.basic-entry a{
   text-decoration: none;
   color:white;
 }
 
+.home-mini{
+  min-height:48px;
+  font-size:20px;
+  margin-bottom:30px;
+  text-align:center;
+  cursor:pointer;
+  color:white;
+}
+
+.home-mini a{
+  color:white;
+  text-decoration:none;
+  font-size:2em;
+}
+
+.home-mini:hover{
+  background:rgba(255,255,255,0.2);
+}
+
 .logout-icon{
-  color:rgb(255,0,0,0.6);
+  color:rgb(255,0,0,0.5);
 }
 
 
