@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Component, Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, interval } from 'rxjs';
 import { switchMap, map, share, filter } from 'rxjs/operators';
 import { LogResponseType, UserType, UsersResponseType, VersionResponseType } from './interfaces'
 import * as config from './config.json';
 import { CookieService } from 'ngx-cookie-service';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
+import { MatSnackBar, MatSnackBarConfig, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { BlockScrollService } from './block-scroll.service';
 
 /*
@@ -21,7 +21,7 @@ export class UserService {
     public users$: Observable<UserType[]>;//observable to get user list
     private users_version = ""; //version code for user list
 
-    constructor(private BlockScrollService: BlockScrollService, private httpClient: HttpClient, private cookieService: CookieService, public snackBar: MatSnackBar) {
+    constructor(private BlockScrollService: BlockScrollService, private cookieService: CookieService, public dialog: MatDialog, private httpClient: HttpClient, public snackBar: MatSnackBar) {
         this.api = (<any>config).api;
         this.load_cookies();
         //Observable to get Users List is defined here
@@ -40,6 +40,22 @@ export class UserService {
                 map((data)=>{ return data.users }), //save new value (get just users field from response)
                 share()
             );
+    }
+
+    logout_confirm(): void {
+      let dialogRef = this.dialog.open(ConfirmComponent, {
+        width: '250px'
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+        if(result){
+          this.token = null;
+          this.user = null;
+          this.logged_in = false;
+          this.cookieService.deleteAll(); //clear cookies
+        }
+      });
     }
 
     get_login_status(){
@@ -68,10 +84,7 @@ export class UserService {
     }
 
     logout(){
-        this.token = null;
-        this.user = null;
-        this.logged_in = false;
-        this.cookieService.deleteAll(); //clear cookies
+      this.logout_confirm();
     }
 
     save_cookies(){
@@ -105,4 +118,20 @@ export class UserService {
           console.log(JSON.stringify(err));
       });
     }
+}
+
+@Component({
+  selector: 'confirm',
+  templateUrl: 'confirm/confirm.component.html',
+})
+export class ConfirmComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<ConfirmComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
+
+    onNoClick(): void {
+      this.dialogRef.close();
+    }
+
 }

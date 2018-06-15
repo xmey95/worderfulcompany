@@ -25,7 +25,7 @@
     "core-js": "^2.5.4",
     "ngx-cookie-service": "^1.0.10",
     "rxjs": "^6.0.0",
-    "rxjs-compat": "^6.2.0",
+    "rxjs-compat": "^6.2.1",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {

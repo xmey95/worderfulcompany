@@ -14,11 +14,12 @@ import { MatButtonModule,
          MatInputModule,
          MatProgressSpinnerModule,
          MatSnackBarModule,
-         MatTableModule
+         MatTableModule,
+         MatDialogModule
        } from '@angular/material';
 import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component'
-import { UserService } from './user.service';
+import { UserService, ConfirmComponent } from './user.service';
 import { BlockScrollService } from './block-scroll.service';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserTableComponent } from './user-table/user-table.component';
@@ -28,6 +29,7 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 @NgModule({
   declarations: [
     AppComponent,
+    ConfirmComponent,
     HomeComponent,
     MiniSidebarItem,
     SidebarBodyComponent,
@@ -52,9 +54,11 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
     MatInputModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    MatTableModule
+    MatTableModule,
+    MatDialogModule
   ],
   providers: [BlockScrollService, CookieService, UserService],
+  entryComponents: [ConfirmComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
