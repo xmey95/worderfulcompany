@@ -124,7 +124,6 @@ export class SidebarBodyComponent {
       "sub_menu": [
         ["Inserimento Utente", "/adduser"],
         ["Lista Utenti", "/userlist"],
-        ["Gestori Sondaggi", ""],
         ["Responsabili Assenze", ""]
       ]
     }
