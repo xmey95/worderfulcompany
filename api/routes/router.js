@@ -353,9 +353,51 @@ router.route('/users/:user').get(function(req, res) {
   });
 });
 
-//Set the manager for specified survey
-router.route('/users/set_survey_manager/:user/:survey').post(auth.isAuthenticated, function(req, res) {
+/**
+* @api                {get} /users/set_survey_manager/:user/:survey             Set the manager for specified survey
+* @apiName            Set Survey manager
+* @apiDescription     Set the manager for specified survey
+* @apiError           (Error 500) InternalServerError                           Query failed.
+* @apiError           (Error 404) NotFoundError                                 Resource not found.
+* @apiErrorExample    {json} Error-Response:
+*     HTTP/1.1 500 Internal Server Error
+*     {
+*         success : false,
+*         error : "INTERNAL_SERVER_ERROR"
+*      }
+* @apiErrorExample    {json} Error-Response:
+*     HTTP/1.1 404 Not Found Error
+*     {
+*         success : false,
+*         error : "SURVEY_NOT_FOUND"
+*      }
+* @apiSampleRequest   /users/set_survey_manager/1/1
+* @apiGroup           General
+* @apiPermission      none
+* @apiSuccess         {Boolean} success                                         True if the query is succesfully.
+* @apiSuccess         {String} error                                            String containing the error, it's null if success is true.
+* @apiSuccess         {String} user                                             String containing user object.
+* @apiSuccessExample  {json} Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*       "success": true,
+*       "error": null
+*      }
+*/
 
+//Set the manager for specified survey
+router.route('/users/set_survey_manager/:user/:survey').get(auth.isAuthenticated, function(req, res) {
+  pool.getConnection(function(err, connection) {
+      connection.query('UPDATE ?? SET ?? = ? WHERE ?? = ?', ['surveys', 'id_user', req.body.user, 'id', req.body.survey], function (err, results, fields) {
+
+        connection.release();
+
+        if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
+        if (!results[0]) return res.status(404).send(JSON.stringify({success:false, error:"SURVEY_NOT_FOUND"}));
+
+        return res.status(200).send(JSON.stringify({success:true, error:null}));
+      });
+  });
 });
 
 /**
@@ -414,7 +456,6 @@ router.route('/users/set_boss/').post(function(req, res) {
   });
 
 });
-
 
 /**
  * @api {get} /users/:user/get_boss/                                            Get Boss
