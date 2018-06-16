@@ -74,6 +74,7 @@ if(process.argv[3] == "--mac"){
 //show user information hiding password
 function make_user_safe(user) {
   return {
+    id: user.id,
     name: user.name,
     surname: user.surname,
     email: user.email
@@ -152,6 +153,7 @@ router.get('/', function(req, res){
 * @apiSuccess         {String} token                                            JWT Access Token.
 * @apiSuccess         {Boolean} success                                         True if login is succesfully.
 * @apiSuccess         {Object} user                                             User object.
+* @apiSuccess         {Number}   user.id                                        User id.
 * @apiSuccess         {String}   user.name                                      User name.
 * @apiSuccess         {String}   user.surname                                   User surname.
 * @apiSuccess         {String}   user.email                                     User email.
@@ -160,6 +162,7 @@ router.get('/', function(req, res){
 *     {
 *        "success": true,
 *        "user": {
+*           "id": 2,
 *           "name": "xmey952",
 *           "surname": "xmey952",
 *           "email": "xmey952@ciao.it"
@@ -246,11 +249,13 @@ router.route('/authenticate').get(auth.isAuthenticatedBasic, function(req,res) {
 *       "error": null,
 *       "users": [
 *                  {
+*                   "id": 2,
 *                   "name":"xmey952",
 *                   "surname":"xmey952",
 *                   "email":"xmey952@ciao.it"
 *                  },
 *                  {
+*                   "id": 4,
 *                   "name":"xmey95",
 *                   "surname":"xmey95",
 *                   "email":"xmey95@ciao.it"
@@ -292,6 +297,68 @@ router.route('/users/:version').get(function(req, res){
               return res.status(201).send(JSON.stringify({success:true, error:null, users: users}));
       }else{
               var string = JSON.stringify(users);
+              string = crypto.createHash('sha1').update(string).digest('hex');
+              return res.status(201).send(JSON.stringify({success:true, error:null, version: string}));
+      }
+    });
+  });
+});
+
+/**
+* @api                {get} /supervisions                                       Get Supervisions
+* @apiName            Get Supervisions
+* @apiDescription     Get the list of supervisions couples (id_employee, id_boss) between users.
+* @apiError           (Error 500) InternalServerError                           Query failed.
+* @apiError           (Error 404) NotFoundError                                 Resource not found.
+* @apiErrorExample    {json} Error-Response:
+*     HTTP/1.1 500 Internal Server Error
+*     {
+*         success : false,
+*         error : "INTERNAL_SERVER_ERROR"
+*      }
+* @apiErrorExample    {json} Error-Response:
+*     HTTP/1.1 404 Not Found Error
+*     {
+*         success : false,
+*         error : "SUPERVISIONS_NOT_FOUND"
+*      }
+* @apiGroup           General
+* @apiPermission      none
+* @apiParam {String} version                                                    If "true" the request returns a version code of the value
+* @apiSuccess         {Boolean} success                                         True if the query is succesfully.
+* @apiSuccess         {String} error                                            String containing the error, it's null if success is true.
+* @apiSuccess         {String} supervisions                                     String containing list of supervisions.
+* @apiSuccessExample  {json} Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*       "success": true,
+*       "error": null,
+*       "supervisions": [
+*                  {
+*                   "id_user": 2,
+*                   "id_boss":7
+*                  },
+*                  {
+*                   "id_user": 5,
+*                   "id_boss":14
+*                  }
+*                 ]
+*      }
+*/
+router.route('/supervisions/:version').get(function(req, res){
+  pool.getConnection(function(err, connection) {
+    // Use the connection
+    connection.query('SELECT * FROM ??', ['supervisions'], function (err, results, fields) {
+      // And done with the connection.
+      connection.release();
+
+      if (err) return res.status(500).send(JSON.stringify({success:false, error: err}));
+      if (!results) return res.status(404).send(JSON.stringify({success:false, error:"SUPERVISIONS_NOT_FOUND"}));
+
+      if(req.params.version=='false'){
+              return res.status(201).send(JSON.stringify({success:true, error:null, supervisions: results}));
+      }else{
+              var string = JSON.stringify(results);
               string = crypto.createHash('sha1').update(string).digest('hex');
               return res.status(201).send(JSON.stringify({success:true, error:null, version: string}));
       }

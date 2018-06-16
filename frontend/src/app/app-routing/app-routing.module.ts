@@ -1,14 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from '../home/home.component'
-import { UserListComponent } from '../user-list/user-list.component';
-import { AddUserComponent } from '../add-user/add-user.component';
+import { ManageUsersComponent } from '../manage-users/manage-users.component';
 //import { PageNotFoundComponent } from './page-not-found.component';
 
 const appRoutes: Routes = [
-    { path: 'adduser', component: AddUserComponent },
     { path: 'home', component: HomeComponent },
-    { path: 'userlist', component: UserListComponent },
+    { path: 'users', component: ManageUsersComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
   /*  { path: '**', component: PageNotFoundComponent }*/
 ];

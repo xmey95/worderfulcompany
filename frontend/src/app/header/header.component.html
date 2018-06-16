@@ -12,19 +12,9 @@
             <span class="fas fa-angle-down profile-arrow"></span>
           </a>
           <ul class="dropdown-menu dropdown-usermenu pull-right">
-            <li [routerLink]="['/adduser']">
+            <li [routerLink]="['/users']">
               <a class="user-menu-item">
-                <i class="fa fa-user-plus pull-right"></i>Inserimento Utente
-              </a>
-            </li>
-            <li>
-              <a class="user-menu-item">
-                <i class="fas fa-user-tie pull-right"></i>Responsabili assenze
-              </a>
-            </li>
-            <li [routerLink]="['/userlist']">
-              <a class="user-menu-item">
-                <i class="fa fa-users pull-right"></i>Lista Utenti
+                <i class="fa fa-users pull-right"></i>Gestione Utenti
               </a>
             </li>
             <li (click)="logout()">

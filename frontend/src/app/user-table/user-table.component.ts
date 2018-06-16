@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { UserService } from '../user.service';
 
 /*
-This component contains the table showing a complete list of users (name,surnem,email)
+This component contains the table showing a complete list of users (name,surname,email, boss)
 */
 @Component({
   selector: 'user-table',
@@ -15,11 +15,15 @@ This component contains the table showing a complete list of users (name,surnem,
 })
 export class UserTableComponent implements OnDestroy {
   @Output() ready = new EventEmitter<number>(); //output to indicate to outer component if data is ready, it contains length of users list
-  private displayedColumns = ['name', 'surname', 'email'];
+  @Output() set_boss = new EventEmitter<UserType>();
+  private displayedColumns = ['name', 'surname', 'email', 'boss'];
   private dataSource; //data source for datatable
   private usersSubscription: Subscription;
 
   constructor(client: HttpClient, private UserService: UserService) {
+    if(window.screen.width <= 766){
+      this.displayedColumns = ['name', 'surname', 'boss'];
+    }
     this.usersSubscription = this.UserService.users$.subscribe((users) => { //subscription to user-service's observable to get user list
         this.dataSource = new MatTableDataSource(users); //inject recieved data in the table
         if(users.length == 0){ //emit query status to outer component
@@ -28,11 +32,7 @@ export class UserTableComponent implements OnDestroy {
           this.ready.emit(users.length); //data is ready, table can be displayed
         }
     });
-  }
-
-  //execute unsubscription from user-service's observable
-  ngOnDestroy() {
-    this.usersSubscription.unsubscribe()
+    this.UserService.reset_version();
   }
 
   //filter function for datatable NOTE: code got from Angular Material
@@ -42,4 +42,13 @@ export class UserTableComponent implements OnDestroy {
     this.dataSource.filter = filterValue;
   }
 
+  //execute unsubscription from user-service's observable
+  ngOnDestroy() {
+    this.usersSubscription.unsubscribe();
+  }
+
+  //emit to outer component wich user has been clicked in order to start boss assigment procedure
+  emit_employee(user){
+    this.set_boss.emit(user);
+  }
 }

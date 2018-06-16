@@ -4,32 +4,39 @@ import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MiniSidebarItem, SidebarBodyComponent, SidebarMenuItem } from './sidebar-body/sidebar-body.component';
-import { MatButtonModule,
+import { MatBottomSheetModule,
+         MatButtonModule,
          MatCardModule,
+         MatDialogModule,
          MatDividerModule,
          MatFormFieldModule,
          MatInputModule,
+         MatListModule,
          MatProgressSpinnerModule,
          MatSnackBarModule,
          MatTableModule,
-         MatDialogModule
        } from '@angular/material';
 import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component'
 import { UserService, ConfirmComponent } from './user.service';
 import { BlockScrollService } from './block-scroll.service';
-import { UserListComponent } from './user-list/user-list.component';
+import { BottomListComponent, ManageUsersComponent } from './manage-users/manage-users.component';
 import { UserTableComponent } from './user-table/user-table.component';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
-import { AddUserComponent } from './add-user/add-user.component';
+
+//Registers locale data to 'it' for date pipe format
+import { registerLocaleData } from '@angular/common';
+import localeIt from '@angular/common/locales/it';
+registerLocaleData(localeIt, 'it');
 
 @NgModule({
   declarations: [
     AppComponent,
+    BottomListComponent,
     ConfirmComponent,
     HomeComponent,
     MiniSidebarItem,
@@ -37,10 +44,9 @@ import { AddUserComponent } from './add-user/add-user.component';
     SidebarMenuItem,
     HeaderComponent,
     SidebarComponent,
-    UserListComponent,
+    ManageUsersComponent,
     UserTableComponent,
-    LoginDialogComponent,
-    AddUserComponent
+    LoginDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -49,18 +55,20 @@ import { AddUserComponent } from './add-user/add-user.component';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    MatBottomSheetModule,
     MatButtonModule,
     MatCardModule,
     MatDividerModule,
     MatFormFieldModule,
     MatInputModule,
+    MatListModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatTableModule,
     MatDialogModule
   ],
-  providers: [BlockScrollService, CookieService, UserService],
-  entryComponents: [ConfirmComponent],
+  providers: [{ provide: LOCALE_ID, useValue: 'it' }, BlockScrollService, CookieService, UserService],
+  entryComponents: [BottomListComponent, ConfirmComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

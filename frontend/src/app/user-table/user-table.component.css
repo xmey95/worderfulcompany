@@ -4,6 +4,10 @@
   left:40%;
 }
 
+a{
+  cursor: pointer;
+}
+
 table {
   margin:auto;
   left:0;

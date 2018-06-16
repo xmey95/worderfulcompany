@@ -1,6 +1,7 @@
 import {Component, Input, ElementRef, EventEmitter, HostListener, Output} from '@angular/core';
 import { UserService } from '../user.service';
-
+import { Router } from '@angular/router/'
+import { interval } from 'rxjs';
 /*
 Components of the sidebar menu
 */
@@ -78,11 +79,14 @@ export class SidebarMenuItem {
   styleUrls: ['./sidebar-body.component.css']
 })
 export class SidebarBodyComponent {
+  private today: number = Date.now();
   @Input() side_extended: boolean; //input from outer component (sidebar status)
   items: menuItem[] = []; //List of menu items to be injected in inner components
   @Output() toggle = new EventEmitter(); //emitter to outer component to order the change of sidebar status
-  constructor(private UserService: UserService) {
-
+  constructor(private UserService: UserService, private Router: Router) {
+    interval(1000).subscribe(()=>{
+      this.today = Date.now();
+    });
     //Build the list of data object to be injected in menu-item components
     var obj = { //first item
       "name": "Sezione Assenze",
@@ -117,18 +121,6 @@ export class SidebarBodyComponent {
       ]
     }
     this.items.push(obj);
-
-    obj = { //fourth item
-      "name": "Gestione Utenti",
-      "short_name": "Utenti",
-      "sub_menu": [
-        ["Inserimento Utente", "/adduser"],
-        ["Lista Utenti", "/userlist"],
-        ["Responsabili Assenze", ""]
-      ]
-    }
-    this.items.push(obj);
-
   }
 
   //order to outer component to change sidebar status

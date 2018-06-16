@@ -1,0 +1,7 @@
+<h2>Nomina supervisore per {{data.employee.name}} {{data.employee.surname}}</h2>
+<mat-nav-list>
+  <a *ngFor="let user of data.users" mat-list-item (click)="set_boss(data.employee.id, user.id)" >
+    <span mat-line>{{user.name}} {{user.surname}}</span>
+    <span mat-line>{{user.email}}</span>
+  </a>
+</mat-nav-list>

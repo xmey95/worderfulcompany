@@ -1,19 +1,29 @@
 <div class="sidebar-title-box text-center"  *ngIf="side_extended == true">
-  <h2>Benvenuto, {{UserService.get_name()}}</h2>
+  <h3>
+    {{today | date:'EEEE,' | titlecase}}
+    <br />
+    {{today | date:'d MMMM y' | titlecase}}
+  </h3>
+  <br />
+  <h4>
+    {{today | date:'h:mm:ss'}}
+  </h4>
 </div>
 <div class="sidebar-divider" *ngIf="side_extended == true">
   <mat-divider></mat-divider>
 </div>
 <ul class="sidebar-menu" *ngIf="side_extended == true">
-  <li [routerLink]="['/home']" class="basic-entry" (click)="emit_toggle_if_mobile()">
+  <li [routerLink]="['/home']" class="basic-entry" [ngClass]="{'active' : Router.url === '/home'}" (click)="emit_toggle_if_mobile()">
     <a>
       <i class="fas fa-home"></i> Home
     </a>
   </li>
-  <sidebar-menu-item (toggle)="emit_toggle($event)" class="visible-xs" [item]="items[3]"></sidebar-menu-item>
-  <sidebar-menu-item (toggle)="emit_toggle($event)" [item]="items[0]"></sidebar-menu-item>
-  <sidebar-menu-item (toggle)="emit_toggle($event)" [item]="items[1]"></sidebar-menu-item>
-  <sidebar-menu-item (toggle)="emit_toggle($event)" [item]="items[2]"></sidebar-menu-item>
+  <li [routerLink]="['/users']" class="basic-entry visible-xs" (click)="emit_toggle_if_mobile()">
+    <a>
+      <i class="fas fa-users"></i> Gestione Utenti
+    </a>
+  </li>
+  <sidebar-menu-item *ngFor="let item of items" [item]="item" (toggle)="emit_toggle($event)"></sidebar-menu-item>
   <li (click)="UserService.logout()" class="visible-xs basic-entry">
     <a>
       <i class="fas fa-sign-out-alt logout-icon"></i> Logout
@@ -22,14 +32,12 @@
 </ul>
 
 <ul class="sidebar-menu hidden-xs" *ngIf="side_extended==false">
-  <li class="home-mini" [routerLink]="['/home']">
+  <li class="home-mini" [ngClass]="{'active' : Router.url === '/home'}" [routerLink]="['/home']">
     <a title="Home">
       <i class="fa fa-home"></i>
     </a>
     <br />
     <small>Home</small>
   </li>
-  <mini-sidebar-item [item]="items[0]"></mini-sidebar-item>
-  <mini-sidebar-item [item]="items[1]"></mini-sidebar-item>
-  <mini-sidebar-item [item]="items[2]"></mini-sidebar-item>
+  <mini-sidebar-item *ngFor="let item of items" [item]="item"></mini-sidebar-item>
 </ul>

@@ -1,0 +1,57 @@
+<div class="page">
+    <div class="section">
+        <div class="title text-center">
+            <h1>Inserimento Utente</h1>
+        </div>
+        <div class="form-box">
+            <form>
+                <div class="col-sm-4">
+                    <mat-form-field>
+                       <input name="surname" [(ngModel)]="surname" type="text" matInput placeholder="Cognome">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field>
+                       <input name="name" [(ngModel)]="name" type="text" matInput placeholder="Nome">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field>
+                      <input name="email" [(ngModel)]="email" type="text" matInput placeholder="Email">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field>
+                      <input name="password" [(ngModel)]="password" [type]="showPassword==true ? 'text' : 'password'" matInput placeholder="Password">
+                    </mat-form-field>
+                    <span title="Mostra Password" class="far fa-eye"  [ngClass]="{'fa-eye-slash' : showPassword==true}" (click)="toggle_show_password()"></span>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field>
+                      <input name="password2" [(ngModel)]="password2" [type]="showPassword2==true ? 'text' : 'password'" matInput placeholder="Conferma Password">
+                    </mat-form-field>
+                    <span title="Mostra Password" class="far fa-eye"  [ngClass]="{'fa-eye-slash' : showPassword2==true}" (click)="toggle_show_password2()"></span>
+                </div>
+              <div>
+                <button [disabled]="validate() == false"  mat-button (click)="add_user()">INVIA</button>
+                <br *ngIf="password_confirmed()==false" />
+                <small *ngIf="password_confirmed() == false"><i class="fa fa-warning warn-icon"></i> Le due password non coincidono</small>
+              </div>
+            </form>
+        </div>
+    </div>
+    <div class="section">
+        <div class="title text-center">
+            <h1>Lista Impiegati {{get_number()}}</h1>
+        </div>
+        <div *ngIf="!number" class="center-div">
+            <mat-spinner></mat-spinner>
+        </div>
+        <div *ngIf="number == 0" class="no-user text-center">
+            <h1 >Nessun Utente da mostrare...</h1>
+        </div>
+        <div class="user-table-box" [ngClass]="{'hidden' : (!number || number<1)}">
+            <user-table (set_boss)="openBottomSheet($event)" (ready)="set_number($event)"></user-table>
+        </div>
+    </div>
+</div>
