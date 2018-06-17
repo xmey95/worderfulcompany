@@ -93,7 +93,7 @@ export class SidebarBodyComponent {
       "short_name": "Assenze",
       "sub_menu": [
         ["Calendario", ""],
-        ["Le tue Richieste", ""],
+        ["Le tue Richieste", "/myabsences"],
         ["Richieste (amministratore)", ""]
       ]
     }

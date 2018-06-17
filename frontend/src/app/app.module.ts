@@ -10,12 +10,15 @@ import { MiniSidebarItem, SidebarBodyComponent, SidebarMenuItem } from './sideba
 import { MatBottomSheetModule,
          MatButtonModule,
          MatCardModule,
+         MatDatepickerModule,
          MatDialogModule,
          MatDividerModule,
          MatFormFieldModule,
          MatInputModule,
          MatListModule,
+         MatNativeDateModule,
          MatProgressSpinnerModule,
+         MatSelectModule,
          MatSnackBarModule,
          MatTableModule,
        } from '@angular/material';
@@ -31,6 +34,7 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 //Registers locale data to 'it' for date pipe format
 import { registerLocaleData } from '@angular/common';
 import localeIt from '@angular/common/locales/it';
+import { MyAbsencesComponent } from './absence-section/my-absences/my-absences.component';
 registerLocaleData(localeIt, 'it');
 
 @NgModule({
@@ -46,7 +50,8 @@ registerLocaleData(localeIt, 'it');
     SidebarComponent,
     ManageUsersComponent,
     UserTableComponent,
-    LoginDialogComponent
+    LoginDialogComponent,
+    MyAbsencesComponent
   ],
   imports: [
     BrowserModule,
@@ -58,11 +63,14 @@ registerLocaleData(localeIt, 'it');
     MatBottomSheetModule,
     MatButtonModule,
     MatCardModule,
+    MatDatepickerModule,
     MatDividerModule,
     MatFormFieldModule,
     MatInputModule,
     MatListModule,
+    MatNativeDateModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
     MatSnackBarModule,
     MatTableModule,
     MatDialogModule
