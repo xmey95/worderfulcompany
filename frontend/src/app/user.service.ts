@@ -144,6 +144,13 @@ export class UserService {
         return this.users;
     }
 
+    get_token(){
+      if(this.logged_in && this.token){
+        return this.token;
+      }
+      return "";
+    }
+
     load_cookies(){
         //check if cookies are set
         if(this.cookieService.check('user') && this.cookieService.check('token') && this.cookieService.check('logged_in') && this.cookieService.get('logged_in') == "true"){
