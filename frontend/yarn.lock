@@ -456,6 +456,29 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
+angular-calendar@^0.25.2:
+  version "0.25.2"
+  resolved "https://registry.yarnpkg.com/angular-calendar/-/angular-calendar-0.25.2.tgz#2655dfa6108cd1a35d4429907ff4ab804c135df9"
+  dependencies:
+    angular-draggable-droppable "^3.0.0"
+    angular-resizable-element "^3.0.0"
+    calendar-utils "^0.1.2"
+    date-fns "^1.28.5"
+    positioning "^1.3.1"
+    tslib "^1.9.0"
+
+angular-draggable-droppable@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/angular-draggable-droppable/-/angular-draggable-droppable-3.0.1.tgz#72df5dab23b0932cdcd57264194cbba1f045dbab"
+  dependencies:
+    tslib "^1.9.0"
+
+angular-resizable-element@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/angular-resizable-element/-/angular-resizable-element-3.0.0.tgz#4a9d554e679eb607b7caa8dcc391a6401a127d86"
+  dependencies:
+    tslib "^1.9.0"
+
 ansi-html@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/ansi-html/-/ansi-html-0.0.7.tgz#813584021962a9e9e6fd039f940d12f56ca7859e"
@@ -1047,6 +1070,10 @@ cache-loader@^1.2.2:
     neo-async "^2.5.0"
     schema-utils "^0.4.2"
 
+calendar-utils@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/calendar-utils/-/calendar-utils-0.1.2.tgz#79642f1beb49dc0c8719e2b5d480f7730501d74a"
+
 callsite@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/callsite/-/callsite-1.0.0.tgz#280398e5d664bd74038b6f0905153e6e8af1bc20"
@@ -1577,6 +1604,10 @@ dashdash@^1.12.0:
   resolved "https://registry.yarnpkg.com/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
   dependencies:
     assert-plus "^1.0.0"
+
+date-fns@^1.28.5:
+  version "1.29.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.29.0.tgz#12e609cdcb935127311d04d33334e2960a2a54e6"
 
 date-now@^0.1.4:
   version "0.1.4"
@@ -4561,6 +4592,10 @@ portfinder@^1.0.13, portfinder@^1.0.9:
     async "^1.5.2"
     debug "^2.2.0"
     mkdirp "0.5.x"
+
+positioning@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/positioning/-/positioning-1.3.1.tgz#6ff15e9bf8d8fe341ba1b3900d587e977b5554ec"
 
 posix-character-classes@^0.1.0:
   version "0.1.1"
