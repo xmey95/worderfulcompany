@@ -5,8 +5,8 @@
   </a>
 </li>
 <ul class="inner-list" [ngClass]="{'inner-active' : active==true}">
-  <li class="inner-item" *ngFor="let item of item.sub_menu" (click)="collapse_if_mobile()">
-    <a [routerLink]="[item[1]]">
+  <li [routerLink]="[item[1]]" class="inner-item" *ngFor="let item of item.sub_menu" (click)="collapse_if_mobile()">
+    <a>
       {{item[0]}}
     </a>
   </li>

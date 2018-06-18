@@ -1,0 +1,43 @@
+<div class="page">
+    <div class="title text-center">
+        <h1>Richieste (Amministratore)</h1>
+    </div>
+    <div class="section">
+        <div class="row">
+            <div class="col-sm-3 border-divider">
+                <div class="title text-center">
+                    <h1>Impiegati</h1>
+                </div>
+                <div class="text-center">
+                    <mat-list>
+                      <mat-list-item *ngFor="let employee of employees">
+                        <i class="fa fa-user" mat-list-icon></i>
+                        <h4 class="link-to-user" [routerLink]="['/employee']" [queryParams]="{ employee: employee.id }" mat-line><b>{{employee.name | titlecase}} {{employee.surname | titlecase}}</b></h4>
+                        <p mat-line> {{get_requests_number(employee.id)}} Richieste</p>
+                        <mat-divider></mat-divider>
+                      </mat-list-item>
+                    </mat-list>
+                    <div *ngIf="employees && employees.length == 0" class="no-data">
+                        <h1 >Nessun Utente da mostrare...</h1>
+                    </div>
+                    <div *ngIf="!employees" class="center-div">
+                        <mat-spinner></mat-spinner>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="title text-center">
+                    <h1>Statistiche Generali</h1>
+                    <request-charts *ngIf="requests && requests.length > 0"></request-charts>
+                    <div *ngIf="!requests" class="center-div">
+                        <mat-spinner></mat-spinner>
+                    </div>
+                    <div *ngIf="requests && requests.length == 0" class="no-data">
+                        <h1 >Nessuna Statistica da mostrare</h1>
+                        <h4>Nessuno dei tuoi impiegati ha richiesto dei permessi...</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

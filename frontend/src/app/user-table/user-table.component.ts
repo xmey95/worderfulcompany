@@ -22,7 +22,7 @@ export class UserTableComponent implements OnDestroy {
 
   constructor(client: HttpClient, private UserService: UserService) {
     if(window.screen.width <= 766){
-      this.displayedColumns = ['name', 'surname', 'boss'];
+      this.displayedColumns = ['name', 'surname', 'boss']; //email column is not whown in mobile devices
     }
     this.usersSubscription = this.UserService.users$.subscribe((users) => { //subscription to user-service's observable to get user list
         this.dataSource = new MatTableDataSource(users); //inject recieved data in the table

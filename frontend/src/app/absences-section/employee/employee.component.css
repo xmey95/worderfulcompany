@@ -1,3 +1,7 @@
+.border-divider{
+  padding-bottom:60px;
+}
+
 .center-div
 {
   margin: auto;
@@ -21,14 +25,26 @@
 }
 
 .justification-file-button{
-  margin:10px;
+  margin:5px;
 }
 
-.no-requests{
+.justification-file-label{
+  padding-left:5px;
+}
+
+.no-data{
+  margin:auto;
+  left:0;
+  right:0;
+  width: 70%;
   margin-top:60px;
   background: rgba(255,255,255,0.6);
   border-radius: 20px;
   padding:30px;
+}
+
+.page{
+  padding:60px;
 }
 
 .red{
@@ -39,15 +55,14 @@
   padding-top: 20px;
 }
 
-.divider{
-  width:60%;
-  margin:auto;
-  left:0;
-  right:0;
+.section{
+  padding:20px;
+  margin-bottom:60px;
 }
 
-.list-box{
-  box-shadow:0 18px 6px -12px rgba(0,0,0,.35), 0 12px 12px 0 rgba(0,0,0,.25), 0 4px 20px 0 rgba(0,0,0,.2);
+.title{
+  width:100%;
+  padding-bottom:30px;
 }
 
 mat-panel-description{
@@ -58,9 +73,18 @@ mat-panel-title{
   width:50%;
 }
 
+@media (min-width: 767px){
+  .border-divider{
+    border-right: 3px solid #aaaaaa;
+  }
+}
+
 @media (max-width: 766px){
   .page{
     padding:0px;
+  }
+  .no-data{
+    width:90%;
   }
   button{
     background: #aaaaaa;

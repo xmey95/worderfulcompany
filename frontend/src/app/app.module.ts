@@ -39,6 +39,9 @@ import { registerLocaleData } from '@angular/common';
 import localeIt from '@angular/common/locales/it';
 import { MyAbsencesComponent } from './absences-section/my-absences/my-absences.component';
 import { ModifyRequestComponent, MyAbsencesListComponent } from './absences-section/my-absences/my-absences-list/my-absences-list.component';
+import { EmployeesComponent } from './absences-section/employees/employees.component';
+import { RequestChartsComponent } from './absences-section/employees/request-charts/request-charts.component';
+import { EmployeeComponent } from './absences-section/employee/employee.component';
 registerLocaleData(localeIt, 'it');
 
 @NgModule({
@@ -57,7 +60,10 @@ registerLocaleData(localeIt, 'it');
     LoginDialogComponent,
     ModifyRequestComponent,
     MyAbsencesComponent,
-    MyAbsencesListComponent
+    MyAbsencesListComponent,
+    EmployeesComponent,
+    RequestChartsComponent,
+    EmployeeComponent,
   ],
   imports: [
     BrowserModule,

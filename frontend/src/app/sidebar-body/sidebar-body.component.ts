@@ -66,6 +66,7 @@ export class SidebarMenuItem {
       this.toggle.emit();
     }
   }
+
 }
 
 /*
@@ -94,7 +95,7 @@ export class SidebarBodyComponent {
       "sub_menu": [
         ["Calendario", ""],
         ["Le tue Richieste", "/myabsences"],
-        ["Richieste (amministratore)", ""]
+        ["Richieste (amministratore)", "/employees"]
       ]
     }
     this.items.push(obj);

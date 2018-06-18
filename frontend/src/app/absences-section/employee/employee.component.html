@@ -1,0 +1,94 @@
+<div class="page">
+    <div class="title text-center">
+        <h1>Impiegato: <span *ngIf="employee">{{employee.surname}} {{employee.name}}</span></h1>
+    </div>
+    <div class="section">
+        <div class="row">
+            <div class="col-sm-3 border-divider">
+                <div class="title text-center">
+                    <h1>Richieste</h1>
+                </div>
+                <div class="text-center">
+                    <div class="filter-buttons" *ngIf="employee_requests && employee_requests.length > 0">
+                    <mat-form-field>
+                      <mat-select name="filter" [(ngModel)]="filter" placeholder="Filtra">
+                          <mat-option value="-1">Tutte</mat-option>
+                          <mat-option value="1">Approvate</mat-option>
+                          <mat-option value="0">In Attesa</mat-option>
+                          <mat-option value="2">Rifiutate</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                    <div *ngIf="employee_requests && (employee_requests.length == 0 || displayed_requests()==0)" class="no-data">
+                        <h1 >Nessuna richiesta da mostrare...</h1>
+                    </div>
+                    <div *ngIf="!employee_requests" class="center-div">
+                        <mat-spinner></mat-spinner>
+                    </div>
+                </div>
+                <div *ngIf="employee_requests && employee_requests.length > 0">
+                    <mat-accordion>
+                      <div *ngFor="let request of employee_requests">
+                        <mat-expansion-panel *ngIf="filter == -1 || filter == request.state">
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                              Richiesta #{{request.id}} ({{request.reason | titlecase}})
+                            </mat-panel-title>
+                            <mat-panel-description>
+                              <span [ngClass]="{'green' : request.state==1, 'red': request.state==2}">{{get_state_label(request.state)}}</span>
+                            </mat-panel-description>
+                          </mat-expansion-panel-header>
+                          <div class="divider">
+                            <mat-divider></mat-divider>
+                          </div>
+                          <div class="row request-body">
+                            <div class="col-sm-12">
+                              <ul>
+                                <li>
+                                  Data <span *ngIf="request.start_date != request.end_date">di inizio</span>: {{request.start_date | date : 'EEEE, d MMMM y' | titlecase}}
+                                </li>
+                                <li *ngIf="request.start_date != request.end_date">
+                                  Data di fine (compresa): {{request.end_date | date : 'EEEE, d MMMM y' | titlecase}}
+                                </li>
+                                <li>
+                                  Motivazione: {{request.reason | titlecase}}
+                                </li>
+                              </ul>
+                            </div>
+                            <div class="col-sm-12" *ngIf="request.justification_file">
+                              <p class="justification-file-label">
+                                File giustificativo:
+                                <a target="_blank" href="{{api}}{{request.justification_file}}">
+                                  <button title="Vedi" class="justification-file-button" mat-mini-fab color="primary"><i class="fas fa-file"></i></button>
+                                </a>
+                                <a download="giustificativo{{request.id}}" href="{{api}}{{request.justification_file}}/download">
+                                  <button title="Scarica" class="justification-file-button" mat-mini-fab color="accent"><i class="fas fa-download"></i></button>
+                                </a>
+                              </p>
+                            </div>
+                          </div>
+                          <mat-action-row *ngIf="request.state == 0">
+                          <button (click)="RequestsService.approve_request(request.id)" mat-button>Approva</button>
+                          <button (click)="RequestsService.refuse_request(request.id)" mat-button>Rifiuta</button>
+                        </mat-action-row>
+                        </mat-expansion-panel>
+                      </div>
+                    </mat-accordion>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="title text-center">
+                    <h1>Statistiche Impiegato</h1>
+                    <request-charts *ngIf="employee_requests && employee_requests.length > 0"></request-charts>
+                    <div *ngIf="!employee_requests" class="center-div">
+                        <mat-spinner></mat-spinner>
+                    </div>
+                    <div *ngIf="employee_requests && employee_requests.length == 0" class="no-data">
+                        <h1 >Nessuna Statistica da mostrare</h1>
+                        <h4>Nessuno dei tuoi impiegati ha richiesto dei permessi...</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -11,53 +11,55 @@
     </mat-form-field>
   </div>
 </div>
-<mat-accordion>
-  <div *ngFor="let request of myrequests">
-    <mat-expansion-panel *ngIf="filter == -1 || filter == request.state">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Richiesta #{{request.id}} ({{request.reason | titlecase}})
-        </mat-panel-title>
-        <mat-panel-description>
-          <span [ngClass]="{'green' : request.state==1, 'red': request.state==2}">{{get_state_label(request.state)}}</span>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <div class="divider">
-        <mat-divider></mat-divider>
-      </div>
-      <div class="row request-body">
-        <div class="col-sm-6">
-          <ul>
-            <li>
-              Data <span *ngIf="request.start_date != request.end_date">di inizio</span>: {{request.start_date | date : 'EEEE, d MMMM y' | titlecase}}
-            </li>
-            <li *ngIf="request.start_date != request.end_date">
-              Data di fine (compresa): {{request.end_date | date : 'EEEE, d MMMM y' | titlecase}}
-            </li>
-            <li>
-              Motivazione: {{request.reason | titlecase}}
-            </li>
-          </ul>
+<div class="list-box">
+  <mat-accordion>
+    <div *ngFor="let request of myrequests">
+      <mat-expansion-panel *ngIf="filter == -1 || filter == request.state">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Richiesta #{{request.id}} ({{request.reason | titlecase}})
+          </mat-panel-title>
+          <mat-panel-description>
+            <span [ngClass]="{'green' : request.state==1, 'red': request.state==2}">{{get_state_label(request.state)}}</span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="divider">
+          <mat-divider></mat-divider>
         </div>
-        <div class="col-sm-6" *ngIf="request.justification_file">
-          <p>
-            File giustificativo:
-            <a target="_blank" href="{{api}}{{request.justification_file}}">
-              <button title="Vedi" class="justification-file-button" mat-mini-fab color="primary"><i class="fas fa-file"></i></button>
-            </a>
-            <a download="giustificativo{{request.id}}" href="{{api}}{{request.justification_file}}/download">
-              <button title="Scarica" class="justification-file-button" mat-mini-fab color="accent"><i class="fas fa-download"></i></button>
-            </a>
-          </p>
+        <div class="row request-body">
+          <div class="col-sm-6">
+            <ul>
+              <li>
+                Data <span *ngIf="request.start_date != request.end_date">di inizio</span>: {{request.start_date | date : 'EEEE, d MMMM y' | titlecase}}
+              </li>
+              <li *ngIf="request.start_date != request.end_date">
+                Data di fine (compresa): {{request.end_date | date : 'EEEE, d MMMM y' | titlecase}}
+              </li>
+              <li>
+                Motivazione: {{request.reason | titlecase}}
+              </li>
+            </ul>
+          </div>
+          <div class="col-sm-6" *ngIf="request.justification_file">
+            <p>
+              File giustificativo:
+              <a target="_blank" href="{{api}}{{request.justification_file}}">
+                <button title="Vedi" class="justification-file-button" mat-mini-fab color="primary"><i class="fas fa-file"></i></button>
+              </a>
+              <a download="giustificativo{{request.id}}" href="{{api}}{{request.justification_file}}/download">
+                <button title="Scarica" class="justification-file-button" mat-mini-fab color="accent"><i class="fas fa-download"></i></button>
+              </a>
+            </p>
+          </div>
         </div>
-      </div>
-      <mat-action-row *ngIf="request.state == 0">
-      <button (click)="RequestsService.cancel_request(request.id)" mat-button>Annulla</button>
-      <button (click)="openDialog(request)" mat-button>Modifica</button>
-    </mat-action-row>
-    </mat-expansion-panel>
-  </div>
-</mat-accordion>
+        <mat-action-row *ngIf="request.state == 0">
+        <button (click)="RequestsService.cancel_request(request.id)" mat-button>Annulla</button>
+        <button (click)="openDialog(request)" mat-button>Modifica</button>
+      </mat-action-row>
+      </mat-expansion-panel>
+    </div>
+  </mat-accordion>  
+</div>
 <div *ngIf="!myrequests" class="center-div">
     <mat-spinner></mat-spinner>
 </div>

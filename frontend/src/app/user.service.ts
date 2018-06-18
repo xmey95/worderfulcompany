@@ -139,6 +139,21 @@ export class UserService {
       }
     }
 
+    //get info of the user
+    get_user(){
+      return this.user;
+    }
+
+    //return info of the user selected through his id
+    get_user_by_id(id){
+      var me;
+      for (var i = 0; i < this.users.length; i++){
+        if (this.users[i].id == id)return this.users[i];
+        if(this.users[i].id == this.user.id) me = this.users[i];
+      }
+      return me;
+    }
+
     //get users list holded by userservice instance
     get_users(){
         return this.users;

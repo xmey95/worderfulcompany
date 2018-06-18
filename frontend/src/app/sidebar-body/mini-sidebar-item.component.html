@@ -6,8 +6,8 @@
   <small>{{item.short_name}}</small>
 </li>
 <ul class="inner-list" [ngClass]="{'inner-list-active' : active==true}">
-  <li class="" *ngFor="let item of item.sub_menu" (click)="active = !active">
-    <a [routerLink]="[item[1]]">
+  <li [routerLink]="[item[1]]" class="inner-item" *ngFor="let item of item.sub_menu" (click)="active = !active">
+    <a>
       {{item[0]}}
     </a>
   </li>

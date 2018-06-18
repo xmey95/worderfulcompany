@@ -16,6 +16,7 @@
   transition: height 1s, padding-top 1s;
   list-style: none;
   padding-left: 30px;
+  cursor:pointer;
 }
 
 .inner-list{

@@ -28,6 +28,7 @@ if(process.argv[3] == "--mac"){
 
 function make_user_safe(user) {
   return {
+    id: user.id,
     name: user.name,
     surname: user.surname,
     email: user.email
