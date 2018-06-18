@@ -9,10 +9,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MiniSidebarItem, SidebarBodyComponent, SidebarMenuItem } from './sidebar-body/sidebar-body.component';
 import { MatBottomSheetModule,
          MatButtonModule,
+         MatButtonToggleModule,
          MatCardModule,
          MatDatepickerModule,
          MatDialogModule,
          MatDividerModule,
+         MatExpansionModule,
          MatFormFieldModule,
          MatInputModule,
          MatListModule,
@@ -23,6 +25,7 @@ import { MatBottomSheetModule,
          MatTableModule,
        } from '@angular/material';
 import { HeaderComponent } from './header/header.component';
+import { RequestsService } from './absences-section/requests.service';
 import { SidebarComponent } from './sidebar/sidebar.component'
 import { UserService, ConfirmComponent } from './user.service';
 import { BlockScrollService } from './block-scroll.service';
@@ -34,7 +37,8 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 //Registers locale data to 'it' for date pipe format
 import { registerLocaleData } from '@angular/common';
 import localeIt from '@angular/common/locales/it';
-import { MyAbsencesComponent } from './absence-section/my-absences/my-absences.component';
+import { MyAbsencesComponent } from './absences-section/my-absences/my-absences.component';
+import { ModifyRequestComponent, MyAbsencesListComponent } from './absences-section/my-absences/my-absences-list/my-absences-list.component';
 registerLocaleData(localeIt, 'it');
 
 @NgModule({
@@ -51,7 +55,9 @@ registerLocaleData(localeIt, 'it');
     ManageUsersComponent,
     UserTableComponent,
     LoginDialogComponent,
-    MyAbsencesComponent
+    ModifyRequestComponent,
+    MyAbsencesComponent,
+    MyAbsencesListComponent
   ],
   imports: [
     BrowserModule,
@@ -62,9 +68,11 @@ registerLocaleData(localeIt, 'it');
     HttpClientModule,
     MatBottomSheetModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatCardModule,
     MatDatepickerModule,
     MatDividerModule,
+    MatExpansionModule,
     MatFormFieldModule,
     MatInputModule,
     MatListModule,
@@ -75,8 +83,8 @@ registerLocaleData(localeIt, 'it');
     MatTableModule,
     MatDialogModule
   ],
-  providers: [{ provide: LOCALE_ID, useValue: 'it' }, BlockScrollService, CookieService, UserService],
-  entryComponents: [BottomListComponent, ConfirmComponent],
+  providers: [{ provide: LOCALE_ID, useValue: 'it' }, BlockScrollService, CookieService, RequestsService, UserService],
+  entryComponents: [BottomListComponent, ConfirmComponent, ModifyRequestComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

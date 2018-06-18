@@ -1,0 +1,29 @@
+.dialog-box{
+  padding:30px;
+  margin:auto;
+  left:0;
+  right:0;
+}
+
+.divider{
+  width:80%;
+  margin:auto;
+  left:0;
+  right:0;
+  padding-top:20px;
+  padding-bottom:10px;
+}
+
+mat-form-field{
+  width:100%;
+}
+
+@media (max-width: 766px){
+  .dialog-box{
+      padding: 5px;
+  }
+  button{
+    margin:8px;
+    background: #aaaaaa;
+  }
+}

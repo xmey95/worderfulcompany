@@ -1,0 +1,64 @@
+.center-div
+{
+  margin: auto;
+  margin-top:50px;
+  right: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+}
+
+.filter-buttons{
+  margin:auto;
+  left:0;
+  right:0;
+  padding.top:15px;
+  padding-bottom:15px;
+}
+
+.green{
+  color:green;
+}
+
+.justification-file-button{
+  margin:10px;
+}
+
+.no-requests{
+  margin-top:60px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 20px;
+  padding:30px;
+}
+
+.red{
+  color:red;
+}
+
+.request-body{
+  padding-top: 20px;
+}
+
+.divider{
+  width:60%;
+  margin:auto;
+  left:0;
+  right:0;
+}
+
+mat-panel-description{
+  width:50%;
+}
+
+mat-panel-title{
+  width:50%;
+}
+
+@media (max-width: 766px){
+  .page{
+    padding:0px;
+  }
+  button{
+    background: #aaaaaa;
+  }
+}

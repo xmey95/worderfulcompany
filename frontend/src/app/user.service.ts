@@ -9,7 +9,7 @@ import { MatSnackBar, MatSnackBarConfig, MatDialog, MatDialogRef, MAT_DIALOG_DAT
 import { BlockScrollService } from './block-scroll.service';
 import  swal from 'sweetalert';
 /*
-This service can be used for the user-ralted funtionality like login, logout, token and user info management.
+This service can be used for the user-related funtionality like login, logout, token and user info management.
 */
 
 @Injectable()

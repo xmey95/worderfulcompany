@@ -1,0 +1,52 @@
+<div class="page">
+    <div class="section">
+        <div class="title text-center">
+            <h1>Richiedi un nuovo permesso</h1>
+        </div>
+        <div class="form-box">
+            <div class="row">
+                <div class="col-sm-6">
+                    <mat-form-field>
+                      <input matInput name="start_date" [(ngModel)]="start_date" [matDatepicker]="picker" placeholder="Dal">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field>
+                      <input matInput [min]="start_date" name="end_date" [(ngModel)]="end_date" [matDatepicker]="picker2" placeholder="Al (lasciare vuoto per permessi di un solo giorno)">
+                      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                      <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field>
+                        <mat-select name="reason" [(ngModel)]="reason" placeholder="Motivazione">
+                            <mat-option value="malattia">Malattia</mat-option>
+                            <mat-option value="studio">Studio</mat-option>
+                            <mat-option value="ferie">Ferie</mat-option>
+                            <mat-option value="other">Altro (specifica)</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6" *ngIf="reason == 'other'">
+                    <mat-form-field>
+                      <input [(ngModel)]="custom_reason" name="custom_reason" type="text" matInput placeholder="Specifica motivazione...">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-12 upload">
+                        <label for="filetoupload">Carica file giustificativo</label>
+                        <input multiple  (change)="fileChange($event)" name="file" type="file" placeholder="Carica file giustificativo">
+                </div>
+            </div>
+            <div class="text-center">
+                <button [disabled]="validate() != true"  mat-button (click)="send_request()">INVIA</button>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="absence-list-box">
+            <my-absences-list></my-absences-list>
+        </div>
+    </div>
+</div>

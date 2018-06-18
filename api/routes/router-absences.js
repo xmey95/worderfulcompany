@@ -84,20 +84,23 @@ router.get('/', function(req, res){
  *     }
  * @apiSuccess {Boolean} success                                                True if query is succcessfully
  * @apiSuccess {String} error                                                   String containing the error, it's null if success is true.
+ * @apiSuccess {String} request_id                                              The id of the submitted Request
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
  *       "success": true,
- *       "error": null
+ *       "error": null,
+ *       "request_id": 95,
  *     }
  */
 router.route('/requests').post(auth.isAuthenticated, function(req, res){
   pool.getConnection(function(err, connection) {
+      console.log(req.body.start_date);
       var post  = {state : 0, reason: req.body.reason, start_date:req.body.start_date, end_date: req.body.end_date, id_user: req.user.id};
       connection.query('INSERT INTO ?? SET ?', ['absences', post], function (err, results, fields) {
           connection.release();
           if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
-          res.status(201).send(JSON.stringify({success:true, error:null}));
+          res.status(201).send(JSON.stringify({success:true, error:null, request_id:results.insertId}));
       });
     });
 
@@ -290,18 +293,26 @@ router.route('/requests/:request/upload_justification').put(auth.isAuthenticated
 * @apiDescription     Get Justification file identified by filename
 * @apiError           (Error 404) NotFoundError                                 Resource not found
 * @apiGroup           Absences
-* @apiHeader {String} Authorization                                             Authentication Token
-* @apiHeaderExample {json} Header-Example:
-*     {
-*       "Authorization": "bearer <token>"
-*     }
-*
 * @apiParam {String} file                                                       Filename of the JUstification file, it's like <id_absence>.<extension>
 * @apiSuccess         {File} file                                               Requested file
 */
-router.route('/requests/get_justification/:file').get(auth.isAuthenticated, function(req,res){
+router.route('/requests/get_justification/:file').get(function(req,res){
     var path = config.media_path + '/justification_files/' + req.params.file;
     res.sendFile(path);
+});
+
+/**
+* @api                {get} /requests/get_justification/:file/download          Download a justification file from the storage
+* @apiName            Download Justification
+* @apiDescription     Donwload Justification file identified by filename
+* @apiError           (Error 404) NotFoundError                                 Resource not found
+* @apiGroup           Absences
+* @apiParam {String} file                                                       Filename of the Justification file, it's like <id_absence>.<extension>
+* @apiSuccess         {File} file                                               Requested file
+*/
+router.route('/requests/get_justification/:file/download').get(function(req,res){
+    var path = config.media_path + '/justification_files/' + req.params.file;
+    res.download(path); // Send requested file for donwload
 });
 
 /**

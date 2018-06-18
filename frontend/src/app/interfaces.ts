@@ -1,3 +1,9 @@
+export interface AddRequestResponseType{
+  success: boolean,
+  error:string,
+  request_id: number
+}
+
 export interface BossResponseType{
   success: boolean,
   error: string,
@@ -12,6 +18,27 @@ export interface LogResponseType{
 }
 
 export interface RegisterResponseType{
+  success: boolean,
+  error: string
+}
+
+export interface RequestsResponseType{
+  success: boolean,
+  error: string,
+  requests: RequestType[]
+}
+
+export interface RequestType{
+  id: number,
+  id_user: number,
+  state: number,
+  reason: string,
+  justification_file:string,
+  start_date: Date,
+  end_date: Date
+}
+
+export interface SuccessResponseType{
   success: boolean,
   error: string
 }
@@ -44,11 +71,6 @@ export interface UserType{
   name:string,
   surname: string,
   email: string
-}
-
-export interface SuccessResponseType{
-  success: boolean,
-  error: string
 }
 
 export interface TableUserType{
