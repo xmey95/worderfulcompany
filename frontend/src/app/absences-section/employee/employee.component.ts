@@ -5,37 +5,46 @@ import { RequestType, UserType } from '../../interfaces';
 import { UserService } from '../../user.service';
 import { Subscription } from 'rxjs';
 
+
+/*
+  This component is the overview of the data related to a specific user.
+  in this page the boss of the user specified in the queryparams can approve or refuse his absence-requests and see some statistics about this employee
+*/
 @Component({
   selector: 'app-employee',
   templateUrl: './employee.component.html',
   styleUrls: ['./employee.component.css']
 })
 export class EmployeeComponent implements OnDestroy {
-  private employee_requestsSubscription: Subscription;
+  private employee_requestsSubscription: Subscription; //subscription to requests-service observable to get the list of the requests made by any of the employees of the logged-in user
   private api: string; //api base url
-  private employee: UserType;
-  private employee_requests: RequestType[];
-  private filter: number = -1;
+  private employee: UserType; //info of the employee
+  private employee_requests: RequestType[];//requests of the specific employee
+  private filter: number = -1; //parameter to filter requests by the state
   constructor(private route: ActivatedRoute, private router: Router, private RequestsService: RequestsService, private UserService: UserService) {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(params => { //get the id of the employee from route queryparams
       if(!params['employee']){
-        this.router.navigate(['/home']);
+        this.router.navigate(['/home']); //no user to display, redirect to home
       }else{
+        //subscription to requests-service observable to get requests list and filter it to get the requests of the specific employee
         this.employee_requestsSubscription = this.RequestsService.employees_requests$.subscribe((data)=>{
+
+          //get info of the employee from UserService
           this.employee=this.UserService.get_user_by_id(params['employee']);
           var array = [];
           for (var i=0; i < data.length; i++){
-            if(data[i].id_user == this.employee.id){
+            if(data[i].id_user == this.employee.id){ //the request is made by the employee
               array.push(data[i]);
             }
           }
-          this.employee_requests = array;
+          this.employee_requests = array; //filtered array
         });
-        this.RequestsService.reset_employees_requests_version();
+        this.RequestsService.reset_employees_requests_version(); //force observable to emit data in the stream even if it has not changed from last check
       }
     });
   }
 
+  //get the number of requests currently diplayed requests considering the effect of state filter
   displayed_requests(){
     if(!this.employee_requests) return 0;
     if(!this.filter || this.filter == -1) return this.employee_requests.length;
@@ -48,6 +57,7 @@ export class EmployeeComponent implements OnDestroy {
     return count;
   }
 
+  //get the label to be displayed to show the state of the request in the template
   get_state_label(state){
     if(state == 0){
       return 'In attesa di approvazione';
@@ -61,6 +71,7 @@ export class EmployeeComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
+    //unsubscribe from requests-service observable to get employees requests
     this.employee_requestsSubscription.unsubscribe();
   }
 

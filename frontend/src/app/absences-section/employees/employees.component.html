@@ -6,14 +6,18 @@
         <div class="row">
             <div class="col-sm-3 border-divider">
                 <div class="title text-center">
-                    <h1>Impiegati</h1>
+                    <h2>Impiegati</h2>
                 </div>
                 <div class="text-center">
                     <mat-list>
                       <mat-list-item *ngFor="let employee of employees">
                         <i class="fa fa-user" mat-list-icon></i>
-                        <h4 class="link-to-user" [routerLink]="['/employee']" [queryParams]="{ employee: employee.id }" mat-line><b>{{employee.name | titlecase}} {{employee.surname | titlecase}}</b></h4>
-                        <p mat-line> {{get_requests_number(employee.id)}} Richieste</p>
+                        <h4 class="link-to-user" [routerLink]="['/absences/employee']" [queryParams]="{ employee: employee.id }" mat-line><b>{{employee.name | titlecase}} {{employee.surname | titlecase}}</b></h4>
+                        <p mat-line>
+                          {{get_requests_number(employee.id)}} Richieste
+                          <br />
+                          ({{get_pending_requests_number(employee.id)}} da approvare)
+                        </p>
                         <mat-divider></mat-divider>
                       </mat-list-item>
                     </mat-list>
@@ -27,8 +31,7 @@
             </div>
             <div class="col-sm-9">
                 <div class="title text-center">
-                    <h1>Statistiche Generali</h1>
-                    <request-charts *ngIf="requests && requests.length > 0"></request-charts>
+                    <h2>Statistiche Generali</h2>
                     <div *ngIf="!requests" class="center-div">
                         <mat-spinner></mat-spinner>
                     </div>
@@ -36,6 +39,9 @@
                         <h1 >Nessuna Statistica da mostrare</h1>
                         <h4>Nessuno dei tuoi impiegati ha richiesto dei permessi...</h4>
                     </div>
+                </div>
+                <div class="col-sm-12">
+                  <request-charts [general]="true" [employees]="employees" [requests]="requests" *ngIf="requests && requests.length > 0"></request-charts>
                 </div>
             </div>
         </div>

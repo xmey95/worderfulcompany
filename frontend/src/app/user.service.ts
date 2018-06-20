@@ -180,7 +180,7 @@ export class UserService {
       this.logout_confirm();
     }
 
-    //This request is called when a new subscription to users$ observable is registered, it forces to send the value even this has not changed, so new subscribers can get the value
+    //This method is called when a new subscription to users$ observable is registered, it forces to send the value even this has not changed, so new subscribers can get the value
     reset_version(){
       this.users_version = ""; //setting version code in this way the value will be sent in observable flow in next check for changes
     }

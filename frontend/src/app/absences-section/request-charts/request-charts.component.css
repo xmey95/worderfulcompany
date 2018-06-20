@@ -1,0 +1,66 @@
+.divider{
+  width: 70%;
+  margin:auto;
+  left:0;
+  right:0;
+  margin-bottom:15px;
+}
+
+.number-cards-box{
+  width:100%;
+  margin-bottom:20px;
+}
+
+.number-cards-chart{
+  height:20vh;
+  margin:auto;
+  left:0;
+  right:0;
+}
+
+.pie-box{
+  margin:0;
+  margin-bottom:30px;
+}
+
+.pie-chart{
+  height:200px;
+}
+
+.statistic-section{
+  padding:20px;
+}
+
+.stacked-horizontal-box{
+  padding:5px;
+  margin:0;
+  margin-bottom:30px;
+  margin-top:15px;
+}
+
+.stacked-horizontal-chart{
+  height: 350px;
+}
+
+.title{
+  width:100%;
+}
+
+.users-box{
+  padding:5px;
+  margin:0;
+  margin-bottom:30px;
+}
+
+.users-chart{
+  height: 350px;
+}
+
+@media (max-width: 766px){
+  .number-cards-chart{
+    height:500px;
+  }
+  .statistic-section{
+    padding:5px;
+  }
+}

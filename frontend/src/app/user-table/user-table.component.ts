@@ -25,7 +25,7 @@ export class UserTableComponent implements OnDestroy {
       this.displayedColumns = ['name', 'surname', 'boss']; //email column is not whown in mobile devices
     }
     this.usersSubscription = this.UserService.users$.subscribe((users) => { //subscription to user-service's observable to get user list
-        this.dataSource = new MatTableDataSource(users); //inject recieved data in the table
+        this.dataSource = new MatTableDataSource(users); //inject received data in the table
         if(users.length == 0){ //emit query status to outer component
           this.ready.emit(0); //no user found
         }else{

@@ -12,6 +12,10 @@
   height: 100px;
 }
 
+.employee-name{
+  color:blue;
+}
+
 .filter-buttons{
   margin:auto;
   left:0;
@@ -75,14 +79,18 @@ mat-panel-title{
 
 @media (min-width: 767px){
   .border-divider{
+    min-height:120vh;
     border-right: 3px solid #aaaaaa;
   }
 }
 
-@media (max-width: 766px){
+@media (max-width: 1100px){
   .page{
     padding:0px;
   }
+}
+
+@media (max-width: 766px){
   .no-data{
     width:90%;
   }

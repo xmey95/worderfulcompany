@@ -1,4 +1,4 @@
-<li class="top-item" [ngClass]="{'active' : active==true}" (click)="active=!active">
+<li class="top-item" [ngClass]="{'active' : active==true || get_section_active()==true}" (click)="active=!active">
   <a>
     <i class="fa fa-angle-right" [ngClass]="{'fa-angle-down' : active==true }"></i>
     {{item.name}}

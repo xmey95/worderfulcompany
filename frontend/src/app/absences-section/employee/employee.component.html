@@ -1,12 +1,13 @@
 <div class="page">
     <div class="title text-center">
-        <h1>Impiegato: <span *ngIf="employee">{{employee.surname}} {{employee.name}}</span></h1>
+        <h1>Impiegato: <span *ngIf="employee" class="employee-name">{{employee.surname}} {{employee.name}}</span></h1>
+        <h4 *ngIf="employee">{{employee.email}}</h4>
     </div>
     <div class="section">
         <div class="row">
             <div class="col-sm-3 border-divider">
                 <div class="title text-center">
-                    <h1>Richieste</h1>
+                    <h2>Richieste</h2>
                 </div>
                 <div class="text-center">
                     <div class="filter-buttons" *ngIf="employee_requests && employee_requests.length > 0">
@@ -32,7 +33,7 @@
                         <mat-expansion-panel *ngIf="filter == -1 || filter == request.state">
                           <mat-expansion-panel-header>
                             <mat-panel-title>
-                              Richiesta #{{request.id}} ({{request.reason | titlecase}})
+                              <span class="visible-lg visible-xs">Richiesta</span> #{{request.id}} ({{request.reason | titlecase}})
                             </mat-panel-title>
                             <mat-panel-description>
                               <span [ngClass]="{'green' : request.state==1, 'red': request.state==2}">{{get_state_label(request.state)}}</span>
@@ -78,15 +79,19 @@
             </div>
             <div class="col-sm-9">
                 <div class="title text-center">
-                    <h1>Statistiche Impiegato</h1>
-                    <request-charts *ngIf="employee_requests && employee_requests.length > 0"></request-charts>
+                    <h2>
+                        Statistiche Impiegato
+                    </h2>
                     <div *ngIf="!employee_requests" class="center-div">
                         <mat-spinner></mat-spinner>
                     </div>
                     <div *ngIf="employee_requests && employee_requests.length == 0" class="no-data">
                         <h1 >Nessuna Statistica da mostrare</h1>
-                        <h4>Nessuno dei tuoi impiegati ha richiesto dei permessi...</h4>
+                        <h4>Questo impiegato non ha richiesto dei permessi...</h4>
                     </div>
+                </div>
+                <div class="col-sm-12">
+                  <request-charts [requests]="employee_requests" *ngIf="employee_requests && employee_requests.length > 0"></request-charts>
                 </div>
             </div>
         </div>

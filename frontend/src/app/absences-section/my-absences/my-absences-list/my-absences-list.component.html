@@ -1,5 +1,5 @@
 <div class="text-center">
-  <h1>Le tue richieste</h1>
+  <h1>Le tue richieste {{get_number()}}</h1>
   <div class="filter-buttons">
     <mat-form-field>
       <mat-select name="filter" [(ngModel)]="filter" placeholder="Filtra">
@@ -58,7 +58,7 @@
       </mat-action-row>
       </mat-expansion-panel>
     </div>
-  </mat-accordion>  
+  </mat-accordion>
 </div>
 <div *ngIf="!myrequests" class="center-div">
     <mat-spinner></mat-spinner>

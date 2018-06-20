@@ -1,0 +1,114 @@
+<div class="number-cards-box">
+    <div class="number-cards-chart">
+        <ngx-charts-number-card
+        [scheme]="colorScheme"
+        [results]="cards_data"
+        animations="true"
+        cardColor="#232837">
+      </ngx-charts-number-card>
+    </div>
+</div>
+<div class="divider">
+    <mat-divider></mat-divider>
+</div>
+<div class="statistic-section">
+    <div class="row">
+          <div class="col-sm-12 text-center">
+              <div class="col-xs-6">
+                  <mat-slide-toggle
+                      checked="true"
+                      (change)="pending_toggle_changed($event)">
+                    Includi richieste in Attesa
+                  </mat-slide-toggle>
+              </div>
+              <div class="col-xs-6">
+                  <mat-slide-toggle
+                      checked="false"
+                      (change)="year_toggle_changed($event)">
+                    Filtra per anno
+                  </mat-slide-toggle>
+                  <br *ngIf="year_filter == true"/>
+                  <mat-form-field *ngIf="year_filter == true">
+                      <mat-select placeholder="Anno" [(ngModel)]="year_selected" value="2018" (selectionChange)="reload_data()">
+                        <mat-option value="2018">2018</mat-option>
+                        <mat-option value="2017">2017</mat-option>
+                        <mat-option value="2016">2016</mat-option>
+                        <mat-option value="2015">2015</mat-option>
+                        <mat-option value="2014">2014</mat-option>
+                        <mat-option value="2013">2013</mat-option>
+                        <mat-option value="2012">2012</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+              </div>
+          </div>
+          <div class="pie-box col-sm-6" *ngIf="general">
+              <div class="text-center">
+                  <h2>Motivazioni Assenze</h2>
+              </div>
+              <div class="pie-chart">
+                  <ngx-charts-advanced-pie-chart
+                    [scheme]="colorScheme"
+                    [results]="pie_data"
+                    animations="true"
+                    label="Permessi"
+                    gradient="true">
+                  </ngx-charts-advanced-pie-chart>
+              </div>
+          </div>
+          <div class="stacked-horizontal-box" [ngClass]="{'col-sm-6' : general==true, 'col-sm-12':general == false}">
+              <div class="title text-center">
+                  <h2>Assenze nel tempo</h2>
+              </div>
+              <div class="stacked-horizontal-chart">
+                  <ngx-charts-bar-horizontal-stacked *ngIf="monthly_data"
+                        [scheme]="colorScheme"
+                        [results]="monthly_data"
+                        animations="true"
+                        barPadding="5"
+                        gradient="true"
+                        xAxis="true"
+                        yAxis="true"
+                        [legend]="is_mobile_device() == false"
+                        legendTitle="Motivazioni"
+                        showDataLabel="true"
+                        showXAxisLabel="true"
+                        showYAxisLabel="true"
+                        xAxisLabel="Giorni di assenza"
+                        yAxisLabel="Mesi">
+                  </ngx-charts-bar-horizontal-stacked>
+              </div>
+          </div>
+          <div class="pie-box col-sm-12" *ngIf="!general">
+              <div class="text-center">
+                  <h2>Motivazioni Assenze</h2>
+              </div>
+              <div class="pie-chart">
+                  <ngx-charts-advanced-pie-chart
+                    [scheme]="colorScheme"
+                    [results]="pie_data"
+                    animations="true"
+                    label="Permessi"
+                    gradient="true">
+                  </ngx-charts-advanced-pie-chart>
+              </div>
+          </div>
+          <div class="col-sm-12 users-box" *ngIf="general">
+              <div class="text-center">
+                  <h2>Giorni di assenza</h2>
+              </div>
+              <div class="users-chart">
+                  <ngx-charts-bar-horizontal
+                      [scheme]="userscolorScheme"
+                      [results]="users_data"
+                      gradient="true"
+                      xAxis="true"
+                      yAxis="true"
+                      showXAxisLabel="true"
+                      showYAxisLabel="true"
+                      xAxisLabel="Giorni di Assenza"
+                      yAxisLabel="Impiegato">
+                  </ngx-charts-bar-horizontal>
+              </div>
+          </div>
+    </div>
+</div>

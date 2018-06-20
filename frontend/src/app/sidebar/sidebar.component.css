@@ -27,7 +27,7 @@ padding: 5px 6px;
 }
 
 .sidebar-body{
-  height:100%;
+  height:100vh;
   overflow-y:auto;
   overflow-x:hidden;
   background: #2a3f54;

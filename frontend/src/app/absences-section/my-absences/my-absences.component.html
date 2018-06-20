@@ -36,11 +36,16 @@
                 </div>
                 <div class="col-sm-12 upload">
                         <label for="filetoupload">Carica file giustificativo</label>
-                        <input multiple  (change)="fileChange($event)" name="file" type="file" placeholder="Carica file giustificativo">
+                        <input  (change)="fileChange($event)" name="file" type="file" placeholder="Carica file giustificativo">
                 </div>
             </div>
             <div class="text-center">
                 <button [disabled]="validate() != true"  mat-button (click)="send_request()">INVIA</button>
+                <br *ngIf="validate_period_len() == false" />
+                <small *ngIf="validate_period_len() == false"><i class="fas fa-exclamation-circle warn-icon"></i> NOTA: Non è possibile richiedere permessi per periodi maggiori di sei mesi (180 giorni)</small>
+            </div>
+            <div>
+                <small><i class="fas fa-exclamation-circle"></i> NB: Le tue richieste dovranno essere approvate dal tuo superiore ({{UserService.get_boss_name(UserService.get_user().id)}}) prima di essere confermate</small>
             </div>
         </div>
     </div>
