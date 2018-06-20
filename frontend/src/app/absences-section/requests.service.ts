@@ -13,6 +13,8 @@ This service can be used for the absence-related funtionality.
 @Injectable()
 export class RequestsService {
     private api : string; //api base url
+    public all_requests$: Observable<RequestType[]>;
+    private all_requests_version = ""; //version code for all_requests list
     public myrequests$: Observable<RequestType[]>;
     private my_requests_version = ""; //version code for myrequests list
     public employees$: Observable<UserType[]>;
@@ -22,6 +24,25 @@ export class RequestsService {
 
     constructor(private HttpClient: HttpClient, private UserService: UserService) {
         this.api = (<any>config).api;
+
+        //Observable to get the list of all request made by any of the users
+        this.all_requests$ = interval(2000)
+            .pipe(
+                switchMap(() => this.HttpClient.get<VersionResponseType>(this.api + 'absences/requests/true', {headers: new HttpHeaders().set('Authorization', "bearer " + this.UserService.get_token()), //set authentication header with thoken got from UserService
+                })), //this request gets version code
+                filter((data: VersionResponseType) => {
+                    if (data.version === this.all_requests_version) {
+                        return false; //stop stream for this iteration, value has not changed from last check
+                    }
+                    //data has changed, refresh version code
+                    this.all_requests_version = data.version;
+                    return true;
+                }),
+                switchMap(() => this.HttpClient.get<RequestsResponseType>(this.api + 'absences/requests/false', {headers: new HttpHeaders().set('Authorization', "bearer " + this.UserService.get_token()),
+                })),
+                map((data)=>{ return data.requests }), //save new value (get just requests field from response)
+                share()
+            );
 
         //Observable to get the list of the requests of the User
         this.myrequests$ = interval(2000)
@@ -214,6 +235,10 @@ export class RequestsService {
       }
 
     //Theese methods are called when a new subscription to an observable is registered, it forces to send the value even this has not changed by setting version code to '', so new subscribers can get the value
+    reset_all_requests_version(){
+        this.all_requests_version = "";
+    }
+
     reset_employees_requests_version(){
         this.employees_requests_version = "";
     }

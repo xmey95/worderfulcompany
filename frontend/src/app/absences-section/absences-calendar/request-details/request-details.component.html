@@ -1,0 +1,41 @@
+<div class="dialog-box">
+  <h1 mat-dialog-title>Richiesta #{{data.request.id}} ({{get_user_name()}})</h1>
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-sm-12">
+        <ul>
+          <li>
+            Data <span *ngIf="data.request.start_date != data.request.end_date">di inizio</span>: {{data.request.start_date | date : 'EEEE, d MMMM y' | titlecase}}
+          </li>
+          <li *ngIf="data.request.start_date != data.request.end_date">
+            Data di fine (compresa): {{data.request.end_date | date : 'EEEE, d MMMM y' | titlecase}}
+          </li>
+          <li>
+            Motivazione: {{data.request.reason | titlecase}}
+          </li>
+          <li>
+            Stato: <span class="{{get_state_label_class(data.request.state)}}">{{get_state_label(data.request.state)}}</span>
+          </li>
+          <li>
+            File giustificativo:
+            <a *ngIf="data.request.justification_file" target="_blank" href="{{api}}{{data.request.justification_file}}">
+              <button title="Vedi" class="justification-file-button" mat-mini-fab color="primary"><i class="fas fa-file"></i></button>
+            </a>
+            <a *ngIf="data.request.justification_file" download="giustificativo{{data.request.id}}" href="{{api}}{{data.request.justification_file}}/download">
+              <button title="Scarica" class="justification-file-button" mat-mini-fab color="accent"><i class="fas fa-download"></i></button>
+            </a>
+            <span *ngIf="!data.request.justification_file" class="no-file">Non disponibile</span>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+  <div class="divider">
+    <mat-divider></mat-divider>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="close()">Ok</button>
+  </div>
+
+</div>

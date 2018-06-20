@@ -146,7 +146,6 @@ router.route('/requests').post(auth.isAuthenticated, function(req, res){
  *     }
  */
 
-//get all absence (approved and not approved) of the requesting user
 router.route('/requests/:version').get(auth.isAuthenticated, function(req, res){
   pool.getConnection(function(err, connection) {
       // Use the connection to select requests from database

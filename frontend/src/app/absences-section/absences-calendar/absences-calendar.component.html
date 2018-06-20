@@ -1,3 +1,50 @@
-<p>
-  absences-calendar works!
-</p>
+<div class="page">
+  <div class="title text-center">
+    <h1>Calendario Assenze</h1>
+  </div>
+  <div class="section">
+    <div class="row text-center">
+      <div class="col-sm-4">
+        <div class="btn-group">
+          <div class="btn btn-primary" mwlCalendarPreviousView view="month" [(viewDate)]="viewDate" (viewDateChange)="activeDayIsOpen = false">
+            Previous
+          </div>
+          <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
+            Today
+          </div>
+          <div class="btn btn-primary" mwlCalendarNextView view="month" [(viewDate)]="viewDate" (viewDateChange)="activeDayIsOpen = false">
+            Next
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4 calendar-title">
+        <h3>{{viewDate | date:'MMMM y' | titlecase}}</h3>
+      </div>
+      <div class="col-sm-4">
+        <mat-form-field>
+            <mat-select placeholder="Filtra Stato" [(ngModel)]="state_filter" (selectionChange)="make_event_list()">
+              <mat-option value="-1">Tutte</mat-option>
+              <mat-option value="0">In Attesa</mat-option>
+              <mat-option value="1">Approvate</mat-option>
+              <mat-option value="2">Rifiutate</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <br />
+        <span class="legend"><i class="fas fa-circle green"></i> Approvate</span>
+        <span class="legend"><i class="fas fa-circle red"></i> Rifiutate</span>
+        <span class="legend"><i class="fas fa-circle grey"></i> In attesa</span>
+      </div>
+    </div>
+    <br>
+    <div *ngIf="!events" class="center-div">
+        <mat-spinner></mat-spinner>
+    </div>
+    <mwl-calendar-month-view *ngIf="events"
+      [viewDate]="viewDate"
+      [events]="events"
+      [activeDayIsOpen]="activeDayIsOpen"
+      (dayClicked)="dayClicked($event.day)"
+      (eventClicked)="show_request($event.event)">
+    </mwl-calendar-month-view>
+  </div>
+</div>

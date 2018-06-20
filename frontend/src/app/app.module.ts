@@ -2,6 +2,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule }   from './app-routing/app-routing.module';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
+import { CalendarModule } from 'angular-calendar';
 import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LOCALE_ID, NgModule } from '@angular/core';
@@ -44,7 +45,7 @@ import { ModifyRequestComponent, MyAbsencesListComponent } from './absences-sect
 import { EmployeesComponent } from './absences-section/employees/employees.component';
 import { RequestChartsComponent } from './absences-section/request-charts/request-charts.component';
 import { EmployeeComponent } from './absences-section/employee/employee.component';
-import { AbsencesCalendarComponent } from './absences-section/absences-calendar/absences-calendar.component';
+import { AbsencesCalendarComponent, RequestDetailsComponent } from './absences-section/absences-calendar/absences-calendar.component';
 registerLocaleData(localeIt, 'it');
 
 @NgModule({
@@ -66,13 +67,15 @@ registerLocaleData(localeIt, 'it');
     MyAbsencesListComponent,
     EmployeesComponent,
     RequestChartsComponent,
+    RequestDetailsComponent,
     EmployeeComponent,
     AbsencesCalendarComponent
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
+    CalendarModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
@@ -96,7 +99,7 @@ registerLocaleData(localeIt, 'it');
     NgxChartsModule
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'it' }, BlockScrollService, CookieService, RequestsService, UserService],
-  entryComponents: [BottomListComponent, ConfirmComponent, ModifyRequestComponent],
+  entryComponents: [BottomListComponent, ConfirmComponent, ModifyRequestComponent, RequestDetailsComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

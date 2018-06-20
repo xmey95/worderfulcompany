@@ -1,0 +1,45 @@
+.dialog-box{
+  padding:5px;
+  margin:auto;
+  left:0;
+  right:0;
+}
+
+.divider{
+  width:80%;
+  margin:auto;
+  left:0;
+  right:0;
+  padding-top:20px;
+  padding-bottom:10px;
+}
+
+.green{
+  color:#21ad21;
+}
+
+.grey{
+  color: #888888;
+}
+
+.justification-file-button{
+  margin:10px;
+}
+
+.no-file{
+  color:#aaaaaa;
+}
+
+.red{
+  color: #ad2121
+}
+
+@media (max-width: 766px){
+  .dialog-box{
+      padding: 5px;
+  }
+  button{
+    margin:8px;
+    background: #aaaaaa;
+  }
+}
