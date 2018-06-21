@@ -7,6 +7,7 @@ var router = express.Router(); // new instance of express router
 var crypto = require('crypto');
 var formidable = require('formidable');  //module to save uploaded file (justifications)
 var fs = require('fs');
+var nodemailer = require('nodemailer');
 
 //MySQL Connection
 if(process.argv[3] == "--mac"){
@@ -318,7 +319,7 @@ router.route('/requests/get_justification/:file/download').get(function(req,res)
 /**
  * @api                {put} /requests/approve/:request                         Approve Request
  * @apiName            Approve Request
- * @apiDescription     Approve an absence request made by an Employee of the requesting user
+ * @apiDescription     Approve an absence request made by an Employee of the requesting user and send a notification email to the employee
  * @apiGroup           Absences
  * @apiError           (Error 500) InternalServerError                          Operation failed.
  * @apiError           (Error 404) NotFoundError                                Request not found.
@@ -393,10 +394,40 @@ router.route('/requests/approve/:request').put(auth.isAuthenticated, function(re
               return res.status(400).send(JSON.stringify({success:false, error:"REQUEST_NOT_PENDING"}));
             }
             connection.query('UPDATE ?? SET ?? = ? WHERE ?? = ?', ['absences', 'state', 1, 'id', req.params.request], function (err, results, fields) {
-                connection.release();
                 if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
                 if (!results) return res.status(404).send(JSON.stringify({success:false, error:"REQUEST_NOT_FOUND"}));
-                res.status(201).send(JSON.stringify({success:true, error:null}));
+
+                connection.query('SELECT * FROM ??,?? WHERE ?? = ?? AND ?? = ?', ['users','absences','users.id', 'absences.id_user', 'absences.id', req.params.request ], function(err, results, fields){
+                  connection.release();
+                  if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
+                  if (!results || !results[0]) return res.status(404).send(JSON.stringify({success:false, error:"USER_NOT_FOUND"}));
+
+                  var transporter = nodemailer.createTransport({
+                   host: config.mailhost,
+                   port: config.mailport,
+                   secureConnection: config.mailsecureConnection,
+                   service: config.email_service,
+                    auth: {
+                      user: config.email,
+                      pass: config.pass_email
+                    }
+                  });
+                  var mailOptions = {
+                    from: config.email,
+                    to: results[0].email,
+                    subject: "Wonderful Company: Aggiornamento richiesta #" + req.params.request,
+                    text: "Gentile " + results[0].name + " " + results[0].surname + ",\nTi avvisiamo che la tua richiesta di assenza numero " + req.params.request + " è stata approvata.\n\n Saluti da WonderfulCompany"
+                  };
+                  transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                      console.log(error);
+                    } else {
+                      console.log('Email sent: ' + info.response);
+                      res.status(201).send(JSON.stringify({success:true, error:null}));
+                    }
+                  });
+                });
+
             });
         });
       });
@@ -406,7 +437,7 @@ router.route('/requests/approve/:request').put(auth.isAuthenticated, function(re
 /**
  * @api                {put} /requests/refuse/:request                          Refuse Request
  * @apiName            Refuse Request
- * @apiDescription     Refuse an absence request made by an Employee of the requesting user
+ * @apiDescription     Refuse an absence request made by an Employee of the requesting user and send a notification email to the employee
  * @apiGroup           Absences
  * @apiError           (Error 500) InternalServerError                          Operation failed.
  * @apiError           (Error 404) NotFoundError                                Request not found.
@@ -488,10 +519,37 @@ router.route('/requests/refuse/:request').put(auth.isAuthenticated, function(req
               return res.status(400).send(JSON.stringify({success:false, error:"REQUEST_NOT_PENDING"}));
             }
             connection.query('UPDATE ?? SET ?? = ? WHERE ?? = ?', ['absences', 'state', 2, 'id', req.params.request], function (err, results, fields) {
-                connection.release();
                 if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
                 if (!results) return res.status(404).send(JSON.stringify({success:false, error:"REQUEST_NOT_FOUND"}));
-                res.status(201).send(JSON.stringify({success:true, error:null}));
+                connection.query('SELECT * FROM ??,?? WHERE ?? = ?? AND ?? = ?', ['users','absences','users.id', 'absences.id_user', 'absences.id', req.params.request ], function(err, results, fields){
+                  connection.release();
+                  if (err) return res.status(500).send(JSON.stringify({success:false, error:err}));
+                  if (!results || !results[0]) return res.status(404).send(JSON.stringify({success:false, error:"USER_NOT_FOUND"}));
+                  var transporter = nodemailer.createTransport({
+                    host: config.mailhost,
+                    port: config.mailport,
+                    secureConnection: config.mailsecureConnection,
+                    service: config.email_service,
+                    auth: {
+                      user: config.email,
+                      pass: config.pass_email
+                    }
+                  });
+                  var mailOptions = {
+                    from: config.email,
+                    to: results[0].email,
+                    subject: "Wonderful Company: Aggiornamento richiesta #" + req.params.request,
+                    text: "Gentile " + results[0].name + " " + results[0].surname + ",\nSiamo spiacenti di informarti che la tua richiesta di assenza numero " + req.params.request + " è stata rifiutata.\n\n Saluti da WonderfulCompany"
+                  };
+                  transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                      console.log(error);
+                    } else {
+                      console.log('Email sent: ' + info.response);
+                      res.status(201).send(JSON.stringify({success:true, error:null}));
+                    }
+                  });
+                });
             });
         });
       });

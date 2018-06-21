@@ -10,8 +10,11 @@ import { UserService } from '../user.service';
 })
 export class LoginDialogComponent {
   private showPassword : boolean = false;
+
+  //login form inputs
   private email: string;
   private password: string;
+
   constructor(private BlockScrollService: BlockScrollService, private UserService: UserService) {
     this.BlockScrollService.disable(); //scroll is disabled when this modal is shown over the page
   }
@@ -35,5 +38,4 @@ export class LoginDialogComponent {
     }
     return false;
   }
-
 }

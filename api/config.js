@@ -6,6 +6,12 @@ var config = {
     dbsecret: '',
     dbname: 'prova',
     media_path: __dirname +'/storage/',
+    mailhost: 'gmail',
+    mailport: 465,
+    mailsecureConnection: true,
+    email: 'wonderfulcompanymail@gmail.com',
+    pass_email: 'wonderful2018',
+    email_service: 'gmail',
 };
 
 module.exports = config;

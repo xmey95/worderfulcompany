@@ -4,10 +4,9 @@ import {MAT_BOTTOM_SHEET_DATA, MatBottomSheet, MatBottomSheetRef} from '@angular
 import { UserType } from '../interfaces';
 import { Subscription } from 'rxjs';
 
-
 /*
   This component is used to show a list of users in order to make user chose new boss for previously selected user
-  NOTE: component got from Angular Material
+  NOTE: base component code got from Angular Material
 */
 @Component({
   selector: 'bottom-list',
@@ -44,7 +43,6 @@ export class ManageUsersComponent {
   public password2: string;
 
   constructor(private bottomSheet: MatBottomSheet, private UserService: UserService) {
-
   }
 
   //This function is called when submit button of the form is clicked
@@ -78,7 +76,7 @@ export class ManageUsersComponent {
   openBottomSheet(employee){
     var array = this.UserService.get_users(); //full list of users got from UserService
     var users = [];
-    for (var i = 0; i< array.length; i++){ //this cycle is to remove selected user (employee) from list to inject in bottom list
+    for (var i = 0; i< array.length; i++){ //remove selected user (employee) from list to inject it in bottom list for boss selection
       if(array[i].id != employee.id){
         users.push(array[i]);
       }
@@ -110,7 +108,7 @@ export class ManageUsersComponent {
     this.showPassword = !this.showPassword;
   }
 
-  //makes password field's content visible or make it hidden again
+  //makes password2 field's content visible or make it hidden again
   toggle_show_password2(){
     this.showPassword2 = !this.showPassword2;
   }
@@ -123,7 +121,6 @@ export class ManageUsersComponent {
     if(this.password != this.password2){
       return false;
     }
-
     return true;
   }
 }

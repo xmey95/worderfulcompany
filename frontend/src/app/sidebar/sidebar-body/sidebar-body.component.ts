@@ -1,17 +1,13 @@
 import {Component, Input, ElementRef, EventEmitter, HostListener, Output} from '@angular/core';
-import { UserService } from '../user.service';
+import { UserService } from '../../user.service';
 import { Router } from '@angular/router/'
 import { interval } from 'rxjs';
+import { MenuItem } from '../../interfaces';
+
+
 /*
 Components of the sidebar menu
 */
-
-//Structure of an Element of Sidebar Menu
-interface menuItem{
-  name: string;
-  short_name:string;
-  sub_menu: string[][];
-}
 
 //This component is an Element of restricted sidebar menu (desktop-only)
 @Component({
@@ -20,11 +16,10 @@ interface menuItem{
   styleUrls: ['./mini-sidebar-item.component.css']
 })
 export class MiniSidebarItem {
-  @Input() item: menuItem; //data of the menu entry to be shown
+  @Input() item: MenuItem; //data of the menu entry to be shown
   active: boolean = false; //if true the submenu is shown
 
   constructor(private _elementRef : ElementRef, private Router: Router) {
-
   }
 
   //The Listener is used to handle every click on the window, and if the element clicked is not this menu-item the sub-menu is closed
@@ -53,9 +48,6 @@ export class MiniSidebarItem {
   }
 }
 
-/*
----------------------------------------------------------------------------------------------------------------------------------------
-*/
 
 //This component is an Element of expanded-sidebar menu
 @Component({
@@ -64,7 +56,7 @@ export class MiniSidebarItem {
   styleUrls: ['./sidebar-menu-item.component.css']
 })
 export class SidebarMenuItem {
-  @Input() item: menuItem; //data of the menu entry to be shown
+  @Input() item: MenuItem; //data of the menu entry to be shown
   active: boolean = false; //if true the submenu is visible
   @Output() toggle = new EventEmitter(); //emitter to outer component to order the change of sidebar status
   constructor(private Router: Router) {
@@ -76,6 +68,7 @@ export class SidebarMenuItem {
       this.toggle.emit();
     }
   }
+
   //check if current route is in the section of this item, so it can be displayed as active
   get_section_active(){
     var parts = this.Router.url.split('/');
@@ -84,12 +77,8 @@ export class SidebarMenuItem {
     if(parts[1] == "rooms" && this.item.short_name=="Aule")return true;
     return false;
   }
-
 }
 
-/*
----------------------------------------------------------------------------------------------------------------------------------------
-*/
 
 //The whole sidebar-menu component, it contains components of type SidebarMenuItem and MiniSidebarItem and inject data in them
 @Component({
@@ -100,7 +89,7 @@ export class SidebarMenuItem {
 export class SidebarBodyComponent {
   private today: number = Date.now(); //date to be displayed in extended sidebar
   @Input() side_extended: boolean; //input from outer component (sidebar status)
-  items: menuItem[] = []; //List of menu items to be injected in inner components
+  items: MenuItem[] = []; //List of menu items to be injected in inner components
   @Output() toggle = new EventEmitter(); //emitter to outer component to order the change of sidebar status
   constructor(private UserService: UserService, private Router: Router) {
     interval(1000).subscribe(()=>{

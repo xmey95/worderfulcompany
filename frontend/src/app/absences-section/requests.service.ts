@@ -6,10 +6,10 @@ import { AddRequestResponseType, SuccessResponseType, RequestType, RequestsRespo
 import * as config from '../config.json';
 import  swal from 'sweetalert';
 import { UserService } from '../user.service'
-/*
-This service can be used for the absence-related funtionality.
-*/
 
+/*
+This service can be used for all the absence-related funtionality.
+*/
 @Injectable()
 export class RequestsService {
     private api : string; //api base url
@@ -63,43 +63,42 @@ export class RequestsService {
                 share()
             );
 
-            //Observable to get the list of the employees of the User
-            this.employees$ = interval(1000)
-                .pipe(
-                    switchMap(() => this.HttpClient.get<VersionResponseType>(this.api + 'absences/employees/true', {headers: new HttpHeaders().set('Authorization', "bearer " + this.UserService.get_token()),
-                    })), //this request gets version code
-                    filter((data: VersionResponseType) => {
-                        if (data.version === this.employees_version) {
-                            return false; //stop stream for this iteration, value has not changed from last check
-                        }
-                        this.employees_version = data.version;
-                        return true;
-                    }),
-                    switchMap(() => this.HttpClient.get<UsersResponseType>(this.api + 'absences/employees/false', {headers: new HttpHeaders().set('Authorization', "bearer " + this.UserService.get_token()),
-                    })),
-                    map((data)=>{ return data.users }), //get new value (get just users field from response)
-                    share()
-                );
+        //Observable to get the list of the employees of the User
+        this.employees$ = interval(1000)
+            .pipe(
+                switchMap(() => this.HttpClient.get<VersionResponseType>(this.api + 'absences/employees/true', {headers: new HttpHeaders().set('Authorization', "bearer " + this.UserService.get_token()),
+                })), //this request gets version code
+                filter((data: VersionResponseType) => {
+                    if (data.version === this.employees_version) {
+                        return false; //stop stream for this iteration, value has not changed from last check
+                    }
+                    this.employees_version = data.version;
+                    return true;
+                }),
+                switchMap(() => this.HttpClient.get<UsersResponseType>(this.api + 'absences/employees/false', {headers: new HttpHeaders().set('Authorization', "bearer " + this.UserService.get_token()),
+                })),
+                map((data)=>{ return data.users }), //get new value (get just users field from response)
+                share()
+            );
 
-            //Observable to get the list of the requests made by any of the employees of the User
-            this.employees_requests$ = interval(1000)
-                .pipe(
-                    switchMap(() => this.HttpClient.get<VersionResponseType>(this.api + 'absences/employees/requests/true', {headers: new HttpHeaders().set('Authorization', "bearer " + this.UserService.get_token()),
-                    })), //this request gets version code
-                    filter((data: VersionResponseType) => {
-                        if (data.version == this.employees_requests_version) {
-                            return false; //stop stream for this iteration, value has not changed from last check
-                        }
-
-                        //data has changed, refresh version code
-                        this.employees_requests_version = data.version;
-                        return true;
-                    }),
-                    switchMap(() => this.HttpClient.get<RequestsResponseType>(this.api + 'absences/employees/requests/false', {headers: new HttpHeaders().set('Authorization', "bearer " + this.UserService.get_token()),
-                    })),
-                    map((data)=>{ return data.requests }), //get new value (get just requests field from response)
-                    share()
-                );
+        //Observable to get the list of the requests made by any of the employees of the User
+        this.employees_requests$ = interval(1000)
+            .pipe(
+                switchMap(() => this.HttpClient.get<VersionResponseType>(this.api + 'absences/employees/requests/true', {headers: new HttpHeaders().set('Authorization', "bearer " + this.UserService.get_token()),
+                })), //this request gets version code
+                filter((data: VersionResponseType) => {
+                    if (data.version == this.employees_requests_version) {
+                        return false; //stop stream for this iteration, value has not changed from last check
+                    }
+                    //data has changed, refresh version code
+                    this.employees_requests_version = data.version;
+                    return true;
+                }),
+                switchMap(() => this.HttpClient.get<RequestsResponseType>(this.api + 'absences/employees/requests/false', {headers: new HttpHeaders().set('Authorization', "bearer " + this.UserService.get_token()),
+                })),
+                map((data)=>{ return data.requests }), //get new value (get just requests field from response)
+                share()
+            );
     }
 
     //method to approve a request made by one of the employees of the user
@@ -200,19 +199,19 @@ export class RequestsService {
           console.log(err);
           return;
         });
-      }
-      //method to refuse a request made by one of the employees of the user
-      refuse_request(id){
+    }
+
+    //method to refuse a request made by one of the employees of the user
+    refuse_request(id){
         swal({//use swal to show a confirm modal
-          title: "Conferma",
-          text: "Vuoi davvero rifiutare la richiesta per questo permesso?",
-          icon: "warning",
-          dangerMode: true,
+        title: "Conferma",
+        text: "Vuoi davvero rifiutare la richiesta per questo permesso?",
+        icon: "warning",
+        dangerMode: true,
         })
         .then(willDelete => {
           if (willDelete) {  //willDelete is true if user clicked 'ok'
             var url = this.api + "absences/requests/refuse/" + id;
-
             //http request to backend (with authorization header containing the token got from UserService)
             this.HttpClient.put<SuccessResponseType>(url,{},
             {headers: new HttpHeaders().set('Authorization', "bearer " + this.UserService.get_token()),
@@ -232,7 +231,7 @@ export class RequestsService {
             });
           }
         });
-      }
+    }
 
     //Theese methods are called when a new subscription to an observable is registered, it forces to send the value even this has not changed by setting version code to '', so new subscribers can get the value
     reset_all_requests_version(){
@@ -295,7 +294,7 @@ export class RequestsService {
     if(fileSize<=10485760){ //10Mb size max
     //create formdata to send the file in the request
     let formData:FormData = new FormData();
-    formData.append('filetoupload',file);
+    formData.append('filetoupload',file); //append file from filelist in the formdata
     var url = this.api + "absences/requests/" + id + "/upload_justification";
 
     //http request to backend (with authorization header containing the token got from UserService)

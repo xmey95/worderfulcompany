@@ -6,7 +6,7 @@ import { MyAbsencesComponent } from '../absences-section/my-absences/my-absences
 import { EmployeesComponent } from '../absences-section/employees/employees.component';
 import { EmployeeComponent } from '../absences-section/employee/employee.component';
 import { AbsencesCalendarComponent } from '../absences-section/absences-calendar/absences-calendar.component';
-//import { PageNotFoundComponent } from './page-not-found.component';
+
 const appRoutes: Routes = [
     { path: 'absences/calendar', component: AbsencesCalendarComponent },
     { path: 'absences/employees', component: EmployeesComponent },
@@ -15,7 +15,6 @@ const appRoutes: Routes = [
     { path: 'absences/myabsences', component: MyAbsencesComponent },
     { path: 'users', component: ManageUsersComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
-  /*  { path: '**', component: PageNotFoundComponent }*/
 ];
 
 

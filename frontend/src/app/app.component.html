@@ -1,10 +1,7 @@
 <login-dialog *ngIf="get_login_status() == false"></login-dialog>
 <div class="veil visible-xs" (click)="toggle_sidebar()" *ngIf="side_expanded==true"></div>
-
 <sidebar [side_expanded]="side_expanded" (toggle)="toggle_sidebar($event)" ></sidebar>
-
 <header [side_expanded]="side_expanded" (toggle)="toggle_sidebar($event)" ></header>
-
 <div class="outlet smooth-transition" [ngClass]="{'outlet-side-expanded' : side_expanded==true}">
   <router-outlet></router-outlet>
 </div>

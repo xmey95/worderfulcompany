@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-//This service allow to block page scrolling (we need this when dialog is open or sidebar is expanded on mobile device)
+//This service allow to block page scrolling (we need this when login dialog is open or sidebar is expanded on mobile devices)
 // Solution found at https://www.bennadel.com/blog/3374-prevent-body-scrolling-with-a-windowscrolling-service-when-showing-a-modal-window-in-angular-5-0-2.htm
 
 @Injectable()

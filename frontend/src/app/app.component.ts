@@ -11,7 +11,7 @@ import { BlockScrollService } from './block-scroll.service';
 })
 export class AppComponent {
   title = 'wonderfulcompany';
-  side_expanded: boolean = false; //track sidebar current status, it can be expanded or collapsed (hidden on mobile devices)
+  side_expanded: boolean = false; //track sidebar status, it can be expanded or collapsed (hidden on mobile devices)
 
   constructor(client: HttpClient, private BlockScrollService: BlockScrollService, private UserService: UserService){
 
@@ -29,7 +29,7 @@ export class AppComponent {
     if(window.screen.width <= 766){
       if(this.side_expanded == true){ //disable scroll on mobile devices if sidebar is expanded
         this.BlockScrollService.disable();
-      }else{
+      }else{ //enable scroll if sidebar is collapsed
         this.BlockScrollService.enable();
       }
     }

@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { UserType } from '../interfaces'
+import { UserType } from '../../interfaces'
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { UserService } from '../user.service';
+import { UserService } from '../../user.service';
 
 /*
 This component contains the table showing a complete list of users (name,surname,email, boss)
@@ -15,10 +15,10 @@ This component contains the table showing a complete list of users (name,surname
 })
 export class UserTableComponent implements OnDestroy {
   @Output() ready = new EventEmitter<number>(); //output to indicate to outer component if data is ready, it contains length of users list
-  @Output() set_boss = new EventEmitter<UserType>();
+  @Output() set_boss = new EventEmitter<UserType>(); //emit to outer component to show boss selection list
   private displayedColumns = ['name', 'surname', 'email', 'boss'];
   private dataSource; //data source for datatable
-  private usersSubscription: Subscription;
+  private usersSubscription: Subscription; //Subscription to user-service observaable to get user list
 
   constructor(client: HttpClient, private UserService: UserService) {
     if(window.screen.width <= 766){
@@ -35,20 +35,21 @@ export class UserTableComponent implements OnDestroy {
     this.UserService.reset_version();
   }
 
-  //filter function for datatable NOTE: code got from Angular Material
+  //filter function for datatable
+  // NOTE: code got from Angular Material
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
 
-  //execute unsubscription from user-service's observable
-  ngOnDestroy() {
-    this.usersSubscription.unsubscribe();
-  }
-
   //emit to outer component wich user has been clicked in order to start boss assigment procedure
   emit_employee(user){
     this.set_boss.emit(user);
+  }
+
+  //execute unsubscription from user-service's observable
+  ngOnDestroy() {
+    this.usersSubscription.unsubscribe();
   }
 }

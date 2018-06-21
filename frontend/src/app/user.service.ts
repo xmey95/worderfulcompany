@@ -1,21 +1,22 @@
-import { Component, Injectable, Inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, interval } from 'rxjs';
-import { switchMap, map, share, filter } from 'rxjs/operators';
-import { BossResponseType, LogResponseType, RegisterResponseType, SuccessResponseType, SupervisionType, SupervisionsResponseType, UserResponseType, UserType, UsersResponseType, VersionResponseType } from './interfaces'
-import * as config from './config.json';
-import { CookieService } from 'ngx-cookie-service';
-import { MatSnackBar, MatSnackBarConfig, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { BlockScrollService } from './block-scroll.service';
+import { BossResponseType, LogResponseType, RegisterResponseType, SuccessResponseType, SupervisionsResponseType, SupervisionType, UserResponseType, UsersResponseType, UserType, VersionResponseType } from './interfaces'
+import { CookieService } from 'ngx-cookie-service';
+import { filter, map, share, switchMap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { interval, Observable } from 'rxjs';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import  swal from 'sweetalert';
+import * as config from './config.json';
+
 /*
 This service can be used for the user-related funtionality like login, logout, token and user info management.
 */
 
 @Injectable()
 export class UserService {
-    private logged_in: boolean = false;
     private api : string; //api base url
+    private logged_in: boolean = false;
     public user: UserType; //Info of the user ( null if not logged in)
     public token:string; //Authentication Token of the user (null if not logged in)
     public users$: Observable<UserType[]>;//observable to get user list
@@ -24,7 +25,8 @@ export class UserService {
     private supervisions_version = ""; //version code for supervision list
     private supervisions : SupervisionType[] = [];//list of supervisions couples (id_user, id_boss)
     private users: UserType[] = [];//list of users
-    constructor(private BlockScrollService: BlockScrollService, private cookieService: CookieService, public dialog: MatDialog, private httpClient: HttpClient, public snackBar: MatSnackBar) {
+
+    constructor(private BlockScrollService: BlockScrollService, private cookieService: CookieService, private httpClient: HttpClient, public snackBar: MatSnackBar) {
         this.api = (<any>config).api;
         this.load_cookies();
         //NOTE: components that use some observable must implement ngOnDestroy and call unsubscribe() on subscription object
@@ -43,22 +45,21 @@ export class UserService {
                 map((data)=>{ return data.users }), //save new value (get just users field from response)
                 share()
             );
-            //Observable to get Supervisions List
-            this.supervisions$ = interval(1000)
-                .pipe(
-                    switchMap(() => this.httpClient.get<VersionResponseType>(this.api + 'supervisions/true')), //this request gets version code
-                    filter((data: VersionResponseType) => {
-                        if (data.version === this.supervisions_version) {
-                            return false; //stop stream for this iteration, value has not changed from last check
-                        }
-                        this.supervisions_version = data.version;
-                        return true;
-                    }),
-                    switchMap(() => this.httpClient.get<SupervisionsResponseType>(this.api + 'supervisions/false')),
-                    map((data)=>{ return data.supervisions }), //save new value (get just supervisions field from response)
-                    share()
-                );
-
+        //Observable to get Supervisions List
+        this.supervisions$ = interval(1000)
+            .pipe(
+                switchMap(() => this.httpClient.get<VersionResponseType>(this.api + 'supervisions/true')), //this request gets version code
+                filter((data: VersionResponseType) => {
+                    if (data.version === this.supervisions_version) {
+                        return false; //stop stream for this iteration, value has not changed from last check
+                    }
+                    this.supervisions_version = data.version;
+                    return true;
+                }),
+                switchMap(() => this.httpClient.get<SupervisionsResponseType>(this.api + 'supervisions/false')),
+                map((data)=>{ return data.supervisions }), //save new value (get just supervisions field from response)
+                share()
+            );
          //subscribe to this observable to refresh user list every second
          this.users$.subscribe((users)=>{
              this.users = users;
@@ -89,23 +90,6 @@ export class UserService {
           config.duration = 2000;
           this.snackBar.open("Inserimento non riuscito! Errore inaspettato nel server...", "OK", config);
           console.log(err);
-      });
-    }
-
-    //show a confirm modal and if user clicks 'ok' executes logout
-    logout_confirm(): void {
-      let dialogRef = this.dialog.open(ConfirmComponent, {
-        width: '250px'
-      });
-
-      dialogRef.afterClosed().subscribe(result => { //callback from dialg closure
-        console.log('The dialog was closed');
-        if(result){ //callback data, undefined if user doesn't click on 'ok' button
-          this.token = null;
-          this.user = null;
-          this.logged_in = false;
-          this.cookieService.deleteAll(); //clear login data and cookies
-        }
       });
     }
 
@@ -144,7 +128,7 @@ export class UserService {
       return this.user;
     }
 
-    //return info of the user selected through his id
+    //return info of the user selected by his id, if not found returns info of the logged-in user
     get_user_by_id(id){
       var me;
       for (var i = 0; i < this.users.length; i++){
@@ -160,7 +144,7 @@ export class UserService {
     }
 
     get_token(){
-      if(this.logged_in && this.token){
+      if(this.logged_in && this.token){ //if set, return the authentication token
         return this.token;
       }
       return "";
@@ -177,7 +161,20 @@ export class UserService {
     }
 
     logout(){
-      this.logout_confirm();
+      swal({ //use swal to show a confirm modal
+        title: "Conferma",
+        text: "Vuoi davvero uscire?",
+        icon: "warning",
+        dangerMode: true,
+      })
+      .then(willDelete => {
+        if (willDelete) { //willDelete is true if user clicked 'ok'
+        this.token = null;
+        this.user = null;
+        this.logged_in = false;
+        this.cookieService.deleteAll(); //clear login data and cookies
+        }
+      });
     }
 
     //This method is called when a new subscription to users$ observable is registered, it forces to send the value even this has not changed, so new subscribers can get the value
@@ -191,7 +188,7 @@ export class UserService {
         this.cookieService.set( 'user', JSON.stringify(this.user) );
     }
 
-    //Send request to backend to add/update supervision entry for specified user with specified boss
+    //Send request to backend to add/update supervision entry for specified employee/boss
     set_boss(id_user, id_boss, bottomsheetref){
         var post = {"user":id_user, "boss": id_boss};
         this.httpClient.post<SuccessResponseType>(this.api + 'users/set_boss/', post)
@@ -213,7 +210,7 @@ export class UserService {
             this.snackBar.open("Inserimento non riuscito! Errore inaspettato del server...", "OK", config);
             console.log(err);
         });
-        bottomsheetref.dismiss(); //close bottom sheet previously shown to allow user to chose the boss
+        bottomsheetref.dismiss(); //close bottom sheet (boss choosing list) after sending the request
     }
 
     //send authentication request to backend, providing credentials got through the login form
@@ -241,22 +238,4 @@ export class UserService {
           console.log(JSON.stringify(err));
       });
     }
-}
-
-
-//Modal confirm box used to gat a confirm from user who wants to log out
-@Component({
-  selector: 'confirm',
-  templateUrl: 'confirm/confirm.component.html',
-})
-export class ConfirmComponent {
-
-  constructor(
-    public dialogRef: MatDialogRef<ConfirmComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
-
-    onNoClick(): void {
-      this.dialogRef.close();
-    }
-
 }

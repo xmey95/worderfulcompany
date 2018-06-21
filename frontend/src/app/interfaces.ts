@@ -10,6 +10,12 @@ export interface BossResponseType{
   boss: number
 }
 
+export interface MenuItem{
+  name: string;
+  short_name:string;
+  sub_menu: string[][];
+}
+
 export interface LogResponseType{
   success: boolean,
   error: string,

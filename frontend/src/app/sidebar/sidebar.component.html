@@ -1,4 +1,4 @@
-<div class="col-md-3 sidebar" [ngClass]="{'sidebar-collapsed': side_expanded==false,'sidebar-expanded': side_expanded==true}">
+<div class="col-md-3 sidebar-box" [ngClass]="{'sidebar-collapsed': side_expanded==false,'sidebar-expanded': side_expanded==true}">
   <div class="sidebar-body">
     <div class="sidebar-top" [ngClass]="{'sidebar-collapsed': side_expanded==false,'sidebar-expanded': side_expanded==true}">
       <a class="sidebar-expand text-center hidden-xs" *ngIf="side_expanded==false">
@@ -10,7 +10,6 @@
       <div class="collapse-icon-box pull-right" (click)="toggle_sidebar()">
         <i class="fas fa-arrow-left collapse-icon pull-right"></i>
       </div>
-
     </div>
     <div class="clearfix"></div>
     <div class="sidebar-menu-expanded">

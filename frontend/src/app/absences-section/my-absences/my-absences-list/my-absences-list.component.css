@@ -1,11 +1,17 @@
-.center-div
-{
+.center-div{
   margin: auto;
   margin-top:50px;
   right: 0;
   left: 0;
   width: 100px;
   height: 100px;
+}
+
+.divider{
+  width:60%;
+  margin:auto;
+  left:0;
+  right:0;
 }
 
 .filter-buttons{
@@ -24,6 +30,10 @@
   margin:10px;
 }
 
+.list-box{
+  box-shadow:0 18px 6px -12px rgba(0,0,0,.35), 0 12px 12px 0 rgba(0,0,0,.25), 0 4px 20px 0 rgba(0,0,0,.2);
+}
+
 .no-requests{
   margin-top:60px;
   background: rgba(255,255,255,0.6);
@@ -37,17 +47,6 @@
 
 .request-body{
   padding-top: 20px;
-}
-
-.divider{
-  width:60%;
-  margin:auto;
-  left:0;
-  right:0;
-}
-
-.list-box{
-  box-shadow:0 18px 6px -12px rgba(0,0,0,.35), 0 12px 12px 0 rgba(0,0,0,.25), 0 4px 20px 0 rgba(0,0,0,.2);
 }
 
 mat-panel-description{

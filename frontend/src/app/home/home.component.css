@@ -47,10 +47,10 @@ mat-card>:first-child {
 }
 
 @media (max-width: 766px){
-  button{
-    background:#aaaaaa;
-  }
   .page{
     padding:5px;
+  }
+  button{
+    background:#aaaaaa;
   }
 }

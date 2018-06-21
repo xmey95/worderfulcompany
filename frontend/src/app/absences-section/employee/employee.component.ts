@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 
 
 /*
-  This component is the overview of the data related to a specific user.
+  This component is the overview of the data regarding a specific user.
   in this page the boss of the user specified in the queryparams can approve or refuse his absence-requests and see some statistics about this employee
 */
 @Component({
@@ -21,6 +21,7 @@ export class EmployeeComponent implements OnDestroy {
   private employee: UserType; //info of the employee
   private employee_requests: RequestType[];//requests of the specific employee
   private filter: number = -1; //parameter to filter requests by the state
+  
   constructor(private route: ActivatedRoute, private router: Router, private RequestsService: RequestsService, private UserService: UserService) {
     this.route.queryParams.subscribe(params => { //get the id of the employee from route queryparams
       if(!params['employee']){

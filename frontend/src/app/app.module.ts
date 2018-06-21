@@ -8,7 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MiniSidebarItem, SidebarBodyComponent, SidebarMenuItem } from './sidebar-body/sidebar-body.component';
+import { MiniSidebarItem, SidebarBodyComponent, SidebarMenuItem } from './sidebar/sidebar-body/sidebar-body.component';
 import { MatBottomSheetModule,
          MatButtonModule,
          MatButtonToggleModule,
@@ -30,10 +30,10 @@ import { MatBottomSheetModule,
 import { HeaderComponent } from './header/header.component';
 import { RequestsService } from './absences-section/requests.service';
 import { SidebarComponent } from './sidebar/sidebar.component'
-import { UserService, ConfirmComponent } from './user.service';
+import { UserService } from './user.service';
 import { BlockScrollService } from './block-scroll.service';
 import { BottomListComponent, ManageUsersComponent } from './manage-users/manage-users.component';
-import { UserTableComponent } from './user-table/user-table.component';
+import { UserTableComponent } from './manage-users/user-table/user-table.component';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 
@@ -52,7 +52,6 @@ registerLocaleData(localeIt, 'it');
   declarations: [
     AppComponent,
     BottomListComponent,
-    ConfirmComponent,
     HomeComponent,
     MiniSidebarItem,
     SidebarBodyComponent,
@@ -99,7 +98,7 @@ registerLocaleData(localeIt, 'it');
     NgxChartsModule
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'it' }, BlockScrollService, CookieService, RequestsService, UserService],
-  entryComponents: [BottomListComponent, ConfirmComponent, ModifyRequestComponent, RequestDetailsComponent],
+  entryComponents: [BottomListComponent, ModifyRequestComponent, RequestDetailsComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,7 +1,6 @@
 <mat-form-field>
   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtra">
 </mat-form-field>
-
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef> Nome </th>

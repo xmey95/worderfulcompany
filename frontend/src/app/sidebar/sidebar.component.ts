@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent {
-  @Input() side_expanded:boolean;
+  @Input() side_expanded:boolean; //Input from appcomponent to get sidebar status (collapsed/expanded)
   @Output() toggle = new EventEmitter(); //emitter to outer component to order the change of sidebar status
   constructor() { }
 

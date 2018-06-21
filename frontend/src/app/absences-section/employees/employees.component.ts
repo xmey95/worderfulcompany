@@ -22,7 +22,7 @@ export class EmployeesComponent implements OnDestroy {
 
     //subscription to observable to get employees list from requests-service
     this.employeesSubscription = this.RequestsService.employees$.subscribe((data)=>{
-      this.employees = data;
+      this.employees = this.sort_employees(data);
     });
     this.RequestsService.reset_employees_version();//force observable to emit data in the stream even if it has not changed from last check
 
@@ -54,9 +54,26 @@ export class EmployeesComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    //unsubsription from requests-service observables
+    //unsubscription from requests-service observables
     this.employeesSubscription.unsubscribe();
     this.requestsSubscription.unsubscribe();
+  }
+
+  sort_employees(employees){
+    var found = true;
+    var temp;
+    while(found==true){
+      found=false;
+      for(var i = 0; i < employees.length-1; i++){
+        if(employees[i].surname < employees[i+1].surname || (employees[i].surname == employees[i+1].surname && employees[i].name < employees[i+1].name )){
+          found = true;
+          temp = employees[i];
+          employees[i] = employees[i+1];
+          employees[i+1] = temp;
+        }
+      }
+    }
+    return employees;
   }
 
 }

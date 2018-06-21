@@ -9,20 +9,23 @@ import { RequestType } from '../../interfaces';
 import * as config from '../../config.json';
 
 const colors: any = {
-  red: {
+  red: { //refused requests
     primary: '#ad2121',
     secondary: '#FAE3E3'
   },
-  grey: {
+  grey: { //pending requests
     primary: '#888888',
     secondary: '#aaaaaa'
   },
-  green: {
+  green: { //approved requests
     primary: '#21ad21',
     secondary: '#e3fae3'
   }
 };
 
+/*
+  Absences calendar, for every day are displayed all the approved, refused and pending requests for absences
+*/
 @Component({
   selector: 'absences-calendar',
   templateUrl: './absences-calendar.component.html',
@@ -31,50 +34,22 @@ const colors: any = {
 export class AbsencesCalendarComponent implements OnDestroy{
   private requests: RequestType[]; //list of all request made by any of the employees
   private requestsSubscription: Subscription;
-  private events: CalendarEvent[];
-  private viewDate: Date = new Date();
-  private activeDayIsOpen: boolean = true;
-  private state_filter: number = -1;
+  private events: CalendarEvent[]; //Type of event-item to be injected in the calendar
+  private viewDate: Date = new Date(); //selected date
+  private activeDayIsOpen: boolean = true; //If true the list of absences for the active day is shown
+  private state_filter: number = -1; //value of the state filter (-1 means no filter)
 
   constructor(public dialog: MatDialog, private RequestsService: RequestsService, private UserService: UserService) {
     //subscription to observable to get requests list from requests-service
     this.requestsSubscription = this.RequestsService.all_requests$.subscribe((data)=>{
       this.requests = data;
-      this.make_event_list();
+      this.make_event_list(); //Generate the list for the calendar for requests list
     });
     this.RequestsService.reset_all_requests_version();//force observable to emit data in the stream even if it has not changed from last check
   }
 
-  make_event_list(){
-    var res = [];
-    var user;
-    var color;
-    for(var i = 0; i < this.requests.length; i++){
-      if(this.state_filter != -1 && this.requests[i].state != this.state_filter) continue;
-      user = this.UserService.get_user_by_id(this.requests[i].id_user);
-      switch(this.requests[i].state){
-        case 0:
-          color = colors.grey
-          break;
-        case 1:
-          color = colors.green
-          break;
-        case 2:
-          color = colors.red
-          break;
-      }
-      res.push({
-        start: startOfDay(new Date(this.requests[i].start_date)),
-        end: endOfDay(new Date(this.requests[i].end_date)),
-        title: user.surname + ' ' + user.name,
-        request: this.requests[i],
-        color: color
-      });
-    }
-    this.events = res;
-  }
-
   //Handler for clicks on a day of the calendar
+  //NOTE: Code got from angular-calendar demo: https://mattlewis92.github.io/angular-calendar/docs/
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       if ((isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) || events.length === 0) {
@@ -86,21 +61,47 @@ export class AbsencesCalendarComponent implements OnDestroy{
     }
   }
 
-  //method to open modify-request dialog form, injecting into it the data of the selected request
-  openDialog(request): void {
-     let dialogRef = this.dialog.open(RequestDetailsComponent, {
-       data: { request: request }
-     });
-   }
-
-  show_request(event){
-    this.openDialog(event.request);
+  //This function get a list of requests and map it into an CalendarEvent List that can be used as input for the calendar
+  make_event_list(){
+    var res = [];
+    var user;
+    var color;
+    for(var i = 0; i < this.requests.length; i++){
+      if(this.state_filter != -1 && this.requests[i].state != this.state_filter) continue;
+      user = this.UserService.get_user_by_id(this.requests[i].id_user);
+      switch(this.requests[i].state){ //Set the color according to the state of the request
+        case 0:
+          color = colors.grey
+          break;
+        case 1:
+          color = colors.green
+          break;
+        case 2:
+          color = colors.red
+          break;
+      }
+      res.push({ //New CalendarEvent object
+        start: startOfDay(new Date(this.requests[i].start_date)),
+        end: endOfDay(new Date(this.requests[i].end_date)),
+        title: user.surname + ' ' + user.name,
+        request: this.requests[i],
+        color: color
+      });
+    }
+    this.events = res;
   }
 
   ngOnDestroy() {
     //unsubscription from requests-service observable
     this.requestsSubscription.unsubscribe();
   }
+
+  //method to open request-details dialog, data of the selected request are injected into it
+  openDialog(event): void {
+     let dialogRef = this.dialog.open(RequestDetailsComponent, {
+       data: { request: event.request }
+     });
+   }
 }
 
 /*
@@ -117,17 +118,20 @@ export class RequestDetailsComponent {
     this.api = (<any>config).api;
   }
 
+  //Get the complete name of the user thet made the request
   get_user_name(){
-    var user = this.UserService.get_user()
+    var user = this.UserService.get_user_by_id(this.data.request.id_user);
     return user.surname + ' ' + user.name;
   }
 
+  //Get the label to be displayed according to the request state
   get_state_label(state){
     if(state == 1) return 'Approvata';
     if(state == 2) return 'Rifiutata';
     return 'In Attesa di Conferma';
   }
 
+  //Get the class to change the color of request indicator according to the request state
   get_state_label_class(state){
     if(state == 1) return 'green';
     if(state == 2) return 'red';

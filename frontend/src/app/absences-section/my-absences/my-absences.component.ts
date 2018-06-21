@@ -67,6 +67,7 @@ export class MyAbsencesComponent{
     return true;
   }
 
+  //Check request length, it can't be more then 180 days
   validate_period_len(){
     if(!this.end_date)return true;
     var start = new Date(this.start_date);

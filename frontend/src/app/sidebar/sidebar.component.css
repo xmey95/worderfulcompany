@@ -16,7 +16,14 @@
 padding: 5px 6px;
 }
 
-.sidebar{
+.sidebar-body{
+  height:100vh;
+  overflow-y:auto;
+  overflow-x:hidden;
+  background: #2a3f54;
+}
+
+.sidebar-box{
   position:fixed;
   height:200vh;
   padding: 0;
@@ -24,13 +31,6 @@ padding: 5px 6px;
   float:left;
   -webkit-transition: width 1s; /* For Safari 3.1 to 6.0 */
   transition: width 1s;
-}
-
-.sidebar-body{
-  height:100vh;
-  overflow-y:auto;
-  overflow-x:hidden;
-  background: #2a3f54;
 }
 
 .sidebar-expand{
@@ -86,12 +86,12 @@ padding: 5px 6px;
 }
 
 @media (min-width: 767px){
+  .sidebar-collapsed{
+    width:83px;
+  }
   .side-top-icon{
   padding: 5px 6px;
   color: rgba(255,255,255,0.5);
-  }
-  .sidebar-collapsed{
-    width:83px;
   }
 }
 

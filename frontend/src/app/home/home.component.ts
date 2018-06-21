@@ -8,8 +8,5 @@ import { UserService } from '../user.service'
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-
   constructor(private UserService: UserService) { }
-
-
 }

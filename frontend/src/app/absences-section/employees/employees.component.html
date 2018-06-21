@@ -12,7 +12,7 @@
                     <mat-list>
                       <mat-list-item *ngFor="let employee of employees">
                         <i class="fa fa-user" mat-list-icon></i>
-                        <h4 class="link-to-user" [routerLink]="['/absences/employee']" [queryParams]="{ employee: employee.id }" mat-line><b>{{employee.name | titlecase}} {{employee.surname | titlecase}}</b></h4>
+                        <h4 class="link-to-user" [routerLink]="['/absences/employee']" [queryParams]="{ employee: employee.id }" mat-line><b>{{employee.surname | titlecase}} {{employee.name | titlecase}}</b></h4>
                         <p mat-line>
                           {{get_requests_number(employee.id)}} Richieste
                           <br />
