@@ -17,12 +17,16 @@ export class AppComponent {
 
   }
 
-  //check if user is logged in, if not, login modal will be shown over the page (no operation is allowed to a non-logged user)
+  /**
+   * Checks if user is logged in, if not, login modal will be shown over the page (no operation is allowed to a non-logged user)
+   */
   get_login_status(){
     return this.UserService.get_login_status();
   }
 
-  //toggle sidebar mode (collapsed/expanded)
+  /**
+   * Toggle sidebar mode (collapsed/expanded)
+   */
   toggle_sidebar(){
     this.side_expanded = !this.side_expanded;
 

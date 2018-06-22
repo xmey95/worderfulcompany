@@ -4,12 +4,9 @@ import { Router } from '@angular/router/'
 import { interval } from 'rxjs';
 import { MenuItem } from '../../interfaces';
 
-
-/*
-Components of the sidebar menu
-*/
-
-//This component is an Element of restricted sidebar menu (desktop-only)
+/**
+ * This component is an Element of restricted sidebar menu (desktop-only)
+ */
 @Component({
   selector: 'mini-sidebar-item',
   templateUrl: 'mini-sidebar-item.component.html',
@@ -22,7 +19,9 @@ export class MiniSidebarItem {
   constructor(private _elementRef : ElementRef, private Router: Router) {
   }
 
-  //The Listener is used to handle every click on the window, and if the element clicked is not this menu-item the sub-menu is closed
+  /**
+   * The Listener is used to handle every click on the window, and if the element clicked is not this menu-item the sub-menu is closed
+   */
   @HostListener('document:click', ['$event.target'])
   public onClick(targetElement) {
       const clickedInside = this._elementRef.nativeElement.contains(targetElement); //check if element is clicked
@@ -31,14 +30,18 @@ export class MiniSidebarItem {
       }
   }
 
-  //Get class of icon to be shown for this menu entry
+  /**
+   * Get tha class of the icon to be shown for this menu entry
+   */
   get_icon(){
     if(this.item.name == "Sezione Assenze") return "fas fa-calendar-times";
     if(this.item.name == "Sezione Aule") return "fas fa-chalkboard-teacher";
     return "fas fa-question";
   }
 
-  //check if current route is in the section of this item, so it can be displayed as active
+  /**
+   * Checks if current route is in the section related to this item, so it can be displayed as active
+   */
   get_section_active(){
     var parts = this.Router.url.split('/');
     if(parts[1] == "absences" && this.item.short_name=="Assenze")return true;
@@ -49,7 +52,9 @@ export class MiniSidebarItem {
 }
 
 
-//This component is an Element of expanded-sidebar menu
+/**
+ * This component is an Element of expanded-sidebar menu
+ */
 @Component({
   selector: 'sidebar-menu-item',
   templateUrl: 'sidebar-menu-item.component.html',
@@ -62,14 +67,18 @@ export class SidebarMenuItem {
   constructor(private Router: Router) {
   }
 
-  //function called when a submenu item is clicked, it hides sidebar in mobile devices
+  /**
+   * Method called when a submenu item is clicked, it hides sidebar in mobile devices
+   */
   collapse_if_mobile(){
     if(window.screen.width <= 766){
       this.toggle.emit();
     }
   }
 
-  //check if current route is in the section of this item, so it can be displayed as active
+  /**
+   * Checks if current route is in the section related to this item, so it can be displayed as active
+   */
   get_section_active(){
     var parts = this.Router.url.split('/');
     if(parts[1] == "absences" && this.item.short_name=="Assenze")return true;
@@ -80,7 +89,9 @@ export class SidebarMenuItem {
 }
 
 
-//The whole sidebar-menu component, it contains components of type SidebarMenuItem and MiniSidebarItem and inject data in them
+/**
+ * The whole sidebar-menu component, it contains components of type SidebarMenuItem and MiniSidebarItem and inject data in them
+ */
 @Component({
   selector: 'sidebar-body',
   templateUrl: 'sidebar-body.component.html',
@@ -91,6 +102,10 @@ export class SidebarBodyComponent {
   @Input() side_extended: boolean; //input from outer component (sidebar status)
   items: MenuItem[] = []; //List of menu items to be injected in inner components
   @Output() toggle = new EventEmitter(); //emitter to outer component to order the change of sidebar status
+
+  /**
+   * The constructor builds the list of data object to be injected in menu-item components and subscribes to ano observable to refresh displayed datetime every second
+   */
   constructor(private UserService: UserService, private Router: Router) {
     interval(1000).subscribe(()=>{
       this.today = Date.now(); //refresh datetime every second
@@ -132,12 +147,16 @@ export class SidebarBodyComponent {
     this.items.push(obj);
   }
 
-  //order to outer component to change sidebar status
+  /**
+   * Emits output to the outer component in oorder to change sidebar status
+   */
   emit_toggle(){
     this.toggle.emit();
   }
 
-  //order to outer component to change sidebar status (just for mobile devices)
+  /**
+   * Emits output to the outer component in order to change sidebar status (just for mobile devices)
+   */
   emit_toggle_if_mobile(){
     if(window.screen.width <= 766){
       this.toggle.emit();

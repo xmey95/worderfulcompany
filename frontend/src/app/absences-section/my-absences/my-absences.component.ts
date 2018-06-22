@@ -6,9 +6,9 @@ import { RequestsService } from '../requests.service';
 import { UserService } from '../../user.service';
 import  swal from 'sweetalert';
 
-/*
-  This component shows a list of the absence-request made by the logged-in user, and contains a form to  submit new requests
-*/
+/**
+ * This component shows a list of the absence-request made by the logged-in user, and contains a form to submit new requests
+ */
 @Component({
   selector: 'my-absences',
   templateUrl: './my-absences.component.html',
@@ -27,12 +27,16 @@ export class MyAbsencesComponent{
     this.start_date.setHours(0,0,0,0);
   }
 
-  //handle file selection from file input
+  /**
+   * Handles file selection from file input by putting selected files in the fileList object
+   */
   fileChange(event) {
      this.fileList = event.target.files;
   }
 
-  //collect data from inputs and call request-service's method to submit a new absence-request
+  /**
+   * Collects data from inputs and call request-service's method to submit a new absence-request
+   */
   send_request(){
     //check if reason is a custom reason
     var reason = this.reason == "other" ? this.custom_reason : this.reason;
@@ -51,7 +55,9 @@ export class MyAbsencesComponent{
     this.fileList = null;
   }
 
-  //validation of input data
+  /**
+   * Validation of input data, end date, if set, must be after the start date, the absence period must be less than 180 days and a reason must be set
+   */
   validate(){
     //if set, end_date must be after the start_date
     if(this.end_date && !(this.end_date >= this.start_date) ) return false;
@@ -67,7 +73,9 @@ export class MyAbsencesComponent{
     return true;
   }
 
-  //Check request length, it can't be more then 180 days
+  /**
+   * Checks absence length (in days), it can't be more then 180 days
+   */
   validate_period_len(){
     if(!this.end_date)return true;
     var start = new Date(this.start_date);
@@ -77,5 +85,4 @@ export class MyAbsencesComponent{
     if(diffDays > 180) return false;
     return true;
   }
-
 }

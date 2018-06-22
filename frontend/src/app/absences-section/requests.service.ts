@@ -7,9 +7,9 @@ import * as config from '../config.json';
 import  swal from 'sweetalert';
 import { UserService } from '../user.service'
 
-/*
-This service can be used for all the absence-related funtionality.
-*/
+/**
+ * This service can be used for all the absence-related funtionality. It's methods sends propr requests to backend to get and update values in the database
+ */
 @Injectable()
 export class RequestsService {
     private api : string; //api base url
@@ -22,6 +22,9 @@ export class RequestsService {
     public employees_requests$: Observable<RequestType[]>;
     private employees_requests_version = ""; //version code for myrequests list
 
+    /**
+      * The constructor creates 4 observables to get the lists of all requests, the list of employees, the list of employees requests and the list of logged-in user's requests from backend
+      */
     constructor(private HttpClient: HttpClient, private UserService: UserService) {
         this.api = (<any>config).api;
 
@@ -101,7 +104,9 @@ export class RequestsService {
             );
     }
 
-    //method to approve a request made by one of the employees of the user
+    /**
+     * Uses Swal to show a confirm modal and, if users clicks 'ok' approves a request made by one of the employees of the user
+     */
     approve_request(id){
       swal({ //use swal to show a confirm modal
         title: "Conferma",
@@ -133,7 +138,9 @@ export class RequestsService {
       });
     }
 
-    //method to cancel a request
+    /**
+     * Uses Swal to show a confirm modal and, if users clicks 'ok' cancel a pending request made by the user
+     */
     cancel_request(id){
       swal({ //use swal to show a confirm modal
         title: "Conferma",
@@ -165,7 +172,9 @@ export class RequestsService {
       });
     }
 
-    //method to modify a request
+    /**
+     * Modify data of a request
+     */
     modify_request(id, reason,start_date, end_date, fileList, dialog){
         //add 2 hours to collected datetimes to compensate the timezone gap
         start_date.setTime(start_date.getTime() + (2*60*60*1000));
@@ -201,7 +210,9 @@ export class RequestsService {
         });
     }
 
-    //method to refuse a request made by one of the employees of the user
+    /**
+     * Uses Swal to show a confirm modal and, if users clicks 'ok' refuses a request made by one of the employees of the user
+     */
     refuse_request(id){
         swal({//use swal to show a confirm modal
         title: "Conferma",
@@ -233,24 +244,37 @@ export class RequestsService {
         });
     }
 
-    //Theese methods are called when a new subscription to an observable is registered, it forces to send the value even this has not changed by setting version code to '', so new subscribers can get the value
+    /**
+     * This method is called when a new subscription to all_requests observable is registered, it forces to send the value even this has not changed by setting version code to '', so new subscribers can get the value
+     */
     reset_all_requests_version(){
         this.all_requests_version = "";
     }
 
+    /**
+     * This method is called when a new subscription to employees requests observable is registered, it forces to send the value even this has not changed by setting version code to '', so new subscribers can get the value
+     */
     reset_employees_requests_version(){
         this.employees_requests_version = "";
     }
 
+    /**
+     * This method is called when a new subscription to employees observable is registered, it forces to send the value even this has not changed by setting version code to '', so new subscribers can get the value
+     */
     reset_employees_version(){
       this.employees_version = "";
     }
 
+    /**
+     * This method is called when a new subscription to my_requests observable is registered, it forces to send the value even this has not changed by setting version code to '', so new subscribers can get the value
+     */
     reset_myrequests_version(){
       this.my_requests_version = "";
     }
 
-    //mothod to submit a new absence-request
+    /**
+     * This method submits a new absence-request to the backend
+     */
     send_request(reason,start_date, end_date, fileList){
 
     //add 2 hours to collected datetimes to compensate the timezone gap
@@ -286,7 +310,9 @@ export class RequestsService {
     });
   }
 
-  //upload a justification file in the backend server storage
+  /**
+   * This method uploads a justification file in the backend server storage
+   */
   upload_justification_file(id, fileList){
     let file: File = fileList[0];
     let fileSize:number=fileList[0].size;

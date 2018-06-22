@@ -5,9 +5,11 @@ import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../user.service';
 
-/*
-This component contains the table showing a complete list of users (name,surname,email, boss)
-*/
+/**
+ * This component contains the table showing a complete list of users (name,surname,email, boss)
+ *
+ * NOTE: table base code got from Angula Material
+ */
 @Component({
   selector: 'user-table',
   templateUrl: './user-table.component.html',
@@ -20,6 +22,9 @@ export class UserTableComponent implements OnDestroy {
   private dataSource; //data source for datatable
   private usersSubscription: Subscription; //Subscription to user-service observaable to get user list
 
+  /**
+   * The constructro subsribes to UserService Observable to get users list and checks device screen dimension in order to hide email column in mobile devices
+   */
   constructor(client: HttpClient, private UserService: UserService) {
     if(window.screen.width <= 766){
       this.displayedColumns = ['name', 'surname', 'boss']; //email column is not whown in mobile devices
@@ -35,20 +40,25 @@ export class UserTableComponent implements OnDestroy {
     this.UserService.reset_version();
   }
 
-  //filter function for datatable
-  // NOTE: code got from Angular Material
+  /**
+   * Filter function for datatable
+   */
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
 
-  //emit to outer component wich user has been clicked in order to start boss assigment procedure
+  /**
+   * Emits output to outer component, the value indicates wich user has been clicked in order to start boss assigment procedure
+   */
   emit_employee(user){
     this.set_boss.emit(user);
   }
 
-  //execute unsubscription from user-service's observable
+  /**
+   * Executes unsubscription from user-service's observable
+   */
   ngOnDestroy() {
     this.usersSubscription.unsubscribe();
   }

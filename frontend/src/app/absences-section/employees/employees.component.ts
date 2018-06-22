@@ -4,10 +4,9 @@ import { RequestType, UserType } from '../../interfaces';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-/*
-  This component contains the dashboard for bosses in wich they can see some statistic based on all the requests made by their employees and see a list of their own employees
-*/
-
+/**
+ * This component contains the dashboard for bosses in wich they can see some statistic based on all the requests made by their employees and see a list of their own employees
+ */
 @Component({
   selector: 'employees',
   templateUrl: './employees.component.html',
@@ -18,6 +17,10 @@ export class EmployeesComponent implements OnDestroy {
   private requests: RequestType[]; //list of all request made by any of the employees
   private employeesSubscription: Subscription; //subscription to observable to get employees list from requests-service
   private requestsSubscription: Subscription; //subscription to observable to get requests list from requests-service
+
+  /**
+   * The constructor subscribes to RequestsService Observables to get employees list and the list of all their requests
+   */
   constructor(private RequestsService: RequestsService){
 
     //subscription to observable to get employees list from requests-service
@@ -33,7 +36,9 @@ export class EmployeesComponent implements OnDestroy {
     this.RequestsService.reset_employees_requests_version();//force observable to emit data in the stream even if it has not changed from last check
   }
 
-  //get the number of requests made by specified employee (displayed in the user list)
+  /**
+   * Get the number of requests made by specified employee (displayed in the user list)
+   */
   get_requests_number(id){
     if(!this.requests)return 0;
     var count = 0;
@@ -43,7 +48,9 @@ export class EmployeesComponent implements OnDestroy {
     return count;
   }
 
-  //get the number of pending requests made by specified employee (displayed in the user list)
+  /**
+   * Get the number of pending requests made by specified employee (displayed in the user list)
+   */
   get_pending_requests_number(id){
     if(!this.requests)return 0;
     var count = 0;
@@ -53,12 +60,17 @@ export class EmployeesComponent implements OnDestroy {
     return count;
   }
 
+  /**
+   * Unsubscription from requests-service observables
+   */
   ngOnDestroy() {
-    //unsubscription from requests-service observables
     this.employeesSubscription.unsubscribe();
     this.requestsSubscription.unsubscribe();
   }
 
+  /**
+   * Simple name sorting applied to Employees List when received from RequestsService's observable flow
+   */
   sort_employees(employees){
     var found = true;
     var temp;

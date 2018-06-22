@@ -9,10 +9,9 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import  swal from 'sweetalert';
 import * as config from './config.json';
 
-/*
-This service can be used for the user-related funtionality like login, logout, token and user info management.
+/**
+*This service can be used for the user-related funtionality like login, logout, token and user info management.
 */
-
 @Injectable()
 export class UserService {
     private api : string; //api base url
@@ -26,6 +25,9 @@ export class UserService {
     private supervisions : SupervisionType[] = [];//list of supervisions couples (id_user, id_boss)
     private users: UserType[] = [];//list of users
 
+    /**
+     * The constructor creates 2 observables to get the lists of users and supervisions from backend
+     */
     constructor(private BlockScrollService: BlockScrollService, private cookieService: CookieService, private httpClient: HttpClient, public snackBar: MatSnackBar) {
         this.api = (<any>config).api;
         this.load_cookies();
@@ -70,7 +72,9 @@ export class UserService {
          });
     }
 
-    //This function is called when user compiles the form for add a new user
+    /**
+    * This function is called when user compiles the form for add a new user
+    */
     add_user(user){
       this.httpClient.post<RegisterResponseType>(this.api + 'users', user)
       .subscribe(data=> {
@@ -93,7 +97,9 @@ export class UserService {
       });
     }
 
-    //This function is used by users management component to show boss complete name (name + surname) for each user (if it's set)
+    /**
+     *This function is used by users management component to show boss complete name (name + surname) for each user (if it's set)
+     */
     get_boss_name(id_employee){
         //search for user in supervisions list
         for (var i = 0; i < this.supervisions.length; i++){
@@ -114,7 +120,9 @@ export class UserService {
         return false;
     }
 
-    //get complete name (name + surname) of the user
+    /**
+     * Get complete name (name + surname) of the user
+     */
     get_name(){
       if(this.get_login_status() == true){
         return this.user.name + " " + this.user.surname
@@ -123,12 +131,16 @@ export class UserService {
       }
     }
 
-    //get info of the user
+    /**
+     * Get info of the user
+     */
     get_user(){
       return this.user;
     }
 
-    //return info of the user selected by his id, if not found returns info of the logged-in user
+    /**
+     * Return info of the user selected by his id, if not found returns info of the logged-in user
+     */
     get_user_by_id(id){
       var me;
       for (var i = 0; i < this.users.length; i++){
@@ -138,20 +150,27 @@ export class UserService {
       return me;
     }
 
-    //get users list holded by userservice instance
+    /**
+     * Get users list holded by user-service instance
+     */
     get_users(){
         return this.users;
     }
 
+    /**
+     * If set, return the authentication token
+     */
     get_token(){
-      if(this.logged_in && this.token){ //if set, return the authentication token
+      if(this.logged_in && this.token){
         return this.token;
       }
       return "";
     }
 
+    /**
+     * This method checks if cookies are set, if they are load them
+     */
     load_cookies(){
-        //check if cookies are set
         if(this.cookieService.check('user') && this.cookieService.check('token') && this.cookieService.check('logged_in') && this.cookieService.get('logged_in') == "true"){
             //load saved values from cookies
             this.user = JSON.parse(this.cookieService.get('user'));
@@ -160,6 +179,9 @@ export class UserService {
         }
     }
 
+    /**
+     * This Method uses swal to show a confirm modal, and if the user click 'ok' clears login data and cookies
+     */
     logout(){
       swal({ //use swal to show a confirm modal
         title: "Conferma",
@@ -177,18 +199,25 @@ export class UserService {
       });
     }
 
-    //This method is called when a new subscription to users$ observable is registered, it forces to send the value even this has not changed, so new subscribers can get the value
+    /**
+     * This method is called when a new subscription to users$ observable is registered, it forces to send the value even this has not changed, so new subscribers can get the value
+     */
     reset_version(){
       this.users_version = ""; //setting version code in this way the value will be sent in observable flow in next check for changes
     }
 
+    /**
+     * Saves Login data in cookies
+     */
     save_cookies(){
         this.cookieService.set( 'logged_in', 'true' );
         this.cookieService.set( 'token', this.token );
         this.cookieService.set( 'user', JSON.stringify(this.user) );
     }
 
-    //Send request to backend to add/update supervision entry for specified employee/boss
+    /**
+     * Sends a request to backend to add/update supervision entry for specified employee/boss couple
+     */
     set_boss(id_user, id_boss, bottomsheetref){
         var post = {"user":id_user, "boss": id_boss};
         this.httpClient.post<SuccessResponseType>(this.api + 'users/set_boss/', post)
@@ -213,7 +242,9 @@ export class UserService {
         bottomsheetref.dismiss(); //close bottom sheet (boss choosing list) after sending the request
     }
 
-    //send authentication request to backend, providing credentials got through the login form
+    /**
+     * Sends authentication request to backend, providing credentials got through the login form
+     */
     try_login(email, password){
       this.httpClient.get<LogResponseType>(this.api + 'authenticate', {
       headers: new HttpHeaders().set('Authorization', "Basic " + btoa(email + ':' + password)), //basic authentication, base-64 encoded string <email>:<password>

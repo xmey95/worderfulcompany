@@ -3,9 +3,11 @@ import { Component, Input, NgModule, OnChanges, SimpleChanges } from '@angular/c
 import { RequestsService } from '../requests.service';
 import { RequestType, UserType } from '../../interfaces';
 
-/*
-  This Component shows a series of charts getting data from 2 input array (requests and employees). It is used in admin section for absence requests
-*/
+/**
+ * This Component shows a series of charts getting data from 2 input array (requests and employees). It is used in admin section for absence requests
+ *
+ * NOTE: Chart components got from ngx-charts: https://swimlane.gitbook.io/ngx-charts/v/docs-test/
+ */
 @Component({
   selector: 'request-charts',
   templateUrl: './request-charts.component.html',
@@ -13,8 +15,8 @@ import { RequestType, UserType } from '../../interfaces';
               ]
 })
 export class RequestChartsComponent implements OnChanges {
-  @Input() general: boolean;
-  @Input() requests: RequestType[]; //all the Requests
+  @Input() general: boolean; //It is true when component is in the general overview of employees and not in the single-employee page
+  @Input() requests: RequestType[]; //All the requests
   @Input() employees: UserType[]; //all the Employees of the user
   monthly_data: any[]; //data for vertical chart, derived from list containing all requests
   cards_data: any[]; //data for number cards chart, derived from requests list
@@ -31,15 +33,19 @@ export class RequestChartsComponent implements OnChanges {
   year_filter: boolean = false; //filter on year for evaluating charts data
   year_selected: number = 2018;
 
+  /**
+   * The constructor processes input requests and employees lists to get data for the charts
+   */
   constructor(){
-    //process requests and employees lists to get data for the charts
     this.monthly_data = this.make_monthly_data();
     this.cards_data = this.make_cards_data();
     this.pie_data = this.make_pie_data();
     this.users_data = this.make_users_data();
   }
 
-  //get the total number of absences (used for card charts in single employee page)
+  /**
+   * Get the total number of absences (used for card charts in single employee page)
+   */
   absence_days(){
     if(!this.requests)return 0;
     var count = 0;
@@ -50,7 +56,9 @@ export class RequestChartsComponent implements OnChanges {
     return count;
   }
 
-  //calculate the length (in days) of the absence request
+  /**
+   * Calculates the length (in days) of the absence request
+   */
   absence_len(start_date,end_date){
     var start = new Date(start_date);
     var end = new Date(end_date);
@@ -60,7 +68,9 @@ export class RequestChartsComponent implements OnChanges {
     return diffDays +1; //return the number of days, we need to add one day because in the db end date is saved as the last day of absence
   }
 
-  //method used for the year filternig, if request has no day in the selected year return false
+  /**
+   * Method used for the year filternig, if request has no day in the selected year return false
+   */
   check_year_belonging(request,year){
     var start = new Date(request.start_date).getFullYear();
     var end = new Date(request.end_date).getFullYear();
@@ -68,7 +78,9 @@ export class RequestChartsComponent implements OnChanges {
     return false;
   }
 
-  //gget the number of days from last absence in requests list (just approved) this method is used only in the single-employee page
+  /**
+   * Get the number of days from last absence in requests list (just approved) this method is used only in the single-employee page
+   */
   days_from_last_absence(){
     if(!this.requests)return 0;
     var start;
@@ -91,7 +103,9 @@ export class RequestChartsComponent implements OnChanges {
     return diffDays-1; //we have to subtract one because end date of the absences is saved in the db as the 0:00 of the last day of absence
   }
 
-  //Get the number of thays of a request that are in a specified month (used for monthly report chart)
+  /**
+   * Get the number of thays of a request that are in a specified month (used for monthly report chart)
+   */
   days_in_month(request,month){
     var start = new Date(request.start_date);
     var end = new Date(request.end_date);
@@ -159,7 +173,9 @@ export class RequestChartsComponent implements OnChanges {
     }
   }
 
-  //Get the number of thays of a request that are in the selected year (used for user-absences chart if year filter is activated)
+  /**
+   * Get the number of thays of a request that are in the selected year (used for user-absences chart if year filter is activated)
+   */
   days_in_selected_year(start_date, end_date){
     var start = new Date(start_date);
     var end = new Date(end_date);
@@ -189,7 +205,9 @@ export class RequestChartsComponent implements OnChanges {
     }
   }
 
-  //Get the number of absences of a specified employee (used in the general overview)
+  /**
+   * Get the number of absences of a specified employee (used in the general overview)
+   */
   get_absence_days(id){
     var count = 0;
     for(var i = 0; i < this.requests.length; i++){
@@ -205,7 +223,9 @@ export class RequestChartsComponent implements OnChanges {
     return count;
   }
 
-  //Get the number of days of the request that have specified reason and are in the specified month (used for monthly report)
+  /**
+   * Get the number of days of the request that have specified reason and are in the specified month (used for monthly report)
+   */
   get_monthly_absences_with_reason(month,reason){
     if(!this.requests)return 0;
     var count = 0;
@@ -224,7 +244,9 @@ export class RequestChartsComponent implements OnChanges {
     return count;
   }
 
-  //get the number of pending request from requests list (used in card chart)
+  /**
+   * Get the number of pending request from requests list (used in card chart)
+   */
   get_pending_number(){
     if(!this.requests)return 0;
     var count = 0;
@@ -236,7 +258,9 @@ export class RequestChartsComponent implements OnChanges {
     return count;
   }
 
-  //get the number of refused request from requests list (used in card chart)
+  /**
+   * Get the number of refused request from requests list (used in card chart)
+   */
   get_refused_number(){
     if(!this.requests)return 0;
     var count = 0;
@@ -248,7 +272,9 @@ export class RequestChartsComponent implements OnChanges {
     return count;
   }
 
-  //Get the number of absences in the current day, used in card chart (only in general overview)
+  /**
+   * Get the number of absences in the current day, used in card chart (only in general overview)
+   */
   get_today_absences(){
     if(!this.requests) return 0;
     var today = new Date();
@@ -264,13 +290,17 @@ export class RequestChartsComponent implements OnChanges {
     return count;
   }
 
-  //check device screen dimnsion to hide some contents
+  /**
+   * Check device screen dimEnsion to hide some contents
+   */
   is_mobile_device(){
     if(window.screen.width>766)return false;
     return true;
   }
 
-  //Get data for cards chart
+  /**
+   * Creates data object to be injected in cards chart
+   */
   make_cards_data(){
     var req_number = this.requests ? this.requests.length : 0;
     var employees_number = this.employees ? this.employees.length : 0;
@@ -324,7 +354,9 @@ export class RequestChartsComponent implements OnChanges {
 
   }
 
-  //Get data for monthly report chart
+  /**
+   * Creates data object to be injected in monthly report chart
+   */
   make_monthly_data(){
     var data = [
       {
@@ -585,7 +617,9 @@ export class RequestChartsComponent implements OnChanges {
     return data;
   }
 
-  //Get data for pie chart, [reason-number of requests] couples
+  /**
+   * Creates data object to be injected in pie chart
+   */
   make_pie_data(){
     var ferie = 0;
     var malattia = 0;
@@ -630,7 +664,9 @@ export class RequestChartsComponent implements OnChanges {
     ];
   }
 
-  //Get data for usrs absence chart (only in general overview)
+  /**
+   * Creates data object to be injected in absence-days chart (used in general overview only)
+   */
   make_users_data(){
     var res = [];
     if(!this.employees || !this.requests) return res;
@@ -645,14 +681,18 @@ export class RequestChartsComponent implements OnChanges {
     return res;
   }
 
-  //Get the number of days in the month
+  /**
+   * Get the number of days in the month
+   */
   month_days(month){
     if(month == 3 || month == 5 || month == 8 || month == 10) return 30;
     if(month == 1)return 28;
     return 31;
   }
 
-  //Some input changed, refresh all charts data
+  /**
+   * Method called when some input changes, refreshes all charts data
+   */
   ngOnChanges(changes: SimpleChanges) {
     this.monthly_data = this.make_monthly_data();
     this.cards_data = this.make_cards_data();
@@ -660,14 +700,18 @@ export class RequestChartsComponent implements OnChanges {
     this.users_data = this.make_users_data();
   }
 
-  //reload charts data, called after year filter selection
+  /**
+   * This method reloads charts data, it is called after year filter selection
+   */
   reload_data(){
     this.monthly_data = this.make_monthly_data();
     this.pie_data = this.make_pie_data();
     this.users_data = this.make_users_data();
   }
 
-  //Simple sorting of user absences data, by the number of absence-days
+  /**
+   * Simple sorting of user absences data, by the number of absence-days
+   */
   sort_list(list){
     var found = true;
     var temp;
@@ -685,7 +729,9 @@ export class RequestChartsComponent implements OnChanges {
     return list;
   }
 
-  //Enable/Disable pending state filter, then reload charts data
+  /**
+   * Enable/Disable pending state filter, then reload charts data
+   */
   pending_toggle_changed(val){
     this.consider_pending = val.checked;
     this.monthly_data = this.make_monthly_data();
@@ -693,7 +739,9 @@ export class RequestChartsComponent implements OnChanges {
     this.users_data = this.make_users_data();
   }
 
-  //Enable/Disable year filter, then reload charts data
+  /**
+   * Enable/Disable year filter, then reload charts data
+   */
   year_toggle_changed(val){
     this.year_filter = val.checked;
     this.monthly_data = this.make_monthly_data();

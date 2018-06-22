@@ -10,7 +10,9 @@ export class SidebarComponent {
   @Output() toggle = new EventEmitter(); //emitter to outer component to order the change of sidebar status
   constructor() { }
 
-  //order to outer component to change sidebar status
+  /**
+   * Emits an output to outer component in ordrd to change sidebar status
+   */
   toggle_sidebar(){
     this.toggle.emit();
   }

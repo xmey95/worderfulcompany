@@ -4,10 +4,11 @@ import {MAT_BOTTOM_SHEET_DATA, MatBottomSheet, MatBottomSheetRef} from '@angular
 import { UserType } from '../interfaces';
 import { Subscription } from 'rxjs';
 
-/*
-  This component is used to show a list of users in order to make user chose new boss for previously selected user
-  NOTE: base component code got from Angular Material
-*/
+/**
+ * This component is used to show a list of users in order to make user chose new boss for previously selected user (data of the selected user (employee) are injected from outer component)
+ *
+ * NOTE: base component code got from Angular Material
+ */
 @Component({
   selector: 'bottom-list',
   templateUrl: './bottom-list.component.html',
@@ -15,16 +16,19 @@ import { Subscription } from 'rxjs';
 export class BottomListComponent {
   constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: any, private bottomSheetRef: MatBottomSheetRef<BottomListComponent>, private UserService: UserService) {
   }
-  //Data of the selected user (employee) are injected from outer component, when user selects new boss the following function is called
+
+  /**
+   * When user selects new boss from the list this function is called to send a request to backend
+   */
   set_boss(id_user, id_boss){
     //UserService's set_boss method is called, component ref is passed to allow to close this list after the submission of the request to the backend
     this.UserService.set_boss(id_user, id_boss, this.bottomSheetRef);
   }
 }
 
-/*
-  Users Management page, in this page the user can add new users, set boss for any user and see a complete list of users
-*/
+/**
+ * Users Management page, in this page the user can add new users, set boss for any user and see a complete list of users
+ */
 @Component({
   selector: 'manage-users',
   templateUrl: './manage-users.component.html',
@@ -45,7 +49,9 @@ export class ManageUsersComponent {
   constructor(private bottomSheet: MatBottomSheet, private UserService: UserService) {
   }
 
-  //This function is called when submit button of the form is clicked
+  /**
+   * This function is called when submit button of the form is clicked
+   */
   add_user(){
     var user = {
       "name": this.name,
@@ -64,7 +70,9 @@ export class ManageUsersComponent {
     this.password2 = null;
   }
 
-  //used in the template to show the total number of users
+  /**
+   * Method used in the template to show the total number of users
+   */
   get_number(){
     if(this.number){
       return '(' + this.number + ')';
@@ -72,7 +80,9 @@ export class ManageUsersComponent {
     else return "";
   }
 
-  //This function is called when set_boss button is clicked for some user in the table
+  /**
+   * This function is called when set_boss button is clicked for some user in the table, it opens the bottom-list for boss selection
+   */
   openBottomSheet(employee){
     var array = this.UserService.get_users(); //full list of users got from UserService
     var users = [];
@@ -88,7 +98,9 @@ export class ManageUsersComponent {
     });
   }
 
-  //control for password fields (they have to hold the same value)
+  /**
+   * Control for password fields (they have to hold the same value)
+   */
   password_confirmed(){
     if(this.password != this.password2){
       if(!((!this.password && this.password=="") || (this.password=="" && !this.password))){
@@ -98,22 +110,30 @@ export class ManageUsersComponent {
     return true;
   }
 
-  //handler for inner component (user-table) emission: it contains the number of users
+  /**
+   * Handler for inner component (user-table) emission: the emitted values is the number of users
+   */
   set_number(val){
     this.number=val;
   }
 
-  //makes password field's content visible or make it hidden again
+  /**
+   * Makes password field's content visible or make it hidden again
+   */
   toggle_show_password(){
     this.showPassword = !this.showPassword;
   }
 
-  //makes password2 field's content visible or make it hidden again
+  /**
+   * Makes password2 field's content visible or make it hidden again
+   */
   toggle_show_password2(){
     this.showPassword2 = !this.showPassword2;
   }
 
-  //Simple validation for add-user form, all fields must be not null and passwords must be equals
+  /**
+   * Simple validation for add-user form, all fields must be not null and passwords must be equals
+   */
   validate(){
     if(!this.name || !this.password || !this.email || !this.surname || this.name == "" || this.surname == "" || this.email == "" || this.password == ""){
       return false;

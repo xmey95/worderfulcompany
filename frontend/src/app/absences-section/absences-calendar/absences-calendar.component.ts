@@ -8,6 +8,8 @@ import { UserService } from '../../user.service';
 import { RequestType } from '../../interfaces';
 import * as config from '../../config.json';
 
+
+//colors for absence indicators, it changes according to request's state
 const colors: any = {
   red: { //refused requests
     primary: '#ad2121',
@@ -23,9 +25,11 @@ const colors: any = {
   }
 };
 
-/*
-  Absences calendar, for every day are displayed all the approved, refused and pending requests for absences
-*/
+/**
+ * Absences calendar, for every day are displayed all the approved, refused and pending requests for absences
+ *
+ * NOTE: Component base code got from angular-calendar: https://mattlewis92.github.io/angular-calendar/docs/
+ */
 @Component({
   selector: 'absences-calendar',
   templateUrl: './absences-calendar.component.html',
@@ -39,6 +43,9 @@ export class AbsencesCalendarComponent implements OnDestroy{
   private activeDayIsOpen: boolean = true; //If true the list of absences for the active day is shown
   private state_filter: number = -1; //value of the state filter (-1 means no filter)
 
+  /**
+   * The constructor registers a new subscription to RequestsService's observable to get the list of all the absence requests in the company
+   */
   constructor(public dialog: MatDialog, private RequestsService: RequestsService, private UserService: UserService) {
     //subscription to observable to get requests list from requests-service
     this.requestsSubscription = this.RequestsService.all_requests$.subscribe((data)=>{
@@ -48,8 +55,9 @@ export class AbsencesCalendarComponent implements OnDestroy{
     this.RequestsService.reset_all_requests_version();//force observable to emit data in the stream even if it has not changed from last check
   }
 
-  //Handler for clicks on a day of the calendar
-  //NOTE: Code got from angular-calendar demo: https://mattlewis92.github.io/angular-calendar/docs/
+  /**
+   * Handler for clicks on a day of the calendar, if opens/closes dayly-absence list for the clicked day
+   */
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       if ((isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) || events.length === 0) {
@@ -61,7 +69,9 @@ export class AbsencesCalendarComponent implements OnDestroy{
     }
   }
 
-  //This function get a list of requests and map it into an CalendarEvent List that can be used as input for the calendar
+  /**
+   * This method gets a list of requests and maps it into an CalendarEvent List that can be used as input for the calendar
+   */
   make_event_list(){
     var res = [];
     var user;
@@ -91,12 +101,16 @@ export class AbsencesCalendarComponent implements OnDestroy{
     this.events = res;
   }
 
+  /**
+   * Unsubscription from requests-service observable
+   */
   ngOnDestroy() {
-    //unsubscription from requests-service observable
     this.requestsSubscription.unsubscribe();
   }
 
-  //method to open request-details dialog, data of the selected request are injected into it
+  /**
+   * This opens request-details dialog, data of the selected request are injected into it
+   */
   openDialog(event): void {
      let dialogRef = this.dialog.open(RequestDetailsComponent, {
        data: { request: event.request }
@@ -104,9 +118,9 @@ export class AbsencesCalendarComponent implements OnDestroy{
    }
 }
 
-/*
-  This is the dialog component, it contains the info of the selected request
-*/
+/**
+ * This is the dialog component, it contains the info of the selected request
+ */
 @Component({
   selector: 'request-details',
   templateUrl: 'request-details/request-details.component.html',
@@ -118,27 +132,35 @@ export class RequestDetailsComponent {
     this.api = (<any>config).api;
   }
 
-  //Get the complete name of the user thet made the request
+  /**
+   * Get the complete name of the user thet made the request
+   */
   get_user_name(){
     var user = this.UserService.get_user_by_id(this.data.request.id_user);
     return user.surname + ' ' + user.name;
   }
 
-  //Get the label to be displayed according to the request state
+  /**
+   * Get the label to be displayed according to the request state
+   */
   get_state_label(state){
     if(state == 1) return 'Approvata';
     if(state == 2) return 'Rifiutata';
     return 'In Attesa di Conferma';
   }
 
-  //Get the class to change the color of request indicator according to the request state
+  /**
+   * Get the class to change the color of request indicator according to the request state
+   */
   get_state_label_class(state){
     if(state == 1) return 'green';
     if(state == 2) return 'red';
     return 'grey';
   }
 
-  //User clicked ok button, close the dialog
+  /**
+   * Method called when user clicks 'ok' button, just closes the dialog
+   */
   close(): void {
     this.dialogRef.close();
   }
