@@ -1,0 +1,20 @@
+<mat-horizontal-stepper [linear]="true" #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Inserisci il nome del sondaggio</ng-template>
+      <mat-form-field>
+        <input matInput [(ngModel)]="name" placeholder="Nome del sondaggio" formControlName="firstCtrl" required>
+      </mat-form-field>
+      <div>
+        <button mat-button (click)="goForward(stepper)" [disabled]="!firstFormGroup.valid">Prosegui</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup">
+    <ng-template matStepLabel>Fill out your address</ng-template>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    You are now done.
+  </mat-step>
+</mat-horizontal-stepper>

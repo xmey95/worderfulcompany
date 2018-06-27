@@ -23,6 +23,22 @@ export interface LogResponseType{
   token: string
 }
 
+export interface QuestionsResponseType{
+  success: boolean,
+  error: string,
+  questions: QuestionsType[]
+}
+
+export interface QuestionsType{
+  id: number,
+  question: string,
+  answer: string,
+  type: string,
+  step: number,
+  condition_answer: boolean,
+  id_survey: number
+}
+
 export interface RegisterResponseType{
   success: boolean,
   error: string
@@ -47,6 +63,12 @@ export interface RequestType{
 export interface SuccessResponseType{
   success: boolean,
   error: string
+}
+
+export interface SurveyCreationResponseType{
+  success: boolean,
+  error: string,
+  survey: number
 }
 
 export interface SupervisionsResponseType{

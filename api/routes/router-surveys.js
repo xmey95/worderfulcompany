@@ -85,10 +85,10 @@ router.route('/surveys').post(auth.isAuthenticated, function(req, res){
       // Use the connection
       var post  = {name: req.body.name, id_user: req.user.id};
       connection.query('INSERT INTO ?? SET ?', ['surveys', post], function (err, results, fields) {
-
+          var id = results.insertId;
           connection.release();
           if (err) return res.status(500).send(JSON.stringify({success:false, error:err}))
-          res.status(201).send(JSON.stringify({success:true, error:null}));
+          res.status(201).send(JSON.stringify({success:true, error:null, survey: id}));
 
       });
     });
@@ -163,9 +163,7 @@ router.route('/surveys/:survey').post(auth.isAuthenticated, function(req, res){
           return res.status(200).send(JSON.stringify({success:true, error:null}));
       });
   });
-});
-
-router.route('/surveys/:survey/:version').get(auth.isAuthenticated, function(req, res){
+}).get(auth.isAuthenticated, function(req, res){
   var questions = []
   pool.getConnection(function(err, connection) {
       // Use the connection
@@ -180,13 +178,7 @@ router.route('/surveys/:survey/:version').get(auth.isAuthenticated, function(req
 
           questions = results;
           connection.release();
-          if(req.params.version=='false'){
-            return res.status(200).send(JSON.stringify({success:true, error:null, survey: results, questions: questions}));
-          }else{
-            var string = JSON.stringify(results) + JSON.stringify(questions);
-            string = crypto.createHash('sha1').update(string).digest('hex');
-            return res.status(200).send(JSON.stringify({success:true, error:null, version: string}));
-          }
+          return res.status(200).send(JSON.stringify({success:true, error:null, survey: results, questions: questions}));
         });
 
       });

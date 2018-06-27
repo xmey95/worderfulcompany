@@ -25,10 +25,12 @@ import { MatBottomSheetModule,
          MatSelectModule,
          MatSlideToggleModule,
          MatSnackBarModule,
+         MatStepperModule,
          MatTableModule,
        } from '@angular/material';
 import { HeaderComponent } from './header/header.component';
 import { RequestsService } from './absences-section/requests.service';
+import { RequestsSurveysService } from './surveys-section/requests.service';
 import { SidebarComponent } from './sidebar/sidebar.component'
 import { UserService } from './user.service';
 import { BlockScrollService } from './block-scroll.service';
@@ -46,6 +48,7 @@ import { EmployeesComponent } from './absences-section/employees/employees.compo
 import { RequestChartsComponent } from './absences-section/request-charts/request-charts.component';
 import { EmployeeComponent } from './absences-section/employee/employee.component';
 import { AbsencesCalendarComponent, RequestDetailsComponent } from './absences-section/absences-calendar/absences-calendar.component';
+import { CreatesurveyComponent } from './surveys-section/createsurvey/createsurvey.component';
 registerLocaleData(localeIt, 'it');
 
 @NgModule({
@@ -68,7 +71,8 @@ registerLocaleData(localeIt, 'it');
     RequestChartsComponent,
     RequestDetailsComponent,
     EmployeeComponent,
-    AbsencesCalendarComponent
+    AbsencesCalendarComponent,
+    CreatesurveyComponent
   ],
   imports: [
     AppRoutingModule,
@@ -93,11 +97,12 @@ registerLocaleData(localeIt, 'it');
     MatSelectModule,
     MatSlideToggleModule,
     MatSnackBarModule,
+    MatStepperModule,
     MatTableModule,
     MatDialogModule,
     NgxChartsModule
   ],
-  providers: [{ provide: LOCALE_ID, useValue: 'it' }, BlockScrollService, CookieService, RequestsService, UserService],
+  providers: [{ provide: LOCALE_ID, useValue: 'it' }, BlockScrollService, CookieService, RequestsService, RequestsSurveysService, UserService],
   entryComponents: [BottomListComponent, ModifyRequestComponent, RequestDetailsComponent],
   bootstrap: [AppComponent]
 })
