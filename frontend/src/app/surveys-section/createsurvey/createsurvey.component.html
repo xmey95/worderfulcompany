@@ -14,7 +14,7 @@
     <ng-template matStepLabel>Fill out your address</ng-template>
     <div>
       <button mat-button (click)="forwardStep()" [disabled]="!questions || !questions.length > 0">Avanza di step</button>
-      <button mat-button (click)="goForwardEnd()" [disabled]="previous_questions && previous_questions.length > 0">Prosegui</button>
+      <button mat-button (click)="goForwardEnd(stepper)" [disabled]="!previous_questions || previous_questions.length == 0">Prosegui</button>
     </div>
     <form [formGroup]="secondFormGroup">
       <div>
@@ -37,7 +37,7 @@
       </div>
       <div *ngIf="condition">
         <mat-form-field>
-          <mat-select [(value)]="previous_question" (selectionChange)="fillanswerslist(previous_question)" formControlName="pq">
+          <mat-select placeholder="Domanda" [(value)]="previous_question" (selectionChange)="fillanswerslist(previous_question)" formControlName="pq">
             <mat-option>None</mat-option>
             <mat-option *ngFor="let question of previous_questions" [value]="question">
               {{question.question}}
@@ -47,7 +47,7 @@
       </div>
       <div *ngIf="condition && previous_answers">
         <mat-form-field>
-          <mat-select [(value)]="previous_answer" formControlName="pa">
+          <mat-select placeholder="Risposta" [(value)]="previous_answer" formControlName="pa">
             <mat-option>None</mat-option>
             <mat-option *ngFor="let answer of previous_answers" [value]="answer">
               {{answer}}

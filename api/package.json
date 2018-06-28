@@ -29,8 +29,6 @@
     "url": "https://github.com/xmey95/worderfulcompany",
     "sampleUrl": "https://github.com/xmey95/worderfulcompany",
     "description": "",
-    "order": [
-      "General"
-    ]
+    "order": ["General"]
   }
 }
