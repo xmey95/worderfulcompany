@@ -21,23 +21,25 @@ export class RequestsSurveysService {
         this.api = (<any>config).api;
     }
 
-    list_previous_questions(survey : number) : QuestionsType[] {
-      var url = this.api + "surveys/" + survey;
-      this.HttpClient.get<QuestionsResponseType>(url, {headers: new HttpHeaders().set('Authorization', "bearer " + this.UserService.get_token()),
+    create_survey(name : string) {
+      var url = this.api + "surveys/surveys";
+      //new request's data
+      var post = {
+        "name" : name
+      }
+      //http request to backend (with authorization header containing the token got from UserService)
+      this.HttpClient.post<SurveyCreationResponseType>(url,
+      post,  {headers: new HttpHeaders().set('Authorization', "bearer " + this.UserService.get_token()),
     }).subscribe(data => {
-        if(!data.success){
-          swal("Oops!", "Errore durante l'invio della richiesta!", "error");
-          if(data.error){
-            console.log(data.error);
-          }
-          return null;
+        if(data.success == true){
+          console.log(data.survey);
+          return data.survey;
         }
-        return data.questions;
+        return -1;
       },err =>{
         swal("Oops!", "Errore durante l'operazione!", "error");
         console.log(err);
-        return null;
+        return -1;
       });
-      return null;
     }
 }

@@ -12,6 +12,60 @@
   </mat-step>
   <mat-step [stepControl]="secondFormGroup">
     <ng-template matStepLabel>Fill out your address</ng-template>
+    <div>
+      <button mat-button (click)="forwardStep()" [disabled]="!questions || !questions.length > 0">Avanza di step</button>
+      <button mat-button (click)="goForwardEnd()" [disabled]="previous_questions && previous_questions.length > 0">Prosegui</button>
+    </div>
+    <form [formGroup]="secondFormGroup">
+      <div>
+        <mat-form-field>
+          <textarea matInput placeholder="Domanda" [(ngModel)]="question" formControlName="question" required></textarea>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-radio-group formControlName="type" [(ngModel)]="type">
+          <mat-radio-button *ngFor="let type of types" [value]="type">{{type}}</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div *ngIf="type == 'Multiple'">
+        <mat-form-field>
+          <textarea matInput placeholder="Risposte (separate da virgola)" [(ngModel)]="answer" formControlName="answer"></textarea>
+        </mat-form-field>
+      </div>
+      <div *ngIf="step > 1">
+        <mat-checkbox [(ngModel)]="condition" formControlName="check">Domanda condizionale</mat-checkbox>
+      </div>
+      <div *ngIf="condition">
+        <mat-form-field>
+          <mat-select [(value)]="previous_question" (selectionChange)="fillanswerslist(previous_question)" formControlName="pq">
+            <mat-option>None</mat-option>
+            <mat-option *ngFor="let question of previous_questions" [value]="question">
+              {{question.question}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div *ngIf="condition && previous_answers">
+        <mat-form-field>
+          <mat-select [(value)]="previous_answer" formControlName="pa">
+            <mat-option>None</mat-option>
+            <mat-option *ngFor="let answer of previous_answers" [value]="answer">
+              {{answer}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+    <div>
+      <button mat-button (click)="insertQuestion()" [disabled]="!secondFormGroup.valid">Inserisci</button>
+    </div>
+    <div *ngIf="questions">
+      <mat-card *ngFor="let question of questions">
+        <h2>Domanda: {{question.question}}</h2>
+        <p>Risposta: {{question.answer}}</p>
+        <p>Tipo: {{question.type}}</p>
+      </mat-card>
+    </div>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>

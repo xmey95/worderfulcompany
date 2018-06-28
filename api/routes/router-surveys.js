@@ -94,7 +94,7 @@ router.route('/surveys').post(auth.isAuthenticated, function(req, res){
     });
 });
 
-router.route('/surveys/:version').get(auth.isAuthenticated, function(req, res){
+router.route('/allsurveys/:version').get(auth.isAuthenticated, function(req, res){
   pool.getConnection(function(err, connection) {
       // Use the connection
       connection.query('SELECT * FROM ??', ['surveys'], function (err, results, fields) {

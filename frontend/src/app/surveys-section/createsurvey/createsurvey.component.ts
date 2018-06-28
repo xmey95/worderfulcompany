@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material';
 import { RequestsSurveysService } from '../requests.service';
-import { QuestionsType, SurveyCreationResponseType } from '../../interfaces'
+import { QuestionsType, SurveyCreationResponseType, QuestionsResponseType, SuccessResponseType } from '../../interfaces'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, interval } from 'rxjs';
 import { switchMap, map, share, filter } from 'rxjs/operators';
@@ -21,12 +21,27 @@ export class CreatesurveyComponent implements OnInit {
   name : string;
   survey : any;
 
-  previous_questions : QuestionsType[]
+  types : string[] = ['Open', 'Multiple'];
+
+  question : string;
+  answer : string;
+  type : string;
+  step : number = 1;
+  condition : boolean = false;
+
+  previous_question : number;
+  previous_answer : string;
+
+  questions : any;
+
+  previous_questions : QuestionsType[];
+  previous_answers : string[];
 
   private api : string; //api base url
 
   constructor(private _formBuilder: FormBuilder, private RequestsSurveysService: RequestsSurveysService, private UserService: UserService,private HttpClient: HttpClient) {
     this.api = (<any>config).api;
+    this.questions = [];
   }
 
   ngOnInit() {
@@ -34,7 +49,12 @@ export class CreatesurveyComponent implements OnInit {
       firstCtrl: ['', Validators.required]
     });
     this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
+      question: ['', Validators.required],
+      answer: [''],
+      type: [''],
+      check: [''],
+      pq: [''],
+      pa: ['']
     });
   }
 
@@ -56,6 +76,85 @@ export class CreatesurveyComponent implements OnInit {
       console.log(err);
     });
     stepper.next();
+  }
+
+  insertQuestion(){
+    var question = {
+      question : this.question,
+      answer : "",
+      type : this.type,
+      condition: this.condition,
+      previous_question : -1,
+      previous_answer : ""
+    }
+
+    if(this.condition == true){
+      question.previous_question = this.previous_question;
+      question.previous_answer = this.previous_answer;
+    }
+
+    if(this.type == "Multiple"){
+      question.answer = this.answer;
+    }
+
+    this.question = "";
+    this.answer = "";
+    this.previous_answer = "";
+    this.previous_question = null;
+
+    this.questions.push(question);
+  }
+
+  forwardStep(){
+    var url = this.api + "surveys/surveys/" + this.survey;
+    //new request's data
+    var post = {
+      "questions" : JSON.stringify(this.questions)
+    }
+    //http request to backend (with authorization header containing the token got from UserService)
+    this.HttpClient.post<SuccessResponseType>(url,
+    post,  {headers: new HttpHeaders().set('Authorization', "bearer " + this.UserService.get_token()),
+  }).subscribe(data => {
+      if(!data.success){
+        console.log(data.error)
+        return;
+      }
+      this.upgradeQuestionsList();
+      this.step++;
+    },err =>{
+      swal("Oops!", "Errore durante l'operazione!", "error");
+      console.log(err);
+    });
+  }
+
+  goForwardEnd(){
+
+  }
+
+  fillanswerslist(question){
+    this.previous_answers = question.answer.split(',');
+  }
+
+  upgradeQuestionsList(){
+    var url = this.api + "surveys/surveys/" + this.survey;
+    console.log(url);
+    this.HttpClient.get<QuestionsResponseType>(url, {headers: new HttpHeaders().set('Authorization', "bearer " + this.UserService.get_token()),
+  }).subscribe(data => {
+      if(!data.success){
+        swal("Oops!", "Errore durante l'invio della richiesta!", "error");
+        if(data.error){
+          console.log(data.error);
+        }
+        return;
+      }
+      this.previous_questions = data.questions;
+      console.log(JSON.stringify(data))
+    },err =>{
+      swal("Oops!", "Errore durante l'operazione!", "error");
+      console.log(err);
+      return;
+    });
+    return;
   }
 
 }
