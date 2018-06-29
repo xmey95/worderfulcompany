@@ -36,8 +36,8 @@ export class CreatesurveyComponent implements OnInit {
   previous_question: QuestionsType;
   previous_answer: string;
 
+  answers: string[];
   questions: any;
-
   previous_questions: QuestionsType[] = [];
   previous_answers: string[];
 
@@ -51,6 +51,7 @@ export class CreatesurveyComponent implements OnInit {
   ) {
     this.api = (<any>config).api;
     this.questions = [];
+    this.answers = [];
   }
 
   ngOnInit() {
@@ -65,6 +66,11 @@ export class CreatesurveyComponent implements OnInit {
       pq: [""],
       pa: [""]
     });
+  }
+
+  insertAnswer() {
+    this.answers.push(this.answer);
+    this.answer = "";
   }
 
   goForward(stepper: MatStepper) {
@@ -97,6 +103,7 @@ export class CreatesurveyComponent implements OnInit {
     var question = {
       question: this.question,
       answer: "",
+      answers: null,
       type: this.type,
       condition: "false",
       previous_question: -1,
@@ -110,11 +117,12 @@ export class CreatesurveyComponent implements OnInit {
     }
 
     if (this.type == "Multiple") {
-      question.answer = this.answer;
+      question.answer = this.answers.toString();
+      question.answers = this.answers;
     }
 
     this.question = "";
-    this.answer = "";
+    this.answers = [];
     this.previous_answer = "";
     this.previous_question = null;
 
@@ -122,36 +130,15 @@ export class CreatesurveyComponent implements OnInit {
   }
 
   forwardStep() {
-    var url = this.api + "surveys/surveys/" + this.survey;
-    //new request's data
-    var post = {
-      questions: JSON.stringify(this.questions)
-    };
-    //http request to backend (with authorization header containing the token got from UserService)
-    this.HttpClient.post<SuccessResponseType>(url, post, {
-      headers: new HttpHeaders().set(
-        "Authorization",
-        "bearer " + this.UserService.get_token()
-      )
-    }).subscribe(
-      data => {
-        if (!data.success) {
-          console.log(data.error);
-          return;
-        }
-        this.upgradeQuestionsList();
-        this.questions = [];
-        this.step++;
-      },
-      err => {
-        swal("Oops!", "Errore durante l'operazione!", "error");
-        console.log(err);
-      }
-    );
+    this.RequestsSurveysService.sendQuestions(this.survey, this.questions);
+    this.upgradeQuestionsList();
+    this.questions = [];
+    this.step++;
   }
 
   goForwardEnd(stepper: MatStepper) {
-    this.forwardStep();
+    this.question = "None";
+    if (this.questions && this.questions.length > 0) this.forwardStep();
     stepper.next();
   }
 
@@ -184,7 +171,6 @@ export class CreatesurveyComponent implements OnInit {
             this.previous_questions.push(data.questions[i]);
           }
         }
-        console.log(JSON.stringify(data));
       },
       err => {
         swal("Oops!", "Errore durante l'operazione!", "error");

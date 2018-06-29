@@ -5,7 +5,8 @@ import { switchMap, map, share, filter } from "rxjs/operators";
 import {
   SurveyCreationResponseType,
   QuestionsResponseType,
-  QuestionsType
+  QuestionsType,
+  SuccessResponseType
 } from "../interfaces";
 import * as config from "../config.json";
 import swal from "sweetalert";
@@ -28,30 +29,28 @@ export class RequestsSurveysService {
     this.api = (<any>config).api;
   }
 
-  create_survey(name: string) {
-    var url = this.api + "surveys/surveys";
+  sendQuestions(survey: string, questions: any) {
+    var url = this.api + "surveys/surveys/" + survey;
     //new request's data
     var post = {
-      name: name
+      questions: JSON.stringify(questions)
     };
     //http request to backend (with authorization header containing the token got from UserService)
-    this.HttpClient.post<SurveyCreationResponseType>(url, post, {
+    this.HttpClient.post<SuccessResponseType>(url, post, {
       headers: new HttpHeaders().set(
         "Authorization",
         "bearer " + this.UserService.get_token()
       )
     }).subscribe(
       data => {
-        if (data.success == true) {
-          console.log(data.survey);
-          return data.survey;
+        if (!data.success) {
+          console.log(data.error);
+          return;
         }
-        return -1;
       },
       err => {
         swal("Oops!", "Errore durante l'operazione!", "error");
         console.log(err);
-        return -1;
       }
     );
   }
