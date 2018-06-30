@@ -3,6 +3,7 @@ import { AppRoutingModule } from "./app-routing/app-routing.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule } from "@angular/platform-browser";
 import { CalendarModule } from "angular-calendar";
+import { FlexLayoutModule } from "@angular/flex-layout";
 import { HomeComponent } from "./home/home.component";
 import { HttpClientModule } from "@angular/common/http";
 import { LOCALE_ID, NgModule } from "@angular/core";
@@ -14,6 +15,7 @@ import {
   SidebarMenuItem
 } from "./sidebar/sidebar-body/sidebar-body.component";
 import {
+  MatBadgeModule,
   MatBottomSheetModule,
   MatButtonModule,
   MatButtonToggleModule,
@@ -24,6 +26,7 @@ import {
   MatDividerModule,
   MatExpansionModule,
   MatFormFieldModule,
+  MatIconModule,
   MatInputModule,
   MatListModule,
   MatNativeDateModule,
@@ -95,9 +98,11 @@ registerLocaleData(localeIt, "it");
     BrowserModule,
     BrowserAnimationsModule,
     CalendarModule.forRoot(),
+    FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    MatBadgeModule,
     MatBottomSheetModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -107,6 +112,7 @@ registerLocaleData(localeIt, "it");
     MatDividerModule,
     MatExpansionModule,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
     MatListModule,
     MatNativeDateModule,

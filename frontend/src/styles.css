@@ -2,10 +2,10 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 
-.cdk-overlay-container{
-  z-index:1010 !important;
+.cdk-overlay-container {
+  z-index: 1010 !important;
 }
 
-body{
+body {
   background: #f0f0f0;
 }
