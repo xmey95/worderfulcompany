@@ -1,0 +1,51 @@
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { RequestsSurveysService } from "../requests.service";
+import { Subscription } from "rxjs";
+import {} from "@angular/material";
+import { SurveyType, MySurveyType } from "../../interfaces";
+import * as config from "../../config.json";
+import swal from "sweetalert";
+
+@Component({
+  selector: "allsurveys",
+  templateUrl: "./allsurveys.component.html",
+  styleUrls: ["./allsurveys.component.css"]
+})
+export class AllsurveysComponent implements OnInit {
+  private allsurveys: SurveyType[]; //list of the surveys
+  private allsurveysSubscription: Subscription;
+  private mysurveys: MySurveyType[]; //list of my surveys
+  private mysurveysSubscription: Subscription;
+
+  constructor(private RequestsSurveysService: RequestsSurveysService) {
+    this.allsurveysSubscription = this.RequestsSurveysService.all_surveys$.subscribe(
+      surveys => {
+        this.allsurveys = surveys; //save received data
+      }
+    );
+
+    this.mysurveysSubscription = this.RequestsSurveysService.my_surveys$.subscribe(
+      surveys => {
+        this.mysurveys = surveys; //save received data
+      }
+    );
+
+    this.RequestsSurveysService.reset_all_surveys_version();
+    this.RequestsSurveysService.reset_my_surveys_version();
+  }
+
+  isSubmitted(survey_id: number) {
+    var submitted = this.mysurveys.filter(
+      survey => survey.id_survey == survey_id
+    );
+    if (submitted.length > 0) return true;
+    return false;
+  }
+
+  percentageSurveysSubmitted() {
+    var percentage = 100 / this.allsurveys.length;
+    return percentage * this.mysurveys.length;
+  }
+
+  ngOnInit() {}
+}

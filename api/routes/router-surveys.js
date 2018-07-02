@@ -164,6 +164,50 @@ router
     });
   });
 
+router
+  .route("/allsurveyssubmitted/:version")
+  .get(auth.isAuthenticated, function(req, res) {
+    pool.getConnection(function(err, connection) {
+      // Use the connection
+      connection.query(
+        "SELECT ?? FROM ?? WHERE ?? = ?",
+        ["id_survey", "surveyuser", "id_user", req.user.id],
+        function(err, results, fields) {
+          connection.release();
+          if (err)
+            return res
+              .status(500)
+              .send(JSON.stringify({ success: false, error: err }));
+          if (!results)
+            return res
+              .status(404)
+              .send(
+                JSON.stringify({ success: false, error: "SURVEYS_NOT_FOUND" })
+              );
+
+          if (req.params.version == "false") {
+            return res
+              .status(200)
+              .send(
+                JSON.stringify({ success: true, error: null, surveys: results })
+              );
+          } else {
+            var string = JSON.stringify(results);
+            string = crypto
+              .createHash("sha1")
+              .update(string)
+              .digest("hex");
+            return res
+              .status(200)
+              .send(
+                JSON.stringify({ success: true, error: null, version: string })
+              );
+          }
+        }
+      );
+    });
+  });
+
 //Add or delete a step in specified survey or view specified survey
 router
   .route("/surveys/:survey")
@@ -558,6 +602,38 @@ router
           }
         }
       );
+    });
+  });
+
+router
+  .route("/submitsurvey/:survey")
+  .post(auth.isAuthenticated, function(req, res) {
+    pool.getConnection(function(err, connection) {
+      // Use the connection
+      var post = {
+        id_user: req.user.id,
+        id_survey: req.params.survey
+      };
+      connection.query("INSERT INTO ?? SET ?", ["surveyuser", post], function(
+        err,
+        results,
+        fields
+      ) {
+        if (err)
+          return res
+            .status(500)
+            .send(JSON.stringify({ success: false, error: err }));
+        if (!results)
+          return res
+            .status(404)
+            .send(
+              JSON.stringify({ success: false, error: "SURVEY_NOT_FOUND" })
+            );
+        connection.release();
+        return res
+          .status(201)
+          .send(JSON.stringify({ success: true, error: null }));
+      });
     });
   });
 

@@ -16,6 +16,16 @@ export interface MenuItem {
   sub_menu: string[][];
 }
 
+export interface MySurveyType {
+  id_survey: number;
+}
+
+export interface MySurveysResponseType {
+  success: boolean;
+  error: string;
+  surveys: MySurveyType[];
+}
+
 export interface LogResponseType {
   success: boolean;
   error: string;
@@ -69,6 +79,18 @@ export interface SurveyCreationResponseType {
   success: boolean;
   error: string;
   survey: number;
+}
+
+export interface SurveyType {
+  id: number;
+  name: string;
+  id_user: number;
+}
+
+export interface SurveysResponseType {
+  success: boolean;
+  error: string;
+  surveys: SurveyType[];
 }
 
 export interface SupervisionsResponseType {

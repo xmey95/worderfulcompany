@@ -153,7 +153,7 @@ export class SidebarBodyComponent {
       sub_menu: [
         ["Crea Sondaggio", "surveys/createsurvey"],
         ["Sondaggi (amministratore)", ""],
-        ["Tutti i Sondaggi", ""]
+        ["Tutti i Sondaggi", "surveys/allsurveys"]
       ]
     };
     this.items.push(obj);

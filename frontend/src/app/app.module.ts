@@ -71,6 +71,8 @@ import {
   CreatesurveyComponent,
   ModifyQuestionComponent
 } from "./surveys-section/createsurvey/createsurvey.component";
+import { AllsurveysComponent } from "./surveys-section/allsurveys/allsurveys.component";
+import { NgCircleProgressModule } from "ng-circle-progress";
 registerLocaleData(localeIt, "it");
 
 @NgModule({
@@ -95,7 +97,8 @@ registerLocaleData(localeIt, "it");
     RequestDetailsComponent,
     EmployeeComponent,
     AbsencesCalendarComponent,
-    CreatesurveyComponent
+    CreatesurveyComponent,
+    AllsurveysComponent
   ],
   imports: [
     AppRoutingModule,
@@ -128,7 +131,16 @@ registerLocaleData(localeIt, "it");
     MatStepperModule,
     MatTableModule,
     MatDialogModule,
-    NgxChartsModule
+    NgxChartsModule,
+    NgCircleProgressModule.forRoot({
+      // set defaults here
+      radius: 200,
+      outerStrokeWidth: 35,
+      innerStrokeWidth: 26,
+      outerStrokeColor: "#78C000",
+      innerStrokeColor: "#C7E596",
+      animationDuration: 300
+    })
   ],
   providers: [
     { provide: LOCALE_ID, useValue: "it" },
