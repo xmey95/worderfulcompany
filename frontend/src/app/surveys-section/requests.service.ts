@@ -29,6 +29,29 @@ export class RequestsSurveysService {
     this.api = (<any>config).api;
   }
 
+  deleteSurvey(survey: number) {
+    var url = this.api + "surveys/surveys/" + survey;
+    //http request to backend (with authorization header containing the token got from UserService)
+    this.HttpClient.delete<SuccessResponseType>(url, {
+      headers: new HttpHeaders().set(
+        "Authorization",
+        "bearer " + this.UserService.get_token()
+      )
+    }).subscribe(
+      data => {
+        if (!data.success) {
+          console.log(data.error);
+          return;
+        }
+        swal("Fatto!", "Sondaggio eliminato!", "success");
+      },
+      err => {
+        swal("Oops!", "Errore durante l'operazione!", "error");
+        console.log(err);
+      }
+    );
+  }
+
   sendQuestions(survey: string, questions: any) {
     var url = this.api + "surveys/surveys/" + survey;
     //new request's data
@@ -37,6 +60,50 @@ export class RequestsSurveysService {
     };
     //http request to backend (with authorization header containing the token got from UserService)
     this.HttpClient.post<SuccessResponseType>(url, post, {
+      headers: new HttpHeaders().set(
+        "Authorization",
+        "bearer " + this.UserService.get_token()
+      )
+    }).subscribe(
+      data => {
+        if (!data.success) {
+          console.log(data.error);
+          return;
+        }
+      },
+      err => {
+        swal("Oops!", "Errore durante l'operazione!", "error");
+        console.log(err);
+      }
+    );
+  }
+
+  modifyQuestion(question, parameters) {
+    var url = this.api + "surveys//questions/" + question;
+    //http request to backend (with authorization header containing the token got from UserService)
+    this.HttpClient.put<SuccessResponseType>(url, parameters, {
+      headers: new HttpHeaders().set(
+        "Authorization",
+        "bearer " + this.UserService.get_token()
+      )
+    }).subscribe(
+      data => {
+        if (!data.success) {
+          console.log(data.error);
+          return;
+        }
+      },
+      err => {
+        swal("Oops!", "Errore durante l'operazione!", "error");
+        console.log(err);
+      }
+    );
+  }
+
+  deleteQuestion(question) {
+    var url = this.api + "surveys//questions/" + question;
+    //http request to backend (with authorization header containing the token got from UserService)
+    this.HttpClient.delete<SuccessResponseType>(url, {
       headers: new HttpHeaders().set(
         "Authorization",
         "bearer " + this.UserService.get_token()

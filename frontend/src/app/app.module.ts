@@ -67,7 +67,10 @@ import {
   AbsencesCalendarComponent,
   RequestDetailsComponent
 } from "./absences-section/absences-calendar/absences-calendar.component";
-import { CreatesurveyComponent } from "./surveys-section/createsurvey/createsurvey.component";
+import {
+  CreatesurveyComponent,
+  ModifyQuestionComponent
+} from "./surveys-section/createsurvey/createsurvey.component";
 registerLocaleData(localeIt, "it");
 
 @NgModule({
@@ -83,6 +86,7 @@ registerLocaleData(localeIt, "it");
     ManageUsersComponent,
     UserTableComponent,
     LoginDialogComponent,
+    ModifyQuestionComponent,
     ModifyRequestComponent,
     MyAbsencesComponent,
     MyAbsencesListComponent,
@@ -137,6 +141,7 @@ registerLocaleData(localeIt, "it");
   entryComponents: [
     BottomListComponent,
     ModifyRequestComponent,
+    ModifyQuestionComponent,
     RequestDetailsComponent
   ],
   bootstrap: [AppComponent]

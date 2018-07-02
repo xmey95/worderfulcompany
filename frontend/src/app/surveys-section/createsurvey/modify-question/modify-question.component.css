@@ -1,0 +1,50 @@
+.dialog-box {
+  padding: 5px;
+  margin: auto;
+  left: 0;
+  right: 0;
+}
+
+.divider {
+  width: 80%;
+  margin: auto;
+  left: 0;
+  right: 0;
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
+@media (max-width: 766px) {
+  .dialog-box {
+    padding: 5px;
+  }
+  button {
+    margin: 8px;
+    background: #aaaaaa;
+  }
+}
+
+.buttons-margin {
+  margin-top: 15px;
+}
+
+.security-margin {
+  margin-top: 20px;
+}
+
+.security-margin-button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.security-margin-radio {
+  margin-right: 5px;
+}
+
+.security-margin-conditional {
+  margin-top: 15px;
+}
+
+.trash-icon {
+  margin-top: 5px;
+}
