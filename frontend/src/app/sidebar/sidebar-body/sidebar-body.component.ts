@@ -133,7 +133,7 @@ export class SidebarBodyComponent {
     };
     this.items.push(obj);
 
-    obj = {
+    /*obj = {
       //second item, rooms section
       name: "Sezione Aule",
       short_name: "Aule",
@@ -144,7 +144,7 @@ export class SidebarBodyComponent {
         ["Tutte le Aule", ""]
       ]
     };
-    this.items.push(obj);
+    this.items.push(obj);*/
 
     obj = {
       //third item, surveys section

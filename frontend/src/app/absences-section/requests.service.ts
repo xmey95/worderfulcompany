@@ -434,7 +434,7 @@ export class RequestsService {
         } else
           swal(
             "Fatto!",
-            "La richiesta è stata inviata correttamente",
+            "La richiesta è stata inviata correttamente. Riceverai una mail di conferma quando la tua richiesta verrà approvata o rifuitata",
             "success"
           );
       },
