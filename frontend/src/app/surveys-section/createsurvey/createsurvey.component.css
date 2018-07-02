@@ -1,0 +1,20 @@
+.buttons-margin {
+  margin-top: 15px;
+}
+
+.security-margin {
+  margin-top: 20px;
+}
+
+.security-margin-button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.security-margin-radio {
+  margin-right: 5px;
+}
+
+.security-margin-conditional {
+  margin-top: 15px;
+}

@@ -41,6 +41,8 @@ export class CreatesurveyComponent implements OnInit {
   previous_questions: QuestionsType[] = [];
   previous_answers: string[];
 
+  ArrayStep: number[];
+
   private api: string; //api base url
 
   constructor(
@@ -52,6 +54,7 @@ export class CreatesurveyComponent implements OnInit {
     this.api = (<any>config).api;
     this.questions = [];
     this.answers = [];
+    this.ArrayStep = [];
   }
 
   ngOnInit() {
@@ -77,7 +80,7 @@ export class CreatesurveyComponent implements OnInit {
     var url = this.api + "surveys/surveys";
     //new request's data
     var post = {
-      name: name
+      name: this.name
     };
     //http request to backend (with authorization header containing the token got from UserService)
     this.HttpClient.post<SurveyCreationResponseType>(url, post, {
@@ -121,7 +124,7 @@ export class CreatesurveyComponent implements OnInit {
       question.answers = this.answers;
     }
 
-    this.question = "";
+    this.question = "None";
     this.answers = [];
     this.previous_answer = "";
     this.previous_question = null;
@@ -133,11 +136,11 @@ export class CreatesurveyComponent implements OnInit {
     this.RequestsSurveysService.sendQuestions(this.survey, this.questions);
     this.upgradeQuestionsList();
     this.questions = [];
+    this.ArrayStep.push(this.step);
     this.step++;
   }
 
   goForwardEnd(stepper: MatStepper) {
-    this.question = "None";
     if (this.questions && this.questions.length > 0) this.forwardStep();
     stepper.next();
   }
@@ -166,11 +169,7 @@ export class CreatesurveyComponent implements OnInit {
           }
           return;
         }
-        for (var i = 0; i < data.questions.length; i++) {
-          if (data.questions[i].type == "Multiple") {
-            this.previous_questions.push(data.questions[i]);
-          }
-        }
+        this.previous_questions = data.questions;
       },
       err => {
         swal("Oops!", "Errore durante l'operazione!", "error");
@@ -179,5 +178,26 @@ export class CreatesurveyComponent implements OnInit {
       }
     );
     return;
+  }
+
+  multipleQuestions(): QuestionsType[] {
+    return this.previous_questions.filter(
+      question => question.type == "Multiple"
+    );
+  }
+
+  stepQuestions(step: number): QuestionsType[] {
+    return this.previous_questions.filter(question => question.step == step);
+  }
+
+  questionanswers(question: QuestionsType) {
+    return question.answer.split(",");
+  }
+
+  deleteBeforeInsert(question: any) {
+    var index = this.questions.indexOf(question);
+    if (index > -1) {
+      this.questions.splice(index, 1);
+    }
   }
 }
