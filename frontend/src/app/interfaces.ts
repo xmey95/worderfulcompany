@@ -10,6 +10,12 @@ export interface BossResponseType {
   boss: number;
 }
 
+export interface ConditionResponseType {
+  success: boolean;
+  error: string;
+  condition: string;
+}
+
 export interface MenuItem {
   name: string;
   short_name: string;
@@ -37,6 +43,8 @@ export interface QuestionsResponseType {
   success: boolean;
   error: string;
   questions: QuestionsType[];
+  survey: SurveyType;
+  step: any;
 }
 
 export interface QuestionsType {
@@ -47,6 +55,8 @@ export interface QuestionsType {
   step: number;
   condition_answer: boolean;
   id_survey: number;
+  answer_compile: string;
+  condition_confirmed: boolean;
 }
 
 export interface RegisterResponseType {

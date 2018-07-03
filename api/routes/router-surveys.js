@@ -208,6 +208,66 @@ router
     });
   });
 
+router
+  .route("/isconditioned/:id")
+  .get(auth.isAuthenticated, function(req, res) {
+    pool.getConnection(function(err, connection) {
+      // Use the connection
+      connection.query(
+        "SELECT * FROM ?? WHERE ?? = ?",
+        ["conditions", "id_question", req.params.id],
+        function(err, results, fields) {
+          if (err)
+            return res
+              .status(500)
+              .send(JSON.stringify({ success: false, error: err }));
+          if (!results)
+            return res
+              .status(404)
+              .send(JSON.stringify({ success: false, error: "NOT_FOUND" }));
+
+          var condition = results;
+          connection.query(
+            "SELECT * FROM ?? WHERE ?? = ? AND ?? = ?",
+            [
+              "answers",
+              "id_question",
+              condition[0].id_p_question,
+              "id_user",
+              req.user.id
+            ],
+            function(err, results, fields) {
+              connection.release();
+              if (err)
+                return res
+                  .status(500)
+                  .send(JSON.stringify({ success: false, error: err }));
+              if (!results)
+                return res
+                  .status(404)
+                  .send(JSON.stringify({ success: false, error: "NOT_FOUND" }));
+
+              var answer = results;
+              var condition_result = "false";
+              if (answer[0]) {
+                if (condition[0].answer == answer[0].answer) {
+                  condition_result = "true";
+                }
+              }
+              return res.status(200).send(
+                JSON.stringify({
+                  success: true,
+                  error: null,
+                  condition: condition_result
+                })
+              );
+            }
+          );
+        }
+      );
+    });
+  });
+
 //Add or delete a step in specified survey or view specified survey
 router
   .route("/surveys/:survey")
@@ -357,6 +417,8 @@ router
                 JSON.stringify({ success: false, error: "SURVEYS_NOT_FOUND" })
               );
 
+          var survey = results;
+
           connection.query(
             "SELECT * FROM ?? WHERE ?? = ?",
             ["questions", "id_survey", req.params.survey],
@@ -374,14 +436,35 @@ router
                 );
 
               questions = results;
-              connection.release();
-              return res.status(200).send(
-                JSON.stringify({
-                  success: true,
-                  error: null,
-                  survey: results,
-                  questions: questions
-                })
+
+              connection.query(
+                "SELECT MAX(??) AS ?? FROM ?? WHERE ?? = ?",
+                ["step", "step", "questions", "id_survey", req.params.survey],
+                function(err, results, fields) {
+                  if (err)
+                    return res
+                      .status(500)
+                      .send(JSON.stringify({ success: false, error: err }));
+                  if (!results)
+                    return res.status(404).send(
+                      JSON.stringify({
+                        success: false,
+                        error: "QUESTIONS_NOT_FOUND"
+                      })
+                    );
+
+                  var step = results;
+                  connection.release();
+                  return res.status(200).send(
+                    JSON.stringify({
+                      success: true,
+                      error: null,
+                      survey: survey,
+                      questions: questions,
+                      step: step
+                    })
+                  );
+                }
               );
             }
           );
@@ -730,7 +813,7 @@ router
   });
 
 router
-  .route("/answers/:question/:version")
+  .route("/answers/:question")
   .get(auth.isAuthenticated, function(req, res) {
     pool.getConnection(function(err, connection) {
       // Use the connection
@@ -749,24 +832,12 @@ router
                 JSON.stringify({ success: false, error: "QUESTIONS_NOT_FOUND" })
               );
           connection.release();
-          if (req.params.version == "false") {
-            return res
-              .status(200)
-              .send(
-                JSON.stringify({ success: true, error: null, answer: results })
-              );
-          } else {
-            var string = JSON.stringify(results);
-            string = crypto
-              .createHash("sha1")
-              .update(string)
-              .digest("hex");
-            return res
-              .status(200)
-              .send(
-                JSON.stringify({ success: true, error: null, version: string })
-              );
-          }
+
+          return res
+            .status(200)
+            .send(
+              JSON.stringify({ success: true, error: null, answer: results })
+            );
         }
       );
     });

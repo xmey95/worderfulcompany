@@ -1,0 +1,24 @@
+<mat-vertical-stepper [linear]="true" #stepper>
+  <mat-step *ngFor="let step of ArrayStep">
+    <form #Form="ngForm">
+    <div *ngIf="questions">
+      <div *ngFor="let question of stepQuestions(step)">
+      <mat-card *ngIf="question.condition_confirmed" class="security-margin">
+        <h3>{{question.question}}</h3>
+        <div *ngIf="question.type == 'Multiple'">
+          <mat-radio-group [(ngModel)]="question.answer_compile" name="{{question.id}}" required>
+            <div *ngFor="let answer of AnswersList(question)">
+              <mat-radio-button [value]="answer" class="security-margin-radio">{{answer}}</mat-radio-button>
+            </div>
+          </mat-radio-group>
+        </div>
+        <div *ngIf="question.type == 'Open'">
+          <textarea matInput placeholder="Scrivi la risposta..." [(ngModel)]="question.answer_compile" name="{{question.id}}" required></textarea>
+        </div>
+      </mat-card>
+    </div>
+    </div>
+    <button mat-button color="primary" [disabled]="!Form.form.valid" type="submit" class="buttons-margin" (click)="forwardStep(stepper, step)">Prosegui</button>
+  </form>
+  </mat-step>
+</mat-vertical-stepper>

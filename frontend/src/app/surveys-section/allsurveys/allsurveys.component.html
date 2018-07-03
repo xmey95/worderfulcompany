@@ -11,6 +11,7 @@
           <mat-icon mat-list-icon *ngIf="isSubmitted(survey.id)">done</mat-icon>
           <h4 mat-line>{{survey.name}}</h4>
           <p mat-line *ngIf="isSubmitted(survey.id)" class="green"> Completato </p>
+          <button mat-raised-button color="primary" class="button-survey" (click)="openSurvey(survey.id)">Go</button>
         </mat-list-item>
       </mat-list>
     </div>

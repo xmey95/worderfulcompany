@@ -91,6 +91,9 @@ var setup_db = () => {
     connection.query(booking, null, function(err, results, fields) {
       if (err) console.log(err.code);
     });
+    connection.query(surveyuser, null, function(err, results, fields) {
+      if (err) console.log(err.code);
+    });
     connection.release();
   });
 };

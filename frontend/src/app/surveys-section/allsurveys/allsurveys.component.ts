@@ -5,6 +5,7 @@ import {} from "@angular/material";
 import { SurveyType, MySurveyType } from "../../interfaces";
 import * as config from "../../config.json";
 import swal from "sweetalert";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "allsurveys",
@@ -17,7 +18,10 @@ export class AllsurveysComponent implements OnInit {
   private mysurveys: MySurveyType[]; //list of my surveys
   private mysurveysSubscription: Subscription;
 
-  constructor(private RequestsSurveysService: RequestsSurveysService) {
+  constructor(
+    private RequestsSurveysService: RequestsSurveysService,
+    private router: Router
+  ) {
     this.allsurveysSubscription = this.RequestsSurveysService.all_surveys$.subscribe(
       surveys => {
         this.allsurveys = surveys; //save received data
@@ -45,6 +49,13 @@ export class AllsurveysComponent implements OnInit {
   percentageSurveysSubmitted() {
     var percentage = 100 / this.allsurveys.length;
     return percentage * this.mysurveys.length;
+  }
+
+  openSurvey(survey) {
+    if (!this.isSubmitted(survey))
+      this.router.navigate(["/surveys/compile/" + survey]);
+    if (this.isSubmitted(survey))
+      this.router.navigate(["/surveys/recompile/" + survey]);
   }
 
   ngOnInit() {}
