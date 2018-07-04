@@ -756,13 +756,21 @@ router
 
 //Modify, get or delete specific answer
 router
-  .route("/answers/:answer")
+  .route("/answers/:question")
   .put(auth.isAuthenticated, function(req, res) {
     pool.getConnection(function(err, connection) {
       // Use the connection
       connection.query(
-        "UPDATE ?? SET ?? = ? WHERE ?? = ?",
-        ["answers", "answer", req.body.answer, "id", req.params.answer],
+        "UPDATE ?? SET ?? = ? WHERE ?? = ? AND ?? = ?",
+        [
+          "answers",
+          "answer",
+          req.body.answer,
+          "id_question",
+          req.params.question,
+          "id_user",
+          req.user.id
+        ],
         function(err, results, fields) {
           if (err)
             return res
@@ -777,9 +785,7 @@ router
           connection.release();
           return res
             .status(200)
-            .send(
-              JSON.stringify({ success: true, error: null, answer: results })
-            );
+            .send(JSON.stringify({ success: true, error: null }));
         }
       );
     });
@@ -833,11 +839,13 @@ router
               );
           connection.release();
 
-          return res
-            .status(200)
-            .send(
-              JSON.stringify({ success: true, error: null, answer: results })
-            );
+          return res.status(200).send(
+            JSON.stringify({
+              success: true,
+              error: null,
+              answer: results[0].answer
+            })
+          );
         }
       );
     });

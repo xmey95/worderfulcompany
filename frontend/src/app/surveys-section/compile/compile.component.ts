@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { MatStepper } from "@angular/material";
 import { RequestsSurveysService } from "../requests.service";
 import {
+  AnswerResponseType,
   QuestionsType,
   QuestionsResponseType,
   SuccessResponseType,
@@ -9,7 +10,7 @@ import {
 } from "../../interfaces";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, interval } from "rxjs";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import swal from "sweetalert";
 import { switchMap, map, share, filter } from "rxjs/operators";
 import { UserService } from "../../user.service";
@@ -23,6 +24,7 @@ import * as config from "../../config.json";
 export class CompileComponent implements OnInit {
   survey: any;
   id: number;
+  recompile: string;
 
   step: number;
 
@@ -36,11 +38,13 @@ export class CompileComponent implements OnInit {
     private RequestsSurveysService: RequestsSurveysService,
     private UserService: UserService,
     private HttpClient: HttpClient,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.api = (<any>config).api;
 
     this.route.params.subscribe(res => (this.id = res.id));
+    this.route.params.subscribe(res => (this.recompile = res.recompile));
 
     this.ArrayStep = [];
 
@@ -69,6 +73,7 @@ export class CompileComponent implements OnInit {
         this.createArrayStep();
         for (var i = 0; i < this.questions.length; i++) {
           this.isConditioned(this.questions[i]);
+          if (this.recompile == "true") this.fillAnswer(this.questions[i]);
         }
       },
       err => {
@@ -130,42 +135,148 @@ export class CompileComponent implements OnInit {
     return;
   }
 
+  fillAnswer(question) {
+    var url = this.api + "surveys/answers/" + question.id;
+    this.HttpClient.get<AnswerResponseType>(url, {
+      headers: new HttpHeaders().set(
+        "Authorization",
+        "bearer " + this.UserService.get_token()
+      )
+    }).subscribe(
+      data => {
+        if (!data.success) {
+          swal("Oops!", "Errore durante l'invio della richiesta!", "error");
+          if (data.error) {
+            console.log(data.error);
+          }
+          return;
+        }
+        question.answer_compile = data.answer;
+      },
+      err => {
+        swal("Oops!", "Errore durante l'operazione!", "error");
+        console.log(err);
+        return;
+      }
+    );
+    return;
+  }
+
   forwardStep(stepper: MatStepper, step) {
-    for (var i = 0; i < this.stepQuestions(step).length; i++) {
-      if (this.stepQuestions(step)[i].answer_compile) {
-        var url =
-          this.api + "surveys/answers/" + this.stepQuestions(step)[i].id;
-        var post = {
-          answer: this.stepQuestions(step)[i].answer_compile
-        };
-        this.HttpClient.post<SuccessResponseType>(url, post, {
-          headers: new HttpHeaders().set(
-            "Authorization",
-            "bearer " + this.UserService.get_token()
-          )
-        }).subscribe(
-          data => {
-            if (!data.success) {
-              swal("Oops!", "Errore durante l'invio della richiesta!", "error");
-              if (data.error) {
-                console.log(data.error);
+    if (this.recompile == "true") {
+      for (var i = 0; i < this.stepQuestions(step).length; i++) {
+        if (this.stepQuestions(step)[i].answer_compile) {
+          var url =
+            this.api + "surveys/answers/" + this.stepQuestions(step)[i].id;
+          var post = {
+            answer: this.stepQuestions(step)[i].answer_compile
+          };
+          this.HttpClient.put<SuccessResponseType>(url, post, {
+            headers: new HttpHeaders().set(
+              "Authorization",
+              "bearer " + this.UserService.get_token()
+            )
+          }).subscribe(
+            data => {
+              if (!data.success) {
+                swal(
+                  "Oops!",
+                  "Errore durante l'invio della richiesta!",
+                  "error"
+                );
+                if (data.error) {
+                  console.log(data.error);
+                }
+                return;
               }
+              for (var i = 0; i < this.questions.length; i++) {
+                this.isConditioned(this.questions[i]);
+              }
+            },
+            err => {
+              swal("Oops!", "Errore durante l'operazione!", "error");
+              console.log(err);
               return;
             }
-            for (var i = 0; i < this.questions.length; i++) {
-              this.isConditioned(this.questions[i]);
+          );
+        }
+      }
+    } else {
+      for (var i = 0; i < this.stepQuestions(step).length; i++) {
+        if (this.stepQuestions(step)[i].answer_compile) {
+          var url =
+            this.api + "surveys/answers/" + this.stepQuestions(step)[i].id;
+          var post = {
+            answer: this.stepQuestions(step)[i].answer_compile
+          };
+          this.HttpClient.post<SuccessResponseType>(url, post, {
+            headers: new HttpHeaders().set(
+              "Authorization",
+              "bearer " + this.UserService.get_token()
+            )
+          }).subscribe(
+            data => {
+              if (!data.success) {
+                swal(
+                  "Oops!",
+                  "Errore durante l'invio della richiesta!",
+                  "error"
+                );
+                if (data.error) {
+                  console.log(data.error);
+                }
+                return;
+              }
+              for (var i = 0; i < this.questions.length; i++) {
+                this.isConditioned(this.questions[i]);
+              }
+            },
+            err => {
+              swal("Oops!", "Errore durante l'operazione!", "error");
+              console.log(err);
+              return;
             }
-          },
-          err => {
-            swal("Oops!", "Errore durante l'operazione!", "error");
-            console.log(err);
-            return;
-          }
-        );
+          );
+        }
       }
     }
-    if (step == this.ArrayStep[this.ArrayStep.length - 1]) {
-      //Inserisci la sottoscrizione nel db e chiudi il sondaggio
+    if (
+      step == this.ArrayStep[this.ArrayStep.length - 1] &&
+      this.recompile == "false"
+    ) {
+      var url = this.api + "surveys/submitsurvey/" + this.id;
+      var post = {
+        answer: "answer"
+      };
+      this.HttpClient.post<SuccessResponseType>(url, post, {
+        headers: new HttpHeaders().set(
+          "Authorization",
+          "bearer " + this.UserService.get_token()
+        )
+      }).subscribe(
+        data => {
+          if (!data.success) {
+            swal("Oops!", "Errore durante l'invio della richiesta!", "error");
+            if (data.error) {
+              console.log(data.error);
+            }
+            return;
+          }
+          swal("Fatto!", "Sondaggio compilato correttamente!", "success");
+          this.router.navigate(["/home"]);
+        },
+        err => {
+          swal("Oops!", "Errore durante l'operazione!", "error");
+          console.log(err);
+          return;
+        }
+      );
+      return;
+    } else if (
+      step == this.ArrayStep[this.ArrayStep.length - 1] &&
+      this.recompile == "true"
+    ) {
+      swal("Fatto!", "Sondaggio ricompilato correttamente!", "success");
     } else {
       stepper.next();
     }

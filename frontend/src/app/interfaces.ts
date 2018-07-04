@@ -4,6 +4,12 @@ export interface AddRequestResponseType {
   request_id: number;
 }
 
+export interface AnswerResponseType {
+  success: boolean;
+  error: string;
+  answer: string;
+}
+
 export interface BossResponseType {
   success: boolean;
   error: string;

@@ -53,9 +53,9 @@ export class AllsurveysComponent implements OnInit {
 
   openSurvey(survey) {
     if (!this.isSubmitted(survey))
-      this.router.navigate(["/surveys/compile/" + survey]);
+      this.router.navigate(["/surveys/compile/" + survey + "/false"]);
     if (this.isSubmitted(survey))
-      this.router.navigate(["/surveys/recompile/" + survey]);
+      this.router.navigate(["/surveys/compile/" + survey + "/true"]);
   }
 
   ngOnInit() {}

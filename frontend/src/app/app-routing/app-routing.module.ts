@@ -18,7 +18,7 @@ const appRoutes: Routes = [
   { path: "absences/myabsences", component: MyAbsencesComponent },
   { path: "surveys/createsurvey", component: CreatesurveyComponent },
   { path: "surveys/allsurveys", component: AllsurveysComponent },
-  { path: "surveys/compile/:id", component: CompileComponent },
+  { path: "surveys/compile/:id/:recompile", component: CompileComponent },
   { path: "users", component: ManageUsersComponent },
   { path: "", redirectTo: "/home", pathMatch: "full" }
 ];

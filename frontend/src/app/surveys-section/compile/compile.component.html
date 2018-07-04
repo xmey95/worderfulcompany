@@ -1,5 +1,5 @@
 <mat-vertical-stepper [linear]="true" #stepper>
-  <mat-step *ngFor="let step of ArrayStep">
+  <mat-step *ngFor="let step of ArrayStep" [stepControl]="Form.form">
     <form #Form="ngForm">
     <div *ngIf="questions">
       <div *ngFor="let question of stepQuestions(step)">
