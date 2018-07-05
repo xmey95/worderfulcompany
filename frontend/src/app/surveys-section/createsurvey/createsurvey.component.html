@@ -1,115 +1,117 @@
-<mat-horizontal-stepper [linear]="true" #stepper>
-  <mat-step [stepControl]="firstFormGroup">
-    <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel>Inserisci il nome del sondaggio</ng-template>
-      <mat-form-field>
-        <input matInput [(ngModel)]="name" placeholder="Nome del sondaggio" formControlName="firstCtrl" required>
-      </mat-form-field>
-      <div>
-        <button mat-button (click)="goForward(stepper)" [disabled]="!firstFormGroup.valid" color="primary">Prosegui</button>
+<div class="page">
+  <mat-horizontal-stepper [linear]="true" #stepper>
+    <mat-step [stepControl]="firstFormGroup">
+      <form [formGroup]="firstFormGroup">
+        <ng-template matStepLabel>Inserisci il nome del sondaggio</ng-template>
+        <mat-form-field>
+          <input matInput [(ngModel)]="name" placeholder="Nome del sondaggio" formControlName="firstCtrl" required>
+        </mat-form-field>
+        <div>
+          <button mat-button (click)="goForward(stepper)" [disabled]="!firstFormGroup.valid" color="primary">Prosegui</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+      <ng-template matStepLabel>Fill out your address</ng-template>
+      <div flex fxLayout="row" class="buttons-margin">
+        <button mat-button (click)="forwardStep()" [disabled]="!questions || !questions.length > 0" matBadge="{{step}}" matBadgePosition="after" matBadgeColor="accent">Avanza di step</button>
+        <button mat-button (click)="goForwardEnd(stepper)" [disabled]="step <= 1" color="accent">Prosegui</button>
       </div>
-    </form>
-  </mat-step>
-  <mat-step [stepControl]="secondFormGroup">
-    <ng-template matStepLabel>Fill out your address</ng-template>
-    <div flex fxLayout="row" class="buttons-margin">
-      <button mat-button (click)="forwardStep()" [disabled]="!questions || !questions.length > 0" matBadge="{{step}}" matBadgePosition="after" matBadgeColor="accent">Avanza di step</button>
-      <button mat-button (click)="goForwardEnd(stepper)" [disabled]="step <= 1" color="accent">Prosegui</button>
-    </div>
-    <form [formGroup]="secondFormGroup">
-    <div flex fxLayout="row" fxLayout.lt-sm="column">
+      <form [formGroup]="secondFormGroup">
+      <div flex fxLayout="row" fxLayout.lt-sm="column">
+        <div fxFlex="33" class="security-margin">
+          <div>
+          <mat-form-field>
+            <textarea matInput placeholder="Domanda" [(ngModel)]="question" formControlName="question" required></textarea>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-radio-group formControlName="type" [(ngModel)]="type">
+            <mat-radio-button *ngFor="let type of types" [value]="type" class="security-margin-radio">{{type}}</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="security-margin-button">
+          <button mat-button (click)="insertQuestion()" [disabled]="!secondFormGroup.valid" color="primary">Inserisci</button>
+        </div>
+      </div>
+        <div fxFlex="33" *ngIf="type == 'Multiple'" class="security-margin">
+          <div>
+          <mat-form-field>
+            <input matInput placeholder="Risposta" [(ngModel)]="answer" formControlName="answer">
+          </mat-form-field>
+          <button mat-button (click)="insertAnswer()" [disabled]="answer == '' || !answer" color="primary">Aggiungi</button>
+        </div>
+        <div *ngIf="answers && answers.length > 0">
+          <mat-list role="list">
+            <mat-list-item role="listitem" *ngFor="let answer of answers"><mat-icon fontSet="fa" fontIcon="fa-trash" color="accent" (click)="deleteAnswer(answer)" class="trash-icon"></mat-icon> {{answer}}</mat-list-item>
+          </mat-list>
+        </div>
+      </div>
       <div fxFlex="33" class="security-margin">
-        <div>
-        <mat-form-field>
-          <textarea matInput placeholder="Domanda" [(ngModel)]="question" formControlName="question" required></textarea>
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-radio-group formControlName="type" [(ngModel)]="type">
-          <mat-radio-button *ngFor="let type of types" [value]="type" class="security-margin-radio">{{type}}</mat-radio-button>
-        </mat-radio-group>
-      </div>
-      <div class="security-margin-button">
-        <button mat-button (click)="insertQuestion()" [disabled]="!secondFormGroup.valid" color="primary">Inserisci</button>
-      </div>
-    </div>
-      <div fxFlex="33" *ngIf="type == 'Multiple'" class="security-margin">
-        <div>
-        <mat-form-field>
-          <input matInput placeholder="Risposta" [(ngModel)]="answer" formControlName="answer">
-        </mat-form-field>
-        <button mat-button (click)="insertAnswer()" [disabled]="answer == '' || !answer" color="primary">Aggiungi</button>
-      </div>
-      <div *ngIf="answers && answers.length > 0">
-        <mat-list role="list">
-          <mat-list-item role="listitem" *ngFor="let answer of answers"><mat-icon fontSet="fa" fontIcon="fa-trash" color="accent" (click)="deleteAnswer(answer)" class="trash-icon"></mat-icon> {{answer}}</mat-list-item>
-        </mat-list>
+        <div *ngIf="step > 1">
+          <mat-checkbox [(ngModel)]="condition" formControlName="check">Domanda condizionale</mat-checkbox>
+        </div>
+        <div *ngIf="condition" class="security-margin-conditional">
+          <mat-form-field>
+            <mat-select placeholder="Domanda" [(value)]="previous_question" (selectionChange)="fillanswerslist(previous_question)" formControlName="pq">
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let question of multipleQuestions()" [value]="question">
+                {{question.question}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div *ngIf="condition && previous_answers">
+          <mat-form-field>
+            <mat-select placeholder="Risposta" [(value)]="previous_answer" formControlName="pa">
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let answer of previous_answers" [value]="answer">
+                {{answer}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
     </div>
-    <div fxFlex="33" class="security-margin">
-      <div *ngIf="step > 1">
-        <mat-checkbox [(ngModel)]="condition" formControlName="check">Domanda condizionale</mat-checkbox>
+  </form>
+  <mat-divider></mat-divider>
+      <div *ngIf="questions">
+        <mat-card *ngFor="let question of questions" class="security-margin">
+          <h3>{{question.question}}</h3>
+          <mat-list role="list" *ngIf="question.answers">
+            <mat-list-item role="listitem" *ngFor="let answer of question.answers">{{answer}}</mat-list-item>
+          </mat-list>
+          <button mat-raised-button color="warn" (click)="deleteBeforeInsert(question)">Delete</button>
+        </mat-card>
       </div>
-      <div *ngIf="condition" class="security-margin-conditional">
-        <mat-form-field>
-          <mat-select placeholder="Domanda" [(value)]="previous_question" (selectionChange)="fillanswerslist(previous_question)" formControlName="pq">
-            <mat-option>None</mat-option>
-            <mat-option *ngFor="let question of multipleQuestions()" [value]="question">
-              {{question.question}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+      <div flex fxLayout="row" class="buttons-margin">
+        <div fxFlex="100">
+        <button mat-button (click)="deleteSurvey()" color="warn">Elimina tutto</button>
+        <button mat-button (click)="finishCreation()" color="accent">Completa</button>
       </div>
-      <div *ngIf="condition && previous_answers">
-        <mat-form-field>
-          <mat-select placeholder="Risposta" [(value)]="previous_answer" formControlName="pa">
-            <mat-option>None</mat-option>
-            <mat-option *ngFor="let answer of previous_answers" [value]="answer">
-              {{answer}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
       </div>
+      <div flex fxLayout="row">
+        <div fxFlex="100">
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let step of ArrayStep">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Step {{step}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+            <mat-card *ngFor="let question of stepQuestions(step)" class="security-margin">
+              <h3>{{question.question}} <mat-icon fontSet="fa" fontIcon="fa-edit" color="accent" (click)="openDialog(question)"></mat-icon></h3>
+              <mat-list role="list" *ngIf="question.answer != ''">
+                <mat-list-item role="listitem" *ngFor="let answer of questionanswers(question)">{{answer}}</mat-list-item>
+              </mat-list>
+            </mat-card>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
-  </div>
-</form>
-<mat-divider></mat-divider>
-    <div *ngIf="questions">
-      <mat-card *ngFor="let question of questions" class="security-margin">
-        <h3>{{question.question}}</h3>
-        <mat-list role="list" *ngIf="question.answers">
-          <mat-list-item role="listitem" *ngFor="let answer of question.answers">{{answer}}</mat-list-item>
-        </mat-list>
-        <button mat-raised-button color="warn" (click)="deleteBeforeInsert(question)">Delete</button>
-      </mat-card>
-    </div>
-  </mat-step>
-  <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <div flex fxLayout="row" class="buttons-margin">
-      <div fxFlex="100">
-      <button mat-button (click)="deleteSurvey()" color="warn">Elimina tutto</button>
-      <button mat-button (click)="finishCreation()" color="accent">Completa</button>
-    </div>
-    </div>
-    <div flex fxLayout="row">
-      <div fxFlex="100">
-    <mat-accordion>
-      <mat-expansion-panel *ngFor="let step of ArrayStep">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Step {{step}}
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-          <mat-card *ngFor="let question of stepQuestions(step)" class="security-margin">
-            <h3>{{question.question}} <mat-icon fontSet="fa" fontIcon="fa-edit" color="accent" (click)="openDialog(question)"></mat-icon></h3>
-            <mat-list role="list" *ngIf="question.answer != ''">
-              <mat-list-item role="listitem" *ngFor="let answer of questionanswers(question)">{{answer}}</mat-list-item>
-            </mat-list>
-          </mat-card>
-      </mat-expansion-panel>
-    </mat-accordion>
-  </div>
-    </div>
-  </mat-step>
-</mat-horizontal-stepper>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

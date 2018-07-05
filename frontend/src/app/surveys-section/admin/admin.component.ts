@@ -34,36 +34,11 @@ export class AdminComponent implements OnInit {
   constructor(
     private UserService: UserService,
     private HttpClient: HttpClient,
-    private router: Router
+    private router: Router,
+    private RequestsSurveysService: RequestsSurveysService
   ) {
     this.api = (<any>config).api;
-    var url = this.api + "surveys/mysurveys";
-    this.HttpClient.get<SurveyAdminResponseType>(url, {
-      headers: new HttpHeaders().set(
-        "Authorization",
-        "bearer " + this.UserService.get_token()
-      )
-    }).subscribe(
-      data => {
-        if (!data.success) {
-          swal("Oops!", "Errore durante l'invio della richiesta!", "error");
-          if (data.error) {
-            console.log(data.error);
-          }
-          return;
-        }
-        this.surveys = data.surveys;
-        for (var i = 0; i < this.surveys.length; i++) {
-          this.fillQuestions(this.surveys[i]); //Fill all informations of questions
-          this.fillUserList(this.surveys[i]); //Fill all users that submitted survey
-        }
-      },
-      err => {
-        swal("Oops!", "Errore durante l'operazione!", "error");
-        console.log(err);
-        return;
-      }
-    );
+    this.Setup();
   }
 
   createArrayStep(survey: SurveyAdminType) {
@@ -107,6 +82,28 @@ export class AdminComponent implements OnInit {
       }
     );
     return;
+  }
+
+  /**
+   * Delete survey from database(with related questions ecc...)
+   */
+
+  deleteSurvey(survey) {
+    swal({
+      title: "Sei sicuro?",
+      text:
+        "Una volta eliminato perderai tutti i progressi relativi al sondaggio",
+      icon: "warning",
+      dangerMode: true
+    }).then(willDelete => {
+      if (willDelete) {
+        this.RequestsSurveysService.deleteSurvey(survey.id);
+        var index = this.surveys.indexOf(survey);
+        if (index > -1) {
+          this.surveys.splice(index, 1);
+        }
+      }
+    });
   }
 
   /**
@@ -285,6 +282,36 @@ export class AdminComponent implements OnInit {
       }
     );
     return;
+  }
+
+  Setup(){
+    var url = this.api + "surveys/mysurveys";
+    this.HttpClient.get<SurveyAdminResponseType>(url, {
+      headers: new HttpHeaders().set(
+        "Authorization",
+        "bearer " + this.UserService.get_token()
+      )
+    }).subscribe(
+      data => {
+        if (!data.success) {
+          swal("Oops!", "Errore durante l'invio della richiesta!", "error");
+          if (data.error) {
+            console.log(data.error);
+          }
+          return;
+        }
+        this.surveys = data.surveys;
+        for (var i = 0; i < this.surveys.length; i++) {
+          this.fillQuestions(this.surveys[i]); //Fill all informations of questions
+          this.fillUserList(this.surveys[i]); //Fill all users that submitted survey
+        }
+      },
+      err => {
+        swal("Oops!", "Errore durante l'operazione!", "error");
+        console.log(err);
+        return;
+      }
+    );
   }
 
   ngOnInit() {}

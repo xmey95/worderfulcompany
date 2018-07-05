@@ -1,32 +1,35 @@
-<mat-accordion>
-  <mat-expansion-panel *ngFor="let survey of surveys">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        {{survey.name}}
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <mat-vertical-stepper #stepper>
-      <mat-step *ngFor="let step of survey.ArrayStep">
-        <mat-card *ngFor="let question of stepQuestions(survey, step)" class="security-margin">
-          <h3>{{question.question}}</h3>
-          <div *ngIf="question.type == 'Multiple'">
-            <p *ngFor="let percentual of question.percentual_answers">{{percentual.answer}} <span *ngIf="isMax(percentual.percentual, question.percentual_answers)" class="ismax">{{percentual.percentual}}%</span><span *ngIf="!isMax(percentual.percentual, question.percentual_answers)">{{percentual.percentual}}%</span></p>
-          </div>
-          <div *ngIf="survey.users" class="security-margin">
-            <mat-form-field>
-              <mat-select placeholder="Utente" [(value)]="question.current_user" (selectionChange)="showAnswer(question)">
-                <mat-option>None</mat-option>
-                <mat-option *ngFor="let user of survey.users" [value]="user.id">
-                  {{user.email}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div *ngIf="question.answer_of_user">
-            <p>{{question.answer_of_user}}</p>
-          </div>
-        </mat-card>
-      </mat-step>
-    </mat-vertical-stepper>
-  </mat-expansion-panel>
-</mat-accordion>
+<div class="page">
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let survey of surveys">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{survey.name}}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <button mat-button (click)="deleteSurvey(survey)" color="warn">Elimina</button>
+      <mat-vertical-stepper #stepper>
+        <mat-step *ngFor="let step of survey.ArrayStep">
+          <mat-card *ngFor="let question of stepQuestions(survey, step)" class="security-margin">
+            <h3>{{question.question}}</h3>
+            <div *ngIf="question.type == 'Multiple'">
+              <p *ngFor="let percentual of question.percentual_answers">{{percentual.answer}} <span *ngIf="isMax(percentual.percentual, question.percentual_answers)" class="ismax">{{percentual.percentual}}%</span><span *ngIf="!isMax(percentual.percentual, question.percentual_answers)">{{percentual.percentual}}%</span></p>
+            </div>
+            <div *ngIf="survey.users" class="security-margin">
+              <mat-form-field>
+                <mat-select placeholder="Utente" [(value)]="question.current_user" (selectionChange)="showAnswer(question)">
+                  <mat-option>None</mat-option>
+                  <mat-option *ngFor="let user of survey.users" [value]="user.id">
+                    {{user.email}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div *ngIf="question.answer_of_user">
+              <p>{{question.answer_of_user}}</p>
+            </div>
+          </mat-card>
+        </mat-step>
+      </mat-vertical-stepper>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
