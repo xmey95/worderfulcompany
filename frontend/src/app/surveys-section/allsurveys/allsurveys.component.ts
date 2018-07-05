@@ -18,6 +18,10 @@ export class AllsurveysComponent implements OnInit {
   private mysurveys: MySurveyType[]; //list of my surveys
   private mysurveysSubscription: Subscription;
 
+  /**
+   * This component shows frontend section for surveys list, and contains  a list of all surveys and a percentage spinner of submitted surveys
+   */
+
   constructor(
     private RequestsSurveysService: RequestsSurveysService,
     private router: Router
@@ -38,6 +42,10 @@ export class AllsurveysComponent implements OnInit {
     this.RequestsSurveysService.reset_my_surveys_version();
   }
 
+  /**
+   * Return true if specific survey was submitted by user
+   */
+
   isSubmitted(survey_id: number) {
     var submitted = this.mysurveys.filter(
       survey => survey.id_survey == survey_id
@@ -46,10 +54,18 @@ export class AllsurveysComponent implements OnInit {
     return false;
   }
 
+  /**
+   * Return percentage of surveys submitted by user
+   */
+
   percentageSurveysSubmitted() {
     var percentage = 100 / this.allsurveys.length;
     return percentage * this.mysurveys.length;
   }
+
+  /**
+   * Open Survey clicked
+   */
 
   openSurvey(survey) {
     if (!this.isSubmitted(survey))

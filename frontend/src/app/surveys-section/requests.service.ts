@@ -28,7 +28,7 @@ export class RequestsSurveysService {
   public my_surveys$: Observable<MySurveyType[]>;
   private my_surveys_version = ""; //version code for my_surveys list
   /**
-   *
+   * The constructor creates 2 observables to get the lists of all surveys and the list of surveys submitted by user
    */
   constructor(
     private HttpClient: HttpClient,
@@ -70,11 +70,11 @@ export class RequestsSurveysService {
       ),
       map(data => {
         return data.surveys;
-      }), //save new value (get just requests field from response)
+      }), //save new value
       share()
     );
 
-    //Observable to get the list of all surveys
+    //Observable to get the list of surveys submitted by user
     this.my_surveys$ = interval(2000).pipe(
       switchMap(() =>
         this.HttpClient.get<VersionResponseType>(
@@ -108,10 +108,14 @@ export class RequestsSurveysService {
       ),
       map(data => {
         return data.surveys;
-      }), //save new value (get just requests field from response)
+      }), //save new value
       share()
     );
   }
+
+  /**
+   * Deletes a survey from database
+   */
 
   deleteSurvey(survey: number) {
     var url = this.api + "surveys/surveys/" + survey;
@@ -135,6 +139,10 @@ export class RequestsSurveysService {
       }
     );
   }
+
+  /**
+   * Insert questions of specific survey into database
+   */
 
   sendQuestions(survey: string, questions: any) {
     var url = this.api + "surveys/surveys/" + survey;
@@ -162,6 +170,10 @@ export class RequestsSurveysService {
     );
   }
 
+  /**
+   * Send request for modify a specific question
+   */
+
   modifyQuestion(question, parameters) {
     var url = this.api + "surveys//questions/" + question;
     //http request to backend (with authorization header containing the token got from UserService)
@@ -183,6 +195,10 @@ export class RequestsSurveysService {
       }
     );
   }
+
+  /**
+   * Delete a specific question from database
+   */
 
   deleteQuestion(question) {
     var url = this.api + "surveys//questions/" + question;
@@ -206,9 +222,17 @@ export class RequestsSurveysService {
     );
   }
 
+  /**
+   * This method is called when a new subscription to all_surveys observable is registered, it forces to send the value even this has not changed by setting version code to '', so new subscribers can get the value
+   */
+
   reset_all_surveys_version() {
     this.all_surveys_version = "";
   }
+
+  /**
+   * This method is called when a new subscription to my_surveys observable is registered, it forces to send the value even this has not changed by setting version code to '', so new subscribers can get the value
+   */
 
   reset_my_surveys_version() {
     this.my_surveys_version = "";

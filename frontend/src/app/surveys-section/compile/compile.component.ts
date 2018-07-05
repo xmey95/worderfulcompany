@@ -16,19 +16,23 @@ import { switchMap, map, share, filter } from "rxjs/operators";
 import { UserService } from "../../user.service";
 import * as config from "../../config.json";
 
+/**
+ * This component shows frontend section for survey compilation
+ */
+
 @Component({
   selector: "compile",
   templateUrl: "./compile.component.html",
   styleUrls: ["./compile.component.css"]
 })
 export class CompileComponent implements OnInit {
-  survey: any;
-  id: number;
-  recompile: string;
+  survey: any; //survey object
+  id: number; //id of survey
+  recompile: string; //flag for recompiling
 
-  step: number;
+  step: number; //number of step of the survey
 
-  questions: QuestionsType[];
+  questions: QuestionsType[]; //questions of th survey
 
   ArrayStep: number[];
 
@@ -43,13 +47,18 @@ export class CompileComponent implements OnInit {
   ) {
     this.api = (<any>config).api;
 
+    //Set variables from url parameters
     this.route.params.subscribe(res => (this.id = res.id));
     this.route.params.subscribe(res => (this.recompile = res.recompile));
 
     this.ArrayStep = [];
 
-    this.upgradeQuestionsList();
+    this.upgradeQuestionsList(); //Pull questions from database
   }
+
+  /**
+   * Pull questions from database
+   */
 
   upgradeQuestionsList() {
     var url = this.api + "surveys/surveys/" + this.id;
@@ -71,8 +80,10 @@ export class CompileComponent implements OnInit {
         this.step = data.step[0].step;
         this.survey = data.survey;
         this.createArrayStep();
+        //For every question fills condition answer
         for (var i = 0; i < this.questions.length; i++) {
           this.isConditioned(this.questions[i]);
+          //If recopmile is true every question must to have previous answer
           if (this.recompile == "true") this.fillAnswer(this.questions[i]);
         }
       },
@@ -85,6 +96,10 @@ export class CompileComponent implements OnInit {
     return;
   }
 
+  /**
+   * Return only questions of specified step passed by parameter
+   */
+
   stepQuestions(step: number): QuestionsType[] {
     return this.questions.filter(question => question.step == step);
   }
@@ -96,9 +111,17 @@ export class CompileComponent implements OnInit {
     console.log(this.ArrayStep);
   }
 
+  /**
+   * return answer list of question passed by parameter
+   */
+
   AnswersList(question): string[] {
     return question.answer.split(",");
   }
+
+  /**
+   * Fill condition flag of specified question
+   */
 
   isConditioned(question) {
     if (question.condition_answer == 0) {
@@ -135,6 +158,10 @@ export class CompileComponent implements OnInit {
     return;
   }
 
+  /**
+   * Fill previous answer submitted for specified question by user
+   */
+
   fillAnswer(question) {
     var url = this.api + "surveys/answers/" + question.id;
     this.HttpClient.get<AnswerResponseType>(url, {
@@ -162,8 +189,14 @@ export class CompileComponent implements OnInit {
     return;
   }
 
+  /**
+   * Submit questions of current step and, if is the ultimate step, finish compilation or recompilation
+   */
+
   forwardStep(stepper: MatStepper, step) {
+    //case of recompilation
     if (this.recompile == "true") {
+      //for every question submit new answer
       for (var i = 0; i < this.stepQuestions(step).length; i++) {
         if (this.stepQuestions(step)[i].answer_compile) {
           var url =
@@ -189,6 +222,7 @@ export class CompileComponent implements OnInit {
                 }
                 return;
               }
+              //Refresh questins array with new values
               for (var i = 0; i < this.questions.length; i++) {
                 this.isConditioned(this.questions[i]);
               }
@@ -202,6 +236,7 @@ export class CompileComponent implements OnInit {
         }
       }
     } else {
+      //case of compilation for first time
       for (var i = 0; i < this.stepQuestions(step).length; i++) {
         if (this.stepQuestions(step)[i].answer_compile) {
           var url =
@@ -240,10 +275,12 @@ export class CompileComponent implements OnInit {
         }
       }
     }
+    //Final Phase
     if (
       step == this.ArrayStep[this.ArrayStep.length - 1] &&
       this.recompile == "false"
     ) {
+      //Create record for compilation
       var url = this.api + "surveys/submitsurvey/" + this.id;
       var post = {
         answer: "answer"

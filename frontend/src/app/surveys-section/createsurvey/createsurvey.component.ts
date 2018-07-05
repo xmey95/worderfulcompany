@@ -22,6 +22,10 @@ import { switchMap, map, share, filter } from "rxjs/operators";
 import { UserService } from "../../user.service";
 import * as config from "../../config.json";
 
+/**
+ * This component shows frontend section for survey creation, and contains  a tree-times stepper(first step for general informations, second step for questions submit and third step for survey summary) that drive the creation of the survey
+ */
+
 @Component({
   selector: "createsurvey",
   templateUrl: "./createsurvey.component.html",
@@ -30,24 +34,24 @@ import * as config from "../../config.json";
 export class CreatesurveyComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
-  name: string;
-  survey: any;
+  name: string; //name of the survey
+  survey: any; //survey object
 
-  types: string[] = ["Open", "Multiple"];
+  types: string[] = ["Open", "Multiple"]; //possible type of a single question
 
-  question: string;
-  answer: string;
-  type: string;
-  step: number = 1;
-  condition: boolean = false;
+  question: string; //NgModel for question input
+  answer: string; //NgModel for answer input
+  type: string; //NgModel for type radio
+  step: number = 1; //Current step in questions submit
+  condition: boolean = false; //NgModel for condition checkbox
 
-  previous_question: QuestionsType;
-  previous_answer: string;
+  previous_question: QuestionsType; //Ngmodel of previous question choosen for condition
+  previous_answer: string; //Ngmodel for answer select
 
-  answers: string[];
-  questions: any;
-  previous_questions: QuestionsType[] = [];
-  previous_answers: string[];
+  answers: string[]; //list of all answers enter until now
+  questions: any; //list of all questions enter until now
+  previous_questions: QuestionsType[] = []; //questions included in the previous steps
+  previous_answers: string[]; //answers of previous question choosen for condition
 
   timer: any;
   ArrayStep: number[];
@@ -57,10 +61,10 @@ export class CreatesurveyComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private _formBuilder: FormBuilder,
-    private RequestsSurveysService: RequestsSurveysService,
-    private UserService: UserService,
+    private RequestsSurveysService: RequestsSurveysService, //Request service
+    private UserService: UserService, //User service
     private HttpClient: HttpClient,
-    private router: Router
+    private router: Router //Router module
   ) {
     this.api = (<any>config).api;
     this.questions = [];
@@ -83,10 +87,18 @@ export class CreatesurveyComponent implements OnInit {
     });
   }
 
+  /**
+   * Insert answer in answers array
+   */
+
   insertAnswer() {
     this.answers.push(this.answer);
     this.answer = "";
   }
+
+  /**
+   * Creates survey, create record into database and forward step
+   */
 
   goForward(stepper: MatStepper) {
     var url = this.api + "surveys/surveys";
@@ -114,6 +126,10 @@ export class CreatesurveyComponent implements OnInit {
     stepper.next();
   }
 
+  /**
+   * For every question contained in questions array creates record into database. At the end empties array
+   */
+
   insertQuestion() {
     var question = {
       question: this.question,
@@ -125,12 +141,14 @@ export class CreatesurveyComponent implements OnInit {
       previous_answer: ""
     };
 
+    //fill optional attributes if condition is selected
     if (this.condition == true) {
       question.condition = "true";
       question.previous_question = this.previous_question.id;
       question.previous_answer = this.previous_answer;
     }
 
+    //fill answers if type is multiple
     if (this.type == "Multiple") {
       question.answer = this.answers.toString();
       question.answers = this.answers;
@@ -144,13 +162,21 @@ export class CreatesurveyComponent implements OnInit {
     this.questions.push(question);
   }
 
+  /**
+   * Call function for submit all questions and forward step of survey
+   */
+
   forwardStep() {
-    this.RequestsSurveysService.sendQuestions(this.survey, this.questions);
-    this.upgradeQuestionsList();
-    this.questions = [];
+    this.RequestsSurveysService.sendQuestions(this.survey, this.questions); //send questions to database
+    this.upgradeQuestionsList(); //refresh previous_questions adding new questions
+    this.questions = []; //empties questions
     this.ArrayStep.push(this.step);
-    this.step++;
+    this.step++; //increase step
   }
+
+  /**
+   * Move to summary of the survey(ultimate step)
+   */
 
   goForwardEnd(stepper: MatStepper) {
     if (this.questions && this.questions.length > 0) this.forwardStep();
@@ -158,12 +184,20 @@ export class CreatesurveyComponent implements OnInit {
     stepper.next();
   }
 
+  /**
+   * Create a list of answers from answer string received from database
+   */
+
   fillanswerslist(question) {
     if (!question.answer) {
       return;
     }
     this.previous_answers = question.answer.split(",");
   }
+
+  /**
+   * Pull questions already submitted from database
+   */
 
   upgradeQuestionsList() {
     var url = this.api + "surveys/surveys/" + this.survey;
@@ -192,19 +226,35 @@ export class CreatesurveyComponent implements OnInit {
     return;
   }
 
+  /**
+   * Return only Multiple questions from previous_question array
+   */
+
   multipleQuestions(): QuestionsType[] {
     return this.previous_questions.filter(
       question => question.type == "Multiple"
     );
   }
 
+  /**
+   * Return only questions of specified step passed by parameter
+   */
+
   stepQuestions(step: number): QuestionsType[] {
     return this.previous_questions.filter(question => question.step == step);
   }
 
+  /**
+   * return answer list of question passed by parameter
+   */
+
   questionanswers(question: QuestionsType) {
     return question.answer.split(",");
   }
+
+  /**
+   * Delete Question before insert into database
+   */
 
   deleteBeforeInsert(question: any) {
     var index = this.questions.indexOf(question);
@@ -213,6 +263,10 @@ export class CreatesurveyComponent implements OnInit {
     }
   }
 
+  /**
+   * Delete answer from answers list
+   */
+
   deleteAnswer(answer) {
     var index = this.answers.indexOf(answer);
     if (index > -1) {
@@ -220,11 +274,19 @@ export class CreatesurveyComponent implements OnInit {
     }
   }
 
+  /**
+   * Open Dialog for survey modification
+   */
+
   openDialog(question): void {
     let dialogRef = this.dialog.open(ModifyQuestionComponent, {
       data: { question: question, survey: this.survey }
     });
   }
+
+  /**
+   * Delete survey from database(with related questions ecc...)
+   */
 
   deleteSurvey() {
     swal({
@@ -241,6 +303,10 @@ export class CreatesurveyComponent implements OnInit {
     });
   }
 
+  /**
+   * Finalizes the creation of survey
+   */
+
   finishCreation() {
     swal({
       title: "Sei sicuro?",
@@ -256,6 +322,10 @@ export class CreatesurveyComponent implements OnInit {
     });
   }
 }
+
+/**
+ * This component shows modal for survey modification, and contains a form very similar to the creation of the survey, both as a structure and as a logic
+ */
 
 @Component({
   selector: "modify-question",
@@ -288,6 +358,8 @@ export class ModifyQuestionComponent {
     private RequestsSurveysService: RequestsSurveysService
   ) {
     this.api = (<any>config).api;
+
+    //Pull question informations and upload in modal variables
     if (this.data.question.answer.length > 3)
       this.answers = this.questionanswers(this.data.question);
     this.question = this.data.question.question;
@@ -297,10 +369,18 @@ export class ModifyQuestionComponent {
     this.upgradeQuestionsList();
   }
 
+  /**
+   * Insert answer in answers array
+   */
+
   insertAnswer() {
     this.answers.push(this.answer);
     this.answer = "";
   }
+
+  /**
+   * Create a list of answers from answer string received from database
+   */
 
   fillanswerslist(question) {
     if (!question.answer) {
@@ -308,6 +388,10 @@ export class ModifyQuestionComponent {
     }
     this.previous_answers = question.answer.split(",");
   }
+
+  /**
+   * Pull questions already submitted from database
+   */
 
   upgradeQuestionsList() {
     var url = this.api + "surveys/surveys/" + this.data.survey;
@@ -336,15 +420,27 @@ export class ModifyQuestionComponent {
     return;
   }
 
+  /**
+   * Return only Multiple questions from previous_question array
+   */
+
   multipleQuestions(): QuestionsType[] {
     return this.previous_questions.filter(
       question => question.type == "Multiple"
     );
   }
 
+  /**
+   * return answer list of question passed by parameter
+   */
+
   questionanswers(question: QuestionsType) {
     return question.answer.split(",");
   }
+
+  /**
+   * Delete answer from answers list
+   */
 
   deleteAnswer(answer) {
     var index = this.answers.indexOf(answer);
@@ -360,11 +456,19 @@ export class ModifyQuestionComponent {
     this.dialogRef.close();
   }
 
+  /**
+   * Delete question from database
+   */
+
   delete(): void {
     this.RequestsSurveysService.deleteQuestion(this.data.question.id);
     this.upgradeQuestionsList();
     this.dialogRef.close();
   }
+
+  /**
+   * Submit question modification into database
+   */
 
   submit(): void {
     var post = {
