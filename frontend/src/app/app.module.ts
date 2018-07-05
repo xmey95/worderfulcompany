@@ -74,6 +74,7 @@ import {
 import { AllsurveysComponent } from "./surveys-section/allsurveys/allsurveys.component";
 import { NgCircleProgressModule } from "ng-circle-progress";
 import { CompileComponent } from "./surveys-section/compile/compile.component";
+import { AdminComponent } from './surveys-section/admin/admin.component';
 registerLocaleData(localeIt, "it");
 
 @NgModule({
@@ -100,7 +101,8 @@ registerLocaleData(localeIt, "it");
     AbsencesCalendarComponent,
     CreatesurveyComponent,
     AllsurveysComponent,
-    CompileComponent
+    CompileComponent,
+    AdminComponent
   ],
   imports: [
     AppRoutingModule,

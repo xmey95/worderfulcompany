@@ -152,7 +152,7 @@ export class SidebarBodyComponent {
       short_name: "Sondaggi",
       sub_menu: [
         ["Crea Sondaggio", "surveys/createsurvey"],
-        ["Sondaggi (amministratore)", ""],
+        ["Sondaggi (amministratore)", "surveys/admin"],
         ["Tutti i Sondaggi", "surveys/allsurveys"]
       ]
     };

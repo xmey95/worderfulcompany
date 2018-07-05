@@ -53,6 +53,17 @@ export interface QuestionsResponseType {
   step: any;
 }
 
+export interface PercentualAnswerResponseType {
+  success: boolean;
+  error: string;
+  percentual: number;
+}
+
+export interface PercentualAnswerType {
+  answer: string;
+  percentual: number;
+}
+
 export interface QuestionsType {
   id: number;
   question: string;
@@ -63,6 +74,9 @@ export interface QuestionsType {
   id_survey: number;
   answer_compile: string;
   condition_confirmed: boolean;
+  percentual_answers: PercentualAnswerType[];
+  current_user: string;
+  answer_of_user: string;
 }
 
 export interface RegisterResponseType {
@@ -103,6 +117,22 @@ export interface SurveyType {
   id_user: number;
 }
 
+export interface SurveyAdminResponseType {
+  success: boolean;
+  error: string;
+  surveys: SurveyAdminType[];
+}
+
+export interface SurveyAdminType {
+  id: number;
+  name: string;
+  id_user: number;
+  step: number;
+  questions: QuestionsType[];
+  ArrayStep: number[];
+  users: UserType[];
+}
+
 export interface SurveysResponseType {
   success: boolean;
   error: string;
@@ -130,6 +160,16 @@ export interface UsersResponseType {
   success: boolean;
   error: string;
   users: UserType[];
+}
+
+export interface UsersSubmittedResponseType {
+  success: boolean;
+  error: string;
+  users: UsersSubmittedType[];
+}
+
+export interface UsersSubmittedType {
+  id_user: number;
 }
 
 export interface UserType {

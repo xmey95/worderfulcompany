@@ -164,6 +164,35 @@ router
     });
   });
 
+router.route("/mysurveys/").get(auth.isAuthenticated, function(req, res) {
+  pool.getConnection(function(err, connection) {
+    // Use the connection
+    connection.query(
+      "SELECT * FROM ?? WHERE ?? = ?",
+      ["surveys", "id_user", req.user.id],
+      function(err, results, fields) {
+        connection.release();
+        if (err)
+          return res
+            .status(500)
+            .send(JSON.stringify({ success: false, error: err }));
+        if (!results)
+          return res
+            .status(404)
+            .send(
+              JSON.stringify({ success: false, error: "SURVEYS_NOT_FOUND" })
+            );
+
+        return res
+          .status(200)
+          .send(
+            JSON.stringify({ success: true, error: null, surveys: results })
+          );
+      }
+    );
+  });
+});
+
 router
   .route("/allsurveyssubmitted/:version")
   .get(auth.isAuthenticated, function(req, res) {
@@ -203,6 +232,37 @@ router
                 JSON.stringify({ success: true, error: null, version: string })
               );
           }
+        }
+      );
+    });
+  });
+
+router
+  .route("/usersubmitted/:survey")
+  .get(auth.isAuthenticated, function(req, res) {
+    pool.getConnection(function(err, connection) {
+      // Use the connection
+      connection.query(
+        "SELECT ?? FROM ?? WHERE ?? = ?",
+        ["id_user", "surveyuser", "id_survey", req.params.survey],
+        function(err, results, fields) {
+          connection.release();
+          if (err)
+            return res
+              .status(500)
+              .send(JSON.stringify({ success: false, error: err }));
+          if (!results)
+            return res
+              .status(404)
+              .send(
+                JSON.stringify({ success: false, error: "SURVEYS_NOT_FOUND" })
+              );
+
+          return res
+            .status(200)
+            .send(
+              JSON.stringify({ success: true, error: null, users: results })
+            );
         }
       );
     });
@@ -851,9 +911,84 @@ router
     });
   });
 
-//Get of details
 router
-  .route("/surveysdetails/:survey/:version")
-  .get(auth.isAuthenticated, function(req, res) {});
+  .route("/answersubmitted/:question/:user")
+  .get(auth.isAuthenticated, function(req, res) {
+    pool.getConnection(function(err, connection) {
+      // Use the connection
+      connection.query(
+        "SELECT ?? FROM ?? WHERE ?? = ? AND ?? = ?",
+        [
+          "answer",
+          "answers",
+          "id_question",
+          req.params.question,
+          "id_user",
+          req.params.user
+        ],
+        function(err, results, fields) {
+          if (err)
+            return res
+              .status(500)
+              .send(JSON.stringify({ success: false, error: err }));
+          if (!results)
+            return res
+              .status(404)
+              .send(
+                JSON.stringify({ success: false, error: "QUESTIONS_NOT_FOUND" })
+              );
+          connection.release();
+
+          return res.status(200).send(
+            JSON.stringify({
+              success: true,
+              error: null,
+              answer: results[0].answer
+            })
+          );
+        }
+      );
+    });
+  });
+
+router
+  .route("/answers/percentual/:question/:answer")
+  .get(auth.isAuthenticated, function(req, res) {
+    pool.getConnection(function(err, connection) {
+      // Use the connection
+      connection.query(
+        "SELECT * FROM ?? WHERE ?? = ?",
+        ["answers", "id_question", req.params.question],
+        function(err, results, fields) {
+          if (err)
+            return res
+              .status(500)
+              .send(JSON.stringify({ success: false, error: err }));
+          if (!results)
+            return res
+              .status(404)
+              .send(
+                JSON.stringify({ success: false, error: "QUESTIONS_NOT_FOUND" })
+              );
+          connection.release();
+
+          var total = results.length;
+          var partial = results.filter(
+            question => question.answer == req.params.answer
+          ).length;
+
+          var percentual = (100 / total) * partial;
+
+          return res.status(200).send(
+            JSON.stringify({
+              success: true,
+              error: null,
+              percentual: percentual
+            })
+          );
+        }
+      );
+    });
+  });
 
 module.exports = router;
