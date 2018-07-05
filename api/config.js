@@ -3,7 +3,7 @@ var config = {
   dbhost: "localhost",
   dbuser: "root",
   port: "8889",
-  dbsecret: "",
+  dbsecret: "Bellissimo_2018",
   dbname: "prova",
   media_path: __dirname + "/storage/",
   mailhost: "gmail",
