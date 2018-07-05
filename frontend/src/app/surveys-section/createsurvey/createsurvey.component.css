@@ -1,5 +1,6 @@
 .buttons-margin {
   margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .security-margin {
@@ -17,4 +18,8 @@
 
 .security-margin-conditional {
   margin-top: 15px;
+}
+
+.trash-icon {
+  margin-top: 5px;
 }

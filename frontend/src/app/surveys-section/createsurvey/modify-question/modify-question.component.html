@@ -1,0 +1,61 @@
+<div class="dialog-box">
+  <h1 mat-dialog-title>Modifica domanda</h1>
+  <div mat-dialog-content>
+      <div flex fxLayout="row" fxLayout.lt-sm="column" class="security-margin">
+        <div>
+        <mat-form-field>
+          <textarea matInput placeholder="Domanda" [(ngModel)]="question" required></textarea>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-radio-group [(ngModel)]="type">
+          <mat-radio-button *ngFor="let type of types" [value]="type" class="security-margin-radio">{{type}}</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+      <div flex fxLayout="row" fxLayout.lt-sm="column" *ngIf="type == 'Multiple'" class="security-margin">
+        <mat-form-field>
+          <input matInput placeholder="Risposta" [(ngModel)]="answer">
+        </mat-form-field>
+        <button mat-button (click)="insertAnswer()" [disabled]="answer == '' || !answer" color="primary">Aggiungi</button>
+      </div>
+      <div flex fxLayout="row" fxLayout.lt-sm="column" *ngIf="type == 'Multiple'" class="security-margin">
+      <div *ngIf="answers && answers.length > 0">
+        <mat-list role="list">
+          <mat-list-item role="listitem" *ngFor="let answer of answers"><mat-icon fontSet="fa" fontIcon="fa-trash" color="accent" (click)="deleteAnswer(answer)" class="trash-icon"></mat-icon> {{answer}}</mat-list-item>
+        </mat-list>
+      </div>
+    </div>
+      <div flex fxLayout="row" fxLayout.lt-sm="column" class="security-margin" *ngIf="step > 1">
+        <mat-checkbox [(ngModel)]="condition">Domanda condizionale</mat-checkbox>
+      </div>
+      <div flex fxLayout="row" fxLayout.lt-sm="column" class="security-margin" *ngIf="condition">
+        <mat-form-field>
+          <mat-select placeholder="Domanda" [(value)]="previous_question" (selectionChange)="fillanswerslist(previous_question)">
+            <mat-option>None</mat-option>
+            <mat-option *ngFor="let question of multipleQuestions()" [value]="question">
+              {{question.question}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div flex fxLayout="row" fxLayout.lt-sm="column" class="security-margin" *ngIf="condition && previous_answers">
+        <mat-form-field>
+          <mat-select placeholder="Risposta" [(value)]="previous_answer">
+            <mat-option>None</mat-option>
+            <mat-option *ngFor="let answer of previous_answers" [value]="answer">
+              {{answer}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+  </div>
+  <div class="divider">
+    <mat-divider></mat-divider>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="submit()" color="accent">Modifica</button>
+    <button mat-button (click)="delete()" color="warn">Elimina</button>
+    <button mat-button (click)="close()" color="primary">Chiudi</button>
+  </div>
+</div>

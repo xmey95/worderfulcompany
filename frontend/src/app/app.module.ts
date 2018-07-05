@@ -67,7 +67,14 @@ import {
   AbsencesCalendarComponent,
   RequestDetailsComponent
 } from "./absences-section/absences-calendar/absences-calendar.component";
-import { CreatesurveyComponent } from "./surveys-section/createsurvey/createsurvey.component";
+import {
+  CreatesurveyComponent,
+  ModifyQuestionComponent
+} from "./surveys-section/createsurvey/createsurvey.component";
+import { AllsurveysComponent } from "./surveys-section/allsurveys/allsurveys.component";
+import { NgCircleProgressModule } from "ng-circle-progress";
+import { CompileComponent } from "./surveys-section/compile/compile.component";
+import { AdminComponent } from './surveys-section/admin/admin.component';
 registerLocaleData(localeIt, "it");
 
 @NgModule({
@@ -83,6 +90,7 @@ registerLocaleData(localeIt, "it");
     ManageUsersComponent,
     UserTableComponent,
     LoginDialogComponent,
+    ModifyQuestionComponent,
     ModifyRequestComponent,
     MyAbsencesComponent,
     MyAbsencesListComponent,
@@ -91,7 +99,10 @@ registerLocaleData(localeIt, "it");
     RequestDetailsComponent,
     EmployeeComponent,
     AbsencesCalendarComponent,
-    CreatesurveyComponent
+    CreatesurveyComponent,
+    AllsurveysComponent,
+    CompileComponent,
+    AdminComponent
   ],
   imports: [
     AppRoutingModule,
@@ -124,7 +135,16 @@ registerLocaleData(localeIt, "it");
     MatStepperModule,
     MatTableModule,
     MatDialogModule,
-    NgxChartsModule
+    NgxChartsModule,
+    NgCircleProgressModule.forRoot({
+      // set defaults here
+      radius: 200,
+      outerStrokeWidth: 35,
+      innerStrokeWidth: 26,
+      outerStrokeColor: "#78C000",
+      innerStrokeColor: "#C7E596",
+      animationDuration: 300
+    })
   ],
   providers: [
     { provide: LOCALE_ID, useValue: "it" },
@@ -137,6 +157,7 @@ registerLocaleData(localeIt, "it");
   entryComponents: [
     BottomListComponent,
     ModifyRequestComponent,
+    ModifyQuestionComponent,
     RequestDetailsComponent
   ],
   bootstrap: [AppComponent]

@@ -1,0 +1,15 @@
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.green {
+  color: #1a9c15;
+}
+
+.button-survey {
+  width: 50px;
+  margin-top: 15px;
+}

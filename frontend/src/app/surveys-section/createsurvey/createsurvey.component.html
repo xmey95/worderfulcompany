@@ -42,7 +42,7 @@
       </div>
       <div *ngIf="answers && answers.length > 0">
         <mat-list role="list">
-          <mat-list-item role="listitem" *ngFor="let answer of answers">{{answer}}</mat-list-item>
+          <mat-list-item role="listitem" *ngFor="let answer of answers"><mat-icon fontSet="fa" fontIcon="fa-trash" color="accent" (click)="deleteAnswer(answer)" class="trash-icon"></mat-icon> {{answer}}</mat-list-item>
         </mat-list>
       </div>
     </div>
@@ -86,6 +86,14 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
+    <div flex fxLayout="row" class="buttons-margin">
+      <div fxFlex="100">
+      <button mat-button (click)="deleteSurvey()" color="warn">Elimina tutto</button>
+      <button mat-button (click)="finishCreation()" color="accent">Completa</button>
+    </div>
+    </div>
+    <div flex fxLayout="row">
+      <div fxFlex="100">
     <mat-accordion>
       <mat-expansion-panel *ngFor="let step of ArrayStep">
         <mat-expansion-panel-header>
@@ -94,12 +102,14 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
           <mat-card *ngFor="let question of stepQuestions(step)" class="security-margin">
-            <h3>{{question.question}} <mat-icon fontSet="fa" fontIcon="fa-edit" color="accent"></mat-icon></h3>
+            <h3>{{question.question}} <mat-icon fontSet="fa" fontIcon="fa-edit" color="accent" (click)="openDialog(question)"></mat-icon></h3>
             <mat-list role="list" *ngIf="question.answer != ''">
               <mat-list-item role="listitem" *ngFor="let answer of questionanswers(question)">{{answer}}</mat-list-item>
             </mat-list>
           </mat-card>
       </mat-expansion-panel>
     </mat-accordion>
+  </div>
+    </div>
   </mat-step>
 </mat-horizontal-stepper>
