@@ -47,3 +47,9 @@ ng serve
 cd wonderfulcompany/frontend
 ng serve
 ```
+
+
+## Admin Credentials
+
+- Email: `admin@wonderfulcompany.it`
+- Password: `angular`

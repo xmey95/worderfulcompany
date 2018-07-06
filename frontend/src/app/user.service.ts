@@ -17,6 +17,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { interval, Observable } from "rxjs";
 import { MatSnackBar, MatSnackBarConfig } from "@angular/material";
+import { Router } from "@angular/router";
 import swal from "sweetalert";
 import * as config from "./config.json";
 
@@ -43,7 +44,8 @@ export class UserService {
     private BlockScrollService: BlockScrollService,
     private cookieService: CookieService,
     private httpClient: HttpClient,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private Router: Router
   ) {
     this.api = (<any>config).api;
     this.load_cookies();
@@ -228,6 +230,8 @@ export class UserService {
       this.user = JSON.parse(this.cookieService.get("user"));
       this.token = this.cookieService.get("token");
       this.logged_in = true;
+    } else {
+      this.Router.navigate(["/home"]);
     }
   }
 
@@ -250,6 +254,7 @@ export class UserService {
         this.cookieService.deleteAll(); //clear login data and cookies
       }
     });
+    this.Router.navigate(["/home"]);
   }
 
   /**
