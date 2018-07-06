@@ -13,7 +13,11 @@ Full Documentation is available at https://xmey95.github.io/worderfulcompany/
 
 ## Screenshots
 
-<img src="https://imgur.com/bDTU27C">
+![screenshot](screenshots/Screen_home.png)
+
+![screenshot](screenshots/Screen_surveys.png)
+
+![screenshot](screenshots/Screen_absence.png)
 
 ## Requirements
 
