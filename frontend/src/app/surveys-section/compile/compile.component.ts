@@ -181,7 +181,6 @@ export class CompileComponent implements OnInit {
         question.answer_compile = data.answer;
       },
       err => {
-        swal("Oops!", "Errore durante l'operazione!", "error");
         console.log(err);
         return;
       }

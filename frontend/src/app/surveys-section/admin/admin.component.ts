@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { MatStepper } from "@angular/material";
+import { MatSnackBar, MatSnackBarConfig, MatStepper } from "@angular/material";
 import { RequestsSurveysService } from "../requests.service";
 import {
   SurveyAdminType,
@@ -35,7 +35,8 @@ export class AdminComponent implements OnInit {
     private UserService: UserService,
     private HttpClient: HttpClient,
     private router: Router,
-    private RequestsSurveysService: RequestsSurveysService
+    private RequestsSurveysService: RequestsSurveysService,
+    public snackBar: MatSnackBar
   ) {
     this.api = (<any>config).api;
     this.Setup();
@@ -252,6 +253,7 @@ export class AdminComponent implements OnInit {
    */
 
   showAnswer(question) {
+    question.answer_of_user = "";
     if (!question.current_user) return;
     var url =
       this.api +
@@ -267,7 +269,14 @@ export class AdminComponent implements OnInit {
     }).subscribe(
       data => {
         if (!data.success) {
-          swal("Oops!", "Errore durante l'invio della richiesta!", "error");
+          //answer not found
+          let config = new MatSnackBarConfig();
+          config.duration = 2000;
+          this.snackBar.open(
+            "Risposta non trovata, la domanda e' condizionale e non e' stata sottoposta all'utente",
+            "OK",
+            config
+          );
           if (data.error) {
             console.log(data.error);
           }
@@ -276,7 +285,14 @@ export class AdminComponent implements OnInit {
         question.answer_of_user = data.answer; //Pull answer
       },
       err => {
-        swal("Oops!", "Errore durante l'operazione!", "error");
+        //answer not found
+        let config = new MatSnackBarConfig();
+        config.duration = 2000;
+        this.snackBar.open(
+          "Risposta non trovata, la domanda e' condizionale e non e' stata sottoposta all'utente",
+          "OK",
+          config
+        );
         console.log(err);
         return;
       }
@@ -284,7 +300,7 @@ export class AdminComponent implements OnInit {
     return;
   }
 
-  Setup(){
+  Setup() {
     var url = this.api + "surveys/mysurveys";
     this.HttpClient.get<SurveyAdminResponseType>(url, {
       headers: new HttpHeaders().set(

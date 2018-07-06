@@ -1,4 +1,8 @@
 <div class="page">
+  <div class="text-center security-margin-bottom">
+    <h1>Compilazione sondaggio</h1>
+  </div>
+  <div class="shadow">
   <mat-vertical-stepper [linear]="true" #stepper>
     <mat-step *ngFor="let step of ArrayStep" [stepControl]="Form.form">
       <form #Form="ngForm">
@@ -23,5 +27,5 @@
     </form>
     </mat-step>
   </mat-vertical-stepper>
-
+</div>
 </div>

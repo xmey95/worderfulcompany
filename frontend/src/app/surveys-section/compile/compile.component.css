@@ -11,7 +11,16 @@
   margin-bottom: 15px;
 }
 
-.page{
-  padding:60px;
+.page {
+  padding: 60px;
   padding-top: 30px;
+}
+
+.security-margin-bottom {
+  margin-bottom: 20px;
+}
+
+.shadow {
+  box-shadow: 0 18px 6px -12px rgba(0, 0, 0, 0.35),
+    0 12px 12px 0 rgba(0, 0, 0, 0.25), 0 4px 20px 0 rgba(0, 0, 0, 0.2);
 }

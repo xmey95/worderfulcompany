@@ -842,10 +842,41 @@ router
               .send(
                 JSON.stringify({ success: false, error: "ANSWER_NOT_FOUND" })
               );
-          connection.release();
-          return res
-            .status(200)
-            .send(JSON.stringify({ success: true, error: null }));
+          if (results.affectedRows == 0) {
+            var post = {
+              answer: req.body.answer,
+              id_question: req.params.question,
+              id_user: req.user.id
+            };
+            connection.query(
+              "INSERT INTO ?? SET ?",
+              ["answers", post],
+              function(err, results, fields) {
+                if (err)
+                  return res
+                    .status(500)
+                    .send(JSON.stringify({ success: false, error: err }));
+                if (!results)
+                  return res
+                    .status(404)
+                    .send(
+                      JSON.stringify({
+                        success: false,
+                        error: "SURVEY_NOT_FOUND"
+                      })
+                    );
+                connection.release();
+                return res
+                  .status(201)
+                  .send(JSON.stringify({ success: true, error: null }));
+              }
+            );
+          } else {
+            connection.release();
+            return res
+              .status(200)
+              .send(JSON.stringify({ success: true, error: null }));
+          }
         }
       );
     });
