@@ -2,10 +2,10 @@
 
 ## Table of Contents
 
-  * [Documentation](#documentation)
-  * [Screenshots](#screenshots)
-  * [Requirements](#requirements)
-  * [Running](#running)
+- [Documentation](#documentation)
+- [Screenshots](#screenshots)
+- [Requirements](#requirements)
+- [Running](#running)
 
 ## Documentation
 
@@ -13,7 +13,7 @@ Full Documentation is available at https://xmey95.github.io/worderfulcompany/
 
 ## Screenshots
 
-![screenshot](screenshot.png)
+<img src="https://imgur.com/bDTU27C">
 
 ## Requirements
 
@@ -21,6 +21,7 @@ Full Documentation is available at https://xmey95.github.io/worderfulcompany/
 - `npm` or `yarn`
 
 run
+
 ```bash
 npm install -g @angular/cli
 ```
@@ -34,7 +35,6 @@ git clone https://github.com/xmey95/worderfulcompany.git
 cd wonderfulcompany/frontend
 yarn install
 ng serve
-
 ```
 
 #### Later on
