@@ -1057,7 +1057,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="270" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:270</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="292" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:292</a></div>
                             </td>
                         </tr>
 
@@ -1124,7 +1124,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="259" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:259</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="281" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:281</a></div>
                             </td>
                         </tr>
 
@@ -1195,7 +1195,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="291" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:291</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="313" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:313</a></div>
                             </td>
                         </tr>
 
@@ -1235,7 +1235,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="191" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:191</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="213" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:213</a></div>
                             </td>
                         </tr>
 
@@ -1302,7 +1302,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="310" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:310</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="332" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:332</a></div>
                             </td>
                         </tr>
 
@@ -1453,7 +1453,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="181" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:181</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="203" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:203</a></div>
                             </td>
                         </tr>
 
@@ -1604,7 +1604,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="233" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:233</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="255" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:255</a></div>
                             </td>
                         </tr>
 
@@ -1682,7 +1682,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="281" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:281</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="303" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:303</a></div>
                             </td>
                         </tr>
 
@@ -1749,7 +1749,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="251" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:251</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="273" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:273</a></div>
                             </td>
                         </tr>
 
@@ -1820,7 +1820,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="243" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:243</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="265" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:265</a></div>
                             </td>
                         </tr>
 
@@ -1891,7 +1891,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="202" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:202</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="224" class="link-to-prism">app/surveys-section/createsurvey/createsurvey.component.ts:224</a></div>
                             </td>
                         </tr>
 
@@ -2793,11 +2793,33 @@ export class CreatesurveyComponent implements OnInit {
    */
 
   forwardStep() {
-    this.RequestsSurveysService.sendQuestions(this.survey, this.questions); //send questions to database
-    this.upgradeQuestionsList(); //refresh previous_questions adding new questions
-    this.questions &#x3D; []; //empties questions
-    this.ArrayStep.push(this.step);
-    this.step++; //increase step
+    var url &#x3D; this.api + &quot;surveys/surveys/&quot; + this.survey;
+    //new request&#x27;s data
+    var post &#x3D; {
+      questions: JSON.stringify(this.questions)
+    };
+    //http request to backend (with authorization header containing the token got from UserService)
+    this.HttpClient.post&lt;SuccessResponseType&gt;(url, post, {
+      headers: new HttpHeaders().set(
+        &quot;Authorization&quot;,
+        &quot;bearer &quot; + this.UserService.get_token()
+      )
+    }).subscribe(
+      data &#x3D;&gt; {
+        if (!data.success) {
+          console.log(data.error);
+          return;
+        }
+        this.upgradeQuestionsList(); //refresh previous_questions adding new questions
+        this.questions &#x3D; []; //empties questions
+        this.ArrayStep.push(this.step);
+        this.step++; //increase step
+      },
+      err &#x3D;&gt; {
+        swal(&quot;Oops!&quot;, &quot;Errore durante l&#x27;operazione!&quot;, &quot;error&quot;);
+        console.log(err);
+      }
+    );
   }
 
   /**
@@ -3126,6 +3148,10 @@ export class ModifyQuestionComponent {
 
     <div class="tab-pane fade " id="c-templateData">
         <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;page&quot;&gt;
+  &lt;div class&#x3D;&quot;text-center security-margin-bottom&quot;&gt;
+    &lt;h1&gt;Creazione sondaggio&lt;/h1&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;shadow&quot;&gt;
   &lt;mat-horizontal-stepper [linear]&#x3D;&quot;true&quot; #stepper&gt;
     &lt;mat-step [stepControl]&#x3D;&quot;firstFormGroup&quot;&gt;
       &lt;form [formGroup]&#x3D;&quot;firstFormGroup&quot;&gt;
@@ -3242,6 +3268,7 @@ export class ModifyQuestionComponent {
     &lt;/mat-step&gt;
   &lt;/mat-horizontal-stepper&gt;
 &lt;/div&gt;
+&lt;/div&gt;
 </code></pre>
     </div>
 
@@ -3270,7 +3297,7 @@ export class ModifyQuestionComponent {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="page">  <mat-horizontal-stepper [linear]="true" #stepper>    <mat-step [stepControl]="firstFormGroup">      <form [formGroup]="firstFormGroup">        <ng-template matStepLabel>Inserisci il nome del sondaggio</ng-template>        <mat-form-field>          <input matInput [(ngModel)]="name" placeholder="Nome del sondaggio" formControlName="firstCtrl" required>        </mat-form-field>        <div>          <button mat-button (click)="goForward(stepper)" [disabled]="!firstFormGroup.valid" color="primary">Prosegui</button>        </div>      </form>    </mat-step>    <mat-step [stepControl]="secondFormGroup">      <ng-template matStepLabel>Fill out your address</ng-template>      <div flex fxLayout="row" class="buttons-margin">        <button mat-button (click)="forwardStep()" [disabled]="!questions || !questions.length > 0" matBadge="{{step}}" matBadgePosition="after" matBadgeColor="accent">Avanza di step</button>        <button mat-button (click)="goForwardEnd(stepper)" [disabled]="step <= 1" color="accent">Prosegui</button>      </div>      <form [formGroup]="secondFormGroup">      <div flex fxLayout="row" fxLayout.lt-sm="column">        <div fxFlex="33" class="security-margin">          <div>          <mat-form-field>            <textarea matInput placeholder="Domanda" [(ngModel)]="question" formControlName="question" required></textarea>          </mat-form-field>        </div>        <div>          <mat-radio-group formControlName="type" [(ngModel)]="type">            <mat-radio-button *ngFor="let type of types" [value]="type" class="security-margin-radio">{{type}}</mat-radio-button>          </mat-radio-group>        </div>        <div class="security-margin-button">          <button mat-button (click)="insertQuestion()" [disabled]="!secondFormGroup.valid" color="primary">Inserisci</button>        </div>      </div>        <div fxFlex="33" *ngIf="type == \'Multiple\'" class="security-margin">          <div>          <mat-form-field>            <input matInput placeholder="Risposta" [(ngModel)]="answer" formControlName="answer">          </mat-form-field>          <button mat-button (click)="insertAnswer()" [disabled]="answer == \'\' || !answer" color="primary">Aggiungi</button>        </div>        <div *ngIf="answers && answers.length > 0">          <mat-list role="list">            <mat-list-item role="listitem" *ngFor="let answer of answers"><mat-icon fontSet="fa" fontIcon="fa-trash" color="accent" (click)="deleteAnswer(answer)" class="trash-icon"></mat-icon> {{answer}}</mat-list-item>          </mat-list>        </div>      </div>      <div fxFlex="33" class="security-margin">        <div *ngIf="step > 1">          <mat-checkbox [(ngModel)]="condition" formControlName="check">Domanda condizionale</mat-checkbox>        </div>        <div *ngIf="condition" class="security-margin-conditional">          <mat-form-field>            <mat-select placeholder="Domanda" [(value)]="previous_question" (selectionChange)="fillanswerslist(previous_question)" formControlName="pq">              <mat-option>None</mat-option>              <mat-option *ngFor="let question of multipleQuestions()" [value]="question">                {{question.question}}              </mat-option>            </mat-select>          </mat-form-field>        </div>        <div *ngIf="condition && previous_answers">          <mat-form-field>            <mat-select placeholder="Risposta" [(value)]="previous_answer" formControlName="pa">              <mat-option>None</mat-option>              <mat-option *ngFor="let answer of previous_answers" [value]="answer">                {{answer}}              </mat-option>            </mat-select>          </mat-form-field>        </div>      </div>    </div>  </form>  <mat-divider></mat-divider>      <div *ngIf="questions">        <mat-card *ngFor="let question of questions" class="security-margin">          <h3>{{question.question}}</h3>          <mat-list role="list" *ngIf="question.answers">            <mat-list-item role="listitem" *ngFor="let answer of question.answers">{{answer}}</mat-list-item>          </mat-list>          <button mat-raised-button color="warn" (click)="deleteBeforeInsert(question)">Delete</button>        </mat-card>      </div>    </mat-step>    <mat-step>      <ng-template matStepLabel>Done</ng-template>      <div flex fxLayout="row" class="buttons-margin">        <div fxFlex="100">        <button mat-button (click)="deleteSurvey()" color="warn">Elimina tutto</button>        <button mat-button (click)="finishCreation()" color="accent">Completa</button>      </div>      </div>      <div flex fxLayout="row">        <div fxFlex="100">      <mat-accordion>        <mat-expansion-panel *ngFor="let step of ArrayStep">          <mat-expansion-panel-header>            <mat-panel-title>              Step {{step}}            </mat-panel-title>          </mat-expansion-panel-header>            <mat-card *ngFor="let question of stepQuestions(step)" class="security-margin">              <h3>{{question.question}} <mat-icon fontSet="fa" fontIcon="fa-edit" color="accent" (click)="openDialog(question)"></mat-icon></h3>              <mat-list role="list" *ngIf="question.answer != \'\'">                <mat-list-item role="listitem" *ngFor="let answer of questionanswers(question)">{{answer}}</mat-list-item>              </mat-list>            </mat-card>        </mat-expansion-panel>      </mat-accordion>    </div>      </div>    </mat-step>  </mat-horizontal-stepper></div></div>'
+        var COMPONENT_TEMPLATE = '<div><div class="page">  <div class="text-center security-margin-bottom">    <h1>Creazione sondaggio</h1>  </div>  <div class="shadow">  <mat-horizontal-stepper [linear]="true" #stepper>    <mat-step [stepControl]="firstFormGroup">      <form [formGroup]="firstFormGroup">        <ng-template matStepLabel>Inserisci il nome del sondaggio</ng-template>        <mat-form-field>          <input matInput [(ngModel)]="name" placeholder="Nome del sondaggio" formControlName="firstCtrl" required>        </mat-form-field>        <div>          <button mat-button (click)="goForward(stepper)" [disabled]="!firstFormGroup.valid" color="primary">Prosegui</button>        </div>      </form>    </mat-step>    <mat-step [stepControl]="secondFormGroup">      <ng-template matStepLabel>Fill out your address</ng-template>      <div flex fxLayout="row" class="buttons-margin">        <button mat-button (click)="forwardStep()" [disabled]="!questions || !questions.length > 0" matBadge="{{step}}" matBadgePosition="after" matBadgeColor="accent">Avanza di step</button>        <button mat-button (click)="goForwardEnd(stepper)" [disabled]="step <= 1" color="accent">Prosegui</button>      </div>      <form [formGroup]="secondFormGroup">      <div flex fxLayout="row" fxLayout.lt-sm="column">        <div fxFlex="33" class="security-margin">          <div>          <mat-form-field>            <textarea matInput placeholder="Domanda" [(ngModel)]="question" formControlName="question" required></textarea>          </mat-form-field>        </div>        <div>          <mat-radio-group formControlName="type" [(ngModel)]="type">            <mat-radio-button *ngFor="let type of types" [value]="type" class="security-margin-radio">{{type}}</mat-radio-button>          </mat-radio-group>        </div>        <div class="security-margin-button">          <button mat-button (click)="insertQuestion()" [disabled]="!secondFormGroup.valid" color="primary">Inserisci</button>        </div>      </div>        <div fxFlex="33" *ngIf="type == \'Multiple\'" class="security-margin">          <div>          <mat-form-field>            <input matInput placeholder="Risposta" [(ngModel)]="answer" formControlName="answer">          </mat-form-field>          <button mat-button (click)="insertAnswer()" [disabled]="answer == \'\' || !answer" color="primary">Aggiungi</button>        </div>        <div *ngIf="answers && answers.length > 0">          <mat-list role="list">            <mat-list-item role="listitem" *ngFor="let answer of answers"><mat-icon fontSet="fa" fontIcon="fa-trash" color="accent" (click)="deleteAnswer(answer)" class="trash-icon"></mat-icon> {{answer}}</mat-list-item>          </mat-list>        </div>      </div>      <div fxFlex="33" class="security-margin">        <div *ngIf="step > 1">          <mat-checkbox [(ngModel)]="condition" formControlName="check">Domanda condizionale</mat-checkbox>        </div>        <div *ngIf="condition" class="security-margin-conditional">          <mat-form-field>            <mat-select placeholder="Domanda" [(value)]="previous_question" (selectionChange)="fillanswerslist(previous_question)" formControlName="pq">              <mat-option>None</mat-option>              <mat-option *ngFor="let question of multipleQuestions()" [value]="question">                {{question.question}}              </mat-option>            </mat-select>          </mat-form-field>        </div>        <div *ngIf="condition && previous_answers">          <mat-form-field>            <mat-select placeholder="Risposta" [(value)]="previous_answer" formControlName="pa">              <mat-option>None</mat-option>              <mat-option *ngFor="let answer of previous_answers" [value]="answer">                {{answer}}              </mat-option>            </mat-select>          </mat-form-field>        </div>      </div>    </div>  </form>  <mat-divider></mat-divider>      <div *ngIf="questions">        <mat-card *ngFor="let question of questions" class="security-margin">          <h3>{{question.question}}</h3>          <mat-list role="list" *ngIf="question.answers">            <mat-list-item role="listitem" *ngFor="let answer of question.answers">{{answer}}</mat-list-item>          </mat-list>          <button mat-raised-button color="warn" (click)="deleteBeforeInsert(question)">Delete</button>        </mat-card>      </div>    </mat-step>    <mat-step>      <ng-template matStepLabel>Done</ng-template>      <div flex fxLayout="row" class="buttons-margin">        <div fxFlex="100">        <button mat-button (click)="deleteSurvey()" color="warn">Elimina tutto</button>        <button mat-button (click)="finishCreation()" color="accent">Completa</button>      </div>      </div>      <div flex fxLayout="row">        <div fxFlex="100">      <mat-accordion>        <mat-expansion-panel *ngFor="let step of ArrayStep">          <mat-expansion-panel-header>            <mat-panel-title>              Step {{step}}            </mat-panel-title>          </mat-expansion-panel-header>            <mat-card *ngFor="let question of stepQuestions(step)" class="security-margin">              <h3>{{question.question}} <mat-icon fontSet="fa" fontIcon="fa-edit" color="accent" (click)="openDialog(question)"></mat-icon></h3>              <mat-list role="list" *ngIf="question.answer != \'\'">                <mat-list-item role="listitem" *ngFor="let answer of questionanswers(question)">{{answer}}</mat-list-item>              </mat-list>            </mat-card>        </mat-expansion-panel>      </mat-accordion>    </div>      </div>    </mat-step>  </mat-horizontal-stepper></div></div></div>'
     var COMPONENTS = [{'name': 'AbsencesCalendarComponent', 'selector': 'absences-calendar'},{'name': 'AdminComponent', 'selector': 'admin'},{'name': 'AllsurveysComponent', 'selector': 'allsurveys'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BottomListComponent', 'selector': 'bottom-list'},{'name': 'CompileComponent', 'selector': 'compile'},{'name': 'CreatesurveyComponent', 'selector': 'createsurvey'},{'name': 'EmployeeComponent', 'selector': 'app-employee'},{'name': 'EmployeesComponent', 'selector': 'employees'},{'name': 'HeaderComponent', 'selector': 'header'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'LoginDialogComponent', 'selector': 'login-dialog'},{'name': 'ManageUsersComponent', 'selector': 'manage-users'},{'name': 'MiniSidebarItem', 'selector': 'mini-sidebar-item'},{'name': 'ModifyQuestionComponent', 'selector': 'modify-question'},{'name': 'ModifyRequestComponent', 'selector': 'modify-request'},{'name': 'MyAbsencesComponent', 'selector': 'my-absences'},{'name': 'MyAbsencesListComponent', 'selector': 'my-absences-list'},{'name': 'RequestChartsComponent', 'selector': 'request-charts'},{'name': 'RequestDetailsComponent', 'selector': 'request-details'},{'name': 'SidebarBodyComponent', 'selector': 'sidebar-body'},{'name': 'SidebarComponent', 'selector': 'sidebar'},{'name': 'SidebarMenuItem', 'selector': 'sidebar-menu-item'},{'name': 'UserTableComponent', 'selector': 'user-table'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'CreatesurveyComponent'};
