@@ -977,7 +977,8 @@ router
             question => question.answer == req.params.answer
           ).length;
 
-          var percentual = (100 / total) * partial;
+          if (total == 0) var percentual = 0;
+          else var percentual = (100 / total) * partial;
 
           return res.status(200).send(
             JSON.stringify({

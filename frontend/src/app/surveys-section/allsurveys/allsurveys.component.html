@@ -1,4 +1,4 @@
-<div class="page">  
+<div class="page">
   <div flex fxLayout="row" fxLayout.lt-sm="column" >
     <div fxFlex="66">
       <div *ngIf="!allsurveys || !mysurveys" class="spinner">
@@ -19,7 +19,7 @@
     </div>
     <div fxFlex="33">
       <div align="center" *ngIf="allsurveys && mysurveys">
-        <h3 mat-subheader>Percentuale completata di sondaggi</h3>
+        <h3 id="center">Percentuale completata di sondaggi</h3>
         <circle-progress
         [percent]="percentageSurveysSubmitted()"
         [radius]="100"

@@ -167,11 +167,33 @@ export class CreatesurveyComponent implements OnInit {
    */
 
   forwardStep() {
-    this.RequestsSurveysService.sendQuestions(this.survey, this.questions); //send questions to database
-    this.upgradeQuestionsList(); //refresh previous_questions adding new questions
-    this.questions = []; //empties questions
-    this.ArrayStep.push(this.step);
-    this.step++; //increase step
+    var url = this.api + "surveys/surveys/" + this.survey;
+    //new request's data
+    var post = {
+      questions: JSON.stringify(this.questions)
+    };
+    //http request to backend (with authorization header containing the token got from UserService)
+    this.HttpClient.post<SuccessResponseType>(url, post, {
+      headers: new HttpHeaders().set(
+        "Authorization",
+        "bearer " + this.UserService.get_token()
+      )
+    }).subscribe(
+      data => {
+        if (!data.success) {
+          console.log(data.error);
+          return;
+        }
+        this.upgradeQuestionsList(); //refresh previous_questions adding new questions
+        this.questions = []; //empties questions
+        this.ArrayStep.push(this.step);
+        this.step++; //increase step
+      },
+      err => {
+        swal("Oops!", "Errore durante l'operazione!", "error");
+        console.log(err);
+      }
+    );
   }
 
   /**

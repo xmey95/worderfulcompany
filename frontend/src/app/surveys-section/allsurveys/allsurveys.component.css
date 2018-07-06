@@ -14,7 +14,11 @@
   margin-top: 15px;
 }
 
-.page{
-  padding:60px;
+.page {
+  padding: 60px;
   padding-top: 30px;
+}
+
+#center {
+  text-align: center;
 }

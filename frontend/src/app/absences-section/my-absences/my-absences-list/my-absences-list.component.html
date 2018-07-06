@@ -53,7 +53,7 @@
           </div>
         </div>
         <mat-action-row *ngIf="request.state == 0">
-        <button (click)="RequestsService.cancel_request(request.id)" mat-button>Annulla</button>
+        <button (click)="RequestsService.cancel_request(request.id)" mat-button>Elimina</button>
         <button (click)="openDialog(request)" mat-button>Modifica</button>
       </mat-action-row>
       </mat-expansion-panel>
