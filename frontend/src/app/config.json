@@ -1,4 +1,4 @@
 {
-  "api": "http://localhost:8080/api/",
+  "api": "http://159.65.207.157:8080/api/",
   "frontend": "http://localhost:4200/"
 }
