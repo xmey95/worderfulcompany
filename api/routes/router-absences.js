@@ -338,8 +338,11 @@ router
       var newname = req.params.request + filext;
       var newpath = config.media_path + "justification_files/" + newname;
       console.log(newpath);
-      fs.rename(oldpath, newpath, function(err) {
+      fs.copyFile(oldpath, newpath, function(err) {
         if (err) throw err;
+        fs.unlink(oldpath, function(err) {
+          if (err) throw err;
+        });
         pool.getConnection(function(err, connection) {
           var file_entry = "absences/requests/get_justification/" + newname;
           connection.query(
